@@ -34,6 +34,7 @@ def upgrade() -> None:
     op.create_table('ingredients', 
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
+    sa.Column('isSeasoning', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('recipes',
