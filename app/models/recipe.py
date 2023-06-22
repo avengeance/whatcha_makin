@@ -17,12 +17,12 @@ class Recipe(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
     
-    owner = db.relationship('User', backref='recipes', lazy=True)
-    reviews = db.relationship('Review', backref='recipe', lazy=True)
-    comments = db.relationship('Comment', backref='recipe', lazy=True)
-    likes = db.relationship('Like', backref='recipe', lazy=True)
-    directions = db.relationship('Direction', backref='recipe', lazy=True)
-    recipe_ingredients = db.relationship('RecipeIngredient', backref='recipe', lazy=True)
+    owner = db.relationship('User', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
+    reviews = db.relationship('Review', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
+    comments = db.relationship('Comment', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
+    likes = db.relationship('Like', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
+    directions = db.relationship('Direction', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
+    recipe_ingredients = db.relationship('RecipeIngredient', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
     
     def to_dict(self):
         return {
