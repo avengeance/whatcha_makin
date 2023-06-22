@@ -17,6 +17,7 @@ class  Recipe(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
     
+    owner = db.relationship('User', backref='recipes', lazy=True)
     reviews = db.relationship('Review', backref='recipe', lazy=True)
     comments = db.relationship('Comment', backref='recipe', lazy=True)
     likes = db.relationship('Like', backref='recipe', lazy=True)

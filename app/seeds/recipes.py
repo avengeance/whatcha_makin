@@ -6,10 +6,10 @@ from datetime import datetime
 
 def seed_recipes():
     egg_casserole = Recipe(
-        ownerId=1, name='Egg Casserole', description='Egg Casserole', prep_time=15, cook_time=20, servings=4, createdAt=datetime.now, updatedAt=datetime.now
+        owner_id=1, name='Egg Casserole', description='Egg Casserole', prep_time=15, cook_time=20, servings=4, createdAt=datetime.now, updatedAt=datetime.now
     )
     crepe = Recipe(
-        ownerId=2, name='Crepe', description='Crepe', prep_time=10, cook_time=20, servings=4, createdAt=datetime.now, updatedAt=datetime.now
+        owner_id=2, name='Crepe', description='Crepe', prep_time=10, cook_time=20, servings=4, createdAt=datetime.now, updatedAt=datetime.now
     )
     french_toast = Recipe(
         owner_id=3, name='French Toast', description='French Toast', prep_time=10, cook_time=20, servings=4, createdAt=datetime.now, updatedAt=datetime.now
