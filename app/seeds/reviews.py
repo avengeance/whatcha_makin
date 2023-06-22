@@ -4,151 +4,151 @@ from datetime import datetime
 
 def seed_reviews():
     review1_owner_1 = Review(
-        ownerId=1,
-        recipeId=8,
+        owner_id=1,
+        recipe_id=8,
         review='This was just amazing and fun to make!',
         stars=5,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review2_owner_1 = Review(
-        ownerId=1,
-        recipeId=2,
+        owner_id=1,
+        recipe_id=2,
         review='Soooo simple to make and quick!',
         stars=4,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review3_owner_1 = Review(
-        ownerId=1,
-        recipeId=3,
+        owner_id=1,
+        recipe_id=3,
         review='Not much of a bread person but others did like it.',
         stars=3,        
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review4_owner_1 = Review(
-        ownerId=1,
-        recipeId=9,
+        owner_id=1,
+        recipe_id=9,
         review='A simple recipe that can be made on the fly.',
         stars=4,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review5_owner_1 = Review(
-        ownerId=1,
-        recipeId=5,
+        owner_id=1,
+        recipe_id=5,
         review='Sloppy joes this is a classic.',
         stars=4,        
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review6_owner_1 = Review(
-        ownerId=1,
-        recipeId=6,
+        owner_id=1,
+        recipe_id=6,
         review='Not really feeling this sandwich',
         stars=2,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     
     review1_owner_2 = Review(
-        ownerId=2,
-        recipeId=3,
+        owner_id=2,
+        recipe_id=3,
         review='I absolutely loved this!',
         stars=5,        
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review2_owner_2 = Review(
-        ownerId=2,
-        recipeId=4,
+        owner_id=2,
+        recipe_id=4,
         review='The freshness of the Salmon!',
         stars=4,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review3_owner_2 = Review(
-        ownerId=2,
-        recipeId=1,
+        owner_id=2,
+        recipe_id=1,
         review='Sloppy Joes I loved making this for my kids!',
         stars=5,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review4_owner_2 = Review(
-        ownerId=2,
-        recipeId=6,
+        owner_id=2,
+        recipe_id=6,
         review='Perfect for my partner!',
         stars=4,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review5_owner_2 = Review(
-        ownerId=2,
-        recipeId=7,
+        owner_id=2,
+        recipe_id=7,
         review='A little to salty for my taste. Will adjust the next time I make this.',
         stars=3,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review6_owner_2 = Review(
-        ownerId=2,
-        recipeId=5,
+        owner_id=2,
+        recipe_id=5,
         review='Better than the restaurants!',
         stars=5,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
 
 
     review1_owner_3 = Review(
-        ownerId=3,
-        recipeId=1,
+        owner_id=3,
+        recipe_id=1,
         review='I absolutely loved this!',
         stars=4,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review2_owner_3 = Review(
-        ownerId=3,
-        recipeId=2,
+        owner_id=3,
+        recipe_id=2,
         review='Crepes are my favorite!',
         stars=4,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review3_owner_3 = Review(
-        ownerId=3,
-        recipeId=4,
+        owner_id=3,
+        recipe_id=4,
         review="A taste of Hawaiian Food!",
         stars=4,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review4_owner_3 = Review(
-        ownerId=3,
-        recipeId=5,
+        owner_id=3,
+        recipe_id=5,
         review='A bit not seasoned enough for my taste.',
         stars=2,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review5_owner_3 = Review(
-        ownerId=3,
-        recipeId=7,
+        owner_id=3,
+        recipe_id=7,
         review='Little ingredients and easy to make!',
         stars=3,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
     review6_owner_3 = Review(
-        ownerId=3,
-        recipeId=8,
+        owner_id=3,
+        recipe_id=8,
         review='Never made korean food before and this was a great first recipe!',
         stars=4,
-        createdAt=datetime.now(),
-        updatedAt=datetime.now()
+        created_at=datetime.now(),
+        updated_at=datetime.now()
     )
 
     

@@ -12,25 +12,25 @@ def seed_recipes():
         ownerId=2, name='Crepe', description='Crepe', prep_time=10, cook_time=20, servings=4, createdAt=datetime.now, updatedAt=datetime.now
     )
     french_toast = Recipe(
-        ownerId=3, name='French Toast', description='French Toast', prep_time=10, cook_time=20, servings=4, createdAt=datetime.now, updatedAt=datetime.now
+        owner_id=3, name='French Toast', description='French Toast', prep_time=10, cook_time=20, servings=4, createdAt=datetime.now, updatedAt=datetime.now
     )
     salmon_bowl = Recipe(
-        ownerId=1, name='Salmon Bowl', description='Salmon Bowl', prep_time=5, cook_time=5, servings=4, createdAt=datetime.now, updatedAt=datetime.now
+        owner_id=1, name='Salmon Bowl', description='Salmon Bowl', prep_time=5, cook_time=5, servings=4, createdAt=datetime.now, updatedAt=datetime.now
     )
     sloppy_joe = Recipe(
-        ownerId=2, name='Sloppy Joe', description='Sloppy Joe', prep_time=5, cook_time=30, servings=6, createdAt=datetime.now, updatedAt=datetime.now
+        owner_id=2, name='Sloppy Joe', description='Sloppy Joe', prep_time=5, cook_time=30, servings=6, createdAt=datetime.now, updatedAt=datetime.now
     )
     reuben_sandwich = Recipe(
-        ownerId=3, name='Reuben Sandwich', description='Reuben Sandwich', prep_time=10, cook_time=10, servings=4, createdAt=datetime.now, updatedAt=datetime.now
+        owner_id=3, name='Reuben Sandwich', description='Reuben Sandwich', prep_time=10, cook_time=10, servings=4, createdAt=datetime.now, updatedAt=datetime.now
     )
     beef_stir_fry = Recipe(
-        ownerId=1, name='Beef Stir Fry', description='Beef Stir Fry', prep_time=15, cook_time=25, servings=4, createdAt=datetime.now, updatedAt=datetime.now
+        owner_id=1, name='Beef Stir Fry', description='Beef Stir Fry', prep_time=15, cook_time=25, servings=4, createdAt=datetime.now, updatedAt=datetime.now
     )
     korean_beef_bowl = Recipe(
-        ownerId=2, name='Korean Beef Bowl', description='Korean Beef Bowl', prep_time=10, cook_time=25, servings=4, createdAt=datetime.now, updatedAt=datetime.now
+        owner_id=2, name='Korean Beef Bowl', description='Korean Beef Bowl', prep_time=10, cook_time=25, servings=4, createdAt=datetime.now, updatedAt=datetime.now
     )
     ahi_tuna_steak = Recipe(
-        ownerId=3, name='Ahi Tuna Steak', description='Ahi Tuna Steak', prep_time=5, cook_time=2, servings=2, createdAt=datetime.now, updatedAt=datetime.now
+        owner_id=3, name='Ahi Tuna Steak', description='Ahi Tuna Steak', prep_time=5, cook_time=2, servings=2, createdAt=datetime.now, updatedAt=datetime.now
     )
     # breakfast
     db.session.add(egg_casserole)

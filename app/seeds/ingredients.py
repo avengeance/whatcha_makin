@@ -6,145 +6,145 @@ from datetime import datetime
 
 def seed_ingredients():
     egg = Ingredient(
-        name='egg', isSeasoning=False
+        name='egg', is_seasoning=False
     )
     cheese = Ingredient(
-        name='cheese', isSeasoning=False
+        name='cheese', is_seasoning=False
     )
     bread = Ingredient(
-        name='bread', isSeasoning=False
+        name='bread', is_seasoning=False
     )
     vegetables = Ingredient(
-        name='vegetables', isSeasoning=False
+        name='vegetables', is_seasoning=False
     )
     milk = Ingredient(
-        name='milk', isSeasoning=False
+        name='milk', is_seasoning=False
     )
     flour = Ingredient(
-        name='flour', isSeasoning=False
+        name='flour', is_seasoning=False
     )
     water = Ingredient(
-        name='water', isSeasoning=False
+        name='water', is_seasoning=False
     )
     brioche = Ingredient(
-        name='brioche', isSeasoning=False
+        name='brioche', is_seasoning=False
     )
     salmon = Ingredient(
-        name='salmon', isSeasoning=False
+        name='salmon', is_seasoning=False
     )
     rice = Ingredient(
-        name='rice', isSeasoning=False
+        name='rice', is_seasoning=False
     )
     avocado = Ingredient(
-        name='avocado', isSeasoning=False
+        name='avocado', is_seasoning=False
     )
     kimchi = Ingredient(
-        name='kimchi', isSeasoning=False
+        name='kimchi', is_seasoning=False
     )
     ground_beef = Ingredient(
-        name='ground beef', isSeasoning=False
+        name='ground beef', is_seasoning=False
     )
     buns = Ingredient(
-        name='buns', isSeasoning=False
+        name='buns', is_seasoning=False
     )
     rye_bread = Ingredient(
-        name='rye bread', isSeasoning=False
+        name='rye bread', is_seasoning=False
     )
     swiss_cheese = Ingredient(
-        name='swiss cheese', isSeasoning=False
+        name='swiss cheese', is_seasoning=False
     )
     deli_sliced_beef = Ingredient(
-        name='deli sliced beef', isSeasoning=False
+        name='deli sliced beef', is_seasoning=False
     )
     beef_sirloin = Ingredient(
-        name='beef sirloin', isSeasoning=False
+        name='beef sirloin', is_seasoning=False
     )
     broccoli = Ingredient(
-        name='broccoli', isSeasoning=False
+        name='broccoli', is_seasoning=False
     )
     carrots = Ingredient(
-        name='carrots', isSeasoning=False
+        name='carrots', is_seasoning=False
     )
     tuna_steak = Ingredient(
-        name='tuna steak', isSeasoning=False
+        name='tuna steak', is_seasoning=False
     )
     salt = Ingredient(
-        name='salt', isSeasoning=True
+        name='salt', is_seasoning=True
     )
     pepper = Ingredient(
-        name='pepper', isSeasoning=True
+        name='pepper', is_seasoning=True
     )
     garlic = Ingredient(
-        name='garlic', isSeasoning=True
+        name='garlic', is_seasoning=True
     )
     butter = Ingredient(
-        name='butter', isSeasoning=True
+        name='butter', is_seasoning=True
     )
     maple_syrup = Ingredient(
-        name='maple syrup', isSeasoning=True
+        name='maple syrup', is_seasoning=True
     )
     vanilla_extract = Ingredient(
-        name='vanilla extract', isSeasoning=True
+        name='vanilla extract', is_seasoning=True
     )
     cooking_spray = Ingredient(
-        name='cooking spray', isSeasoning=True
+        name='cooking spray', is_seasoning=True
     )
     soy_sauce = Ingredient(
-        name='soy sauce', isSeasoning=True
+        name='soy sauce', is_seasoning=True
     )
     hot_sauce = Ingredient(
-        name='hot sauce', isSeasoning=True
+        name='hot sauce', is_seasoning=True
     )
     mayonaise = Ingredient(
-        name='mayonaise', isSeasoning=True
+        name='mayonaise', is_seasoning=True
     )
     nori = Ingredient(
-        name='nori', isSeasoning=True
+        name='nori', is_seasoning=True
     )
     onion = Ingredient(
-        name='onion', isSeasoning=True
+        name='onion', is_seasoning=True
     )
     green_bell_pepper = Ingredient(
-        name='green bell pepper', isSeasoning=True
+        name='green bell pepper', is_seasoning=True
     )
     ketchup = Ingredient(
-        name='ketchup', isSeasoning=True
+        name='ketchup', is_seasoning=True
     )
     brown_sugar = Ingredient(
-        name='brown sugar', isSeasoning=True
+        name='brown sugar', is_seasoning=True
     )
     mustard = Ingredient(
-        name='mustard', isSeasoning=True
+        name='mustard', is_seasoning=True
     )
     garlic_powder = Ingredient(
-        name='garlic powder', isSeasoning=True
+        name='garlic powder', is_seasoning=True
     )
     thousand_island_dressing = Ingredient(
-        name='thousand island dressing', isSeasoning=True
+        name='thousand island dressing', is_seasoning=True
     )
     sauerkraut = Ingredient(
-        name='sauer kraut', isSeasoning=True
+        name='sauer kraut', is_seasoning=True
     )
     vegetable_oil = Ingredient(
-        name='vegetable oil', isSeasoning=True
+        name='vegetable oil', is_seasoning=True
     )
     red_bell_pepper = Ingredient(
-        name='red bell pepper', isSeasoning=True
+        name='red bell pepper', is_seasoning=True
     )
     seasame_seed = Ingredient(
-        name='seasame seed', isSeasoning=True
+        name='seasame seed', is_seasoning=True
     )
     ginger = Ingredient(
-        name='ginger', isSeasoning=True
+        name='ginger', is_seasoning=True
     )
     seasame_oil = Ingredient(
-        name='seasame oil', isSeasoning=True
+        name='seasame oil', is_seasoning=True
     )
     cayenne_spice = Ingredient(
-        name='cayenne spice', isSeasoning=True
+        name='cayenne spice', is_seasoning=True
     )
     olive_oil = Ingredient(
-        name='olive oil', isSeasoning=True
+        name='olive oil', is_seasoning=True
     )
     
     # none seasonings

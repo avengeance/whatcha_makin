@@ -8,16 +8,16 @@ class RecipeImage(db.Model):
         __table_args__ = {'schema': SCHEMA}
     
     id = db.Column(db.Integer, primary_key=True)
-    recipeId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('recipes.id')), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('recipes.id')), nullable=False)
     url = db.Column(db.String(255), nullable=False)
-    createdAt = db.Column(db.DateTime, default=datetime.now)
-    updatedAt = db.Column(db.DateTime, default=datetime.now)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now)
     
     def to_dict(self):
         return {
             'id': self.id,
-            'recipeId': self.recipe_id,
+            'recipe_id': self.recipe_id,
             'url': self.url,
-            'createdAt': self.created_at,
-            'updatedAt': self.updated_at
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
         }

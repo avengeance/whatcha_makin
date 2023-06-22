@@ -8,14 +8,14 @@ class RecipeIngredient(db.Model):
         __table_args__ = {'schema': SCHEMA}
     
     id = db.Column(db.Integer, primary_key=True)
-    recipeId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('recipes.id')), nullable=False)
-    ingredientId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('ingredients.id')), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('recipes.id')), nullable=False)
+    ingredient_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('ingredients.id')), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     
     def to_dict(self):
         return {
             'id': self.id,
-            'recipeId': self.recipe_id,
-            'ingredientId': self.ingredient_id,
+            'recipe_id': self.recipe_id,
+            'ingredient_id': self.ingredient_id,
             'quantity': self.quantity,
         }

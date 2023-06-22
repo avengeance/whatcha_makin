@@ -9,11 +9,13 @@ class Ingredient(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    isSeasoning = db.Column(db.Boolean, nullable=False)
+    is_seasoning = db.Column(db.Boolean, nullable=False)
     recipe_ingredients = db.relationship('RecipeIngredient', backref='ingredients', lazy=True)
     
     def to_dict(self):
         return {
             'id': self.id,
             'name': self.name,
+            'is_seasoning': self.is_seasoning,
+            'recipe_ingredients': [recipe_ingredient.id for recipe_ingredient in self.recipe_ingredients]
         }
