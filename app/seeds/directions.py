@@ -224,10 +224,10 @@ def seed_directions():
     
     db.session.commit()
 
-    def undo_directions():
-        if environment == "production":
-            db.session.execute(f"TRUNCATE table {SCHEMA}.directions RESTART IDENTITY CASCADE;")
-        else:
-            db.session.execute("DELETE FROM directions")
+def undo_directions():
+    if environment == "production":
+        db.session.execute(f"TRUNCATE table {SCHEMA}.directions RESTART IDENTITY CASCADE;")
+    else:
+        db.session.execute("DELETE FROM directions")
         
-        db.session.commit()
+    db.session.commit()

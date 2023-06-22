@@ -201,10 +201,10 @@ def seed_ingredients():
     
     db.session.commit()
 
-    def undo_ingredients():
-        if environment == "production":
-            db.session.execute(f"TRUNCATE table {SCHEMA}.ingredients RESTART IDENTITY CASCADE;")
-        else:
-            db.session.execute("DELETE FROM ingredients")
+def undo_ingredients():
+    if environment == "production":
+        db.session.execute(f"TRUNCATE table {SCHEMA}.ingredients RESTART IDENTITY CASCADE;")
+    else:
+        db.session.execute("DELETE FROM ingredients")
         
-        db.session.commit()
+    db.session.commit()

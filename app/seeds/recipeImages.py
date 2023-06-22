@@ -212,10 +212,10 @@ def seed_recipe_images():
     
     db.session.commit()
     
-    def undo_recipe_images():
-        if environment == "production":
-            db.session.execute(f"TRUNCATE table {SCHEMA}.recipe_images RESTART IDENTITY CASCADE;")
-        else:
-            db.session.execute("DELETE FROM recipe_images")
+def undo_recipe_images():
+    if environment == "production":
+        db.session.execute(f"TRUNCATE table {SCHEMA}.recipe_images RESTART IDENTITY CASCADE;")
+    else:
+        db.session.execute("DELETE FROM recipe_images")
             
-        db.session.commit()
+    db.session.commit()

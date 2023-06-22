@@ -32,6 +32,9 @@ def seed():
         db.session.execute(f"TRUNCATE table {SCHEMA}.reviews RESTART IDENTITY CASCADE;")
         db.session.execute(f"TRUNCATE table {SCHEMA}.comments RESTART IDENTITY CASCADE;")
         db.session.execute(f"TRUNCATE table {SCHEMA}.likes RESTART IDENTITY CASCADE;")
+        
+        db.session.commit()
+        
     seed_users()
     seed_ingredients()
     seed_recipes()
