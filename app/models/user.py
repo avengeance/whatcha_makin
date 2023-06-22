@@ -18,10 +18,10 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
     
-    recipes = db.relationship('Recipe', back_populates='users', lazy=True, cascade='all, delete-orphan')
-    reviews = db.relationship('Review', back_populates='users', lazy=True, cascade='all, delete-orphan')
-    comments = db.relationship('Comment', back_populates='users', lazy=True, cascade='all, delete-orphan')
-    likes = db.relationship('Like', back_populates='users', lazy=True, cascade='all, delete-orphan')
+    recipe = db.relationship('Recipe', back_populates='user', lazy=True, cascade='all, delete')
+    reviews = db.relationship('Review', back_populates='users', lazy=True, cascade='all, delete')
+    comments = db.relationship('Comment', back_populates='users', lazy=True, cascade='all, delete')
+    likes = db.relationship('Like', back_populates='users', lazy=True, cascade='all, delete')
     
 
     @property

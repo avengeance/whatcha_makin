@@ -14,6 +14,8 @@ class Direction(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
     
+    recipes = db.relationship('Recipe', back_populates='users', lazy=True, cascade='all, delete')
+    
     def to_dict(self):
         return {
             'id': self.id,

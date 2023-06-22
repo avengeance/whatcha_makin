@@ -23,8 +23,8 @@ depends_on = None
 def upgrade() -> None:
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('firstName', sa.String(length=50), nullable=False),                
-    sa.Column('lastName', sa.String(length=50), nullable=False),
+    sa.Column('first_name', sa.String(length=50), nullable=False),                
+    sa.Column('last_name', sa.String(length=50), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
     sa.Column('hashed_password', sa.String(length=255), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
@@ -34,7 +34,7 @@ def upgrade() -> None:
     op.create_table('ingredients', 
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=255), nullable=False),
-    sa.Column('isSeasoning', sa.Boolean(), nullable=True),
+    sa.Column('is_seasoning', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('recipes',

@@ -1,6 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
-
 class Recipe(db.Model):
     __tablename__ = 'recipes'
     
@@ -17,12 +16,12 @@ class Recipe(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
     
-    owner = db.relationship('User', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
+    user = db.relationship('User', back_populates='recipe')
     reviews = db.relationship('Review', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
     comments = db.relationship('Comment', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
-    likes = db.relationship('Like', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
-    directions = db.relationship('Direction', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
-    recipe_ingredients = db.relationship('RecipeIngredient', back_populates='recipes', lazy=True, cascade='all, delete-orphan')
+    likes = db.relationship('Like', back_populates='recipes', lazy=True, cascade='all')
+    directions = db.relationship('Direction', back_populates='recipes', lazy=True, cascade='all')
+    recipe_ingredients = db.relationship('RecipeIngredient', back_populates='recipes', lazy=True, cascade='all')
     
     def to_dict(self):
         return {

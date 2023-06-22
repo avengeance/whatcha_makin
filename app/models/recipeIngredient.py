@@ -12,6 +12,8 @@ class RecipeIngredient(db.Model):
     ingredient_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('ingredients.id')), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     
+    recipes = db.relationship('Recipe', back_populates='users', lazy=True, cascade='all, delete')
+    
     def to_dict(self):
         return {
             'id': self.id,

@@ -2,7 +2,7 @@ from app.models import db, Comment,environment,SCHEMA
 from sqlalchemy.sql import text
 from datetime import datetime
 
-def seed_comment():
+def seed_comments():
     comment1_owner_1 = Comment(
         owner_id=1,
         recipe_id=1,

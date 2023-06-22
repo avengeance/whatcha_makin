@@ -1,7 +1,7 @@
 from app.models import db, Like, environment, SCHEMA
 from sqlalchemy.sql import text
 
-def seed_like():
+def seed_likes():
     like1 = Like(
         user_id=1,
         recipe_id=1
