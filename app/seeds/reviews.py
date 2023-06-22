@@ -7,74 +7,98 @@ def seed_reviews():
         ownerId=1,
         recipeId=8,
         review='This was just amazing and fun to make!',
-        stars=5
+        stars=5,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review2_owner_1 = Review(
         ownerId=1,
         recipeId=2,
         review='Soooo simple to make and quick!',
-        stars=4
+        stars=4,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review3_owner_1 = Review(
         ownerId=1,
         recipeId=3,
         review='Not much of a bread person but others did like it.',
-        stars=3
+        stars=3,        
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review4_owner_1 = Review(
         ownerId=1,
         recipeId=9,
         review='A simple recipe that can be made on the fly.',
-        stars=4
+        stars=4,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review5_owner_1 = Review(
         ownerId=1,
         recipeId=5,
         review='Sloppy joes this is a classic.',
-        stars=4
+        stars=4,        
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review6_owner_1 = Review(
         ownerId=1,
         recipeId=6,
         review='Not really feeling this sandwich',
-        stars=2
+        stars=2,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     
     review1_owner_2 = Review(
         ownerId=2,
         recipeId=3,
         review='I absolutely loved this!',
-        stars=5
+        stars=5,        
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review2_owner_2 = Review(
         ownerId=2,
         recipeId=4,
         review='The freshness of the Salmon!',
-        stars=4
+        stars=4,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review3_owner_2 = Review(
         ownerId=2,
         recipeId=1,
         review='Sloppy Joes I loved making this for my kids!',
-        stars=5
+        stars=5,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review4_owner_2 = Review(
         ownerId=2,
         recipeId=6,
         review='Perfect for my partner!',
-        stars=4
+        stars=4,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review5_owner_2 = Review(
         ownerId=2,
         recipeId=7,
         review='A little to salty for my taste. Will adjust the next time I make this.',
-        stars=3
+        stars=3,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review6_owner_2 = Review(
         ownerId=2,
         recipeId=5,
         review='Better than the restaurants!',
-        stars=5
+        stars=5,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
 
 
@@ -82,37 +106,49 @@ def seed_reviews():
         ownerId=3,
         recipeId=1,
         review='I absolutely loved this!',
-        stars=4
+        stars=4,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review2_owner_3 = Review(
         ownerId=3,
         recipeId=2,
         review='Crepes are my favorite!',
-        stars=4
+        stars=4,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review3_owner_3 = Review(
         ownerId=3,
         recipeId=4,
         review="A taste of Hawaiian Food!",
-        stars=4
+        stars=4,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review4_owner_3 = Review(
         ownerId=3,
         recipeId=5,
         review='A bit not seasoned enough for my taste.',
-        stars=2
+        stars=2,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review5_owner_3 = Review(
         ownerId=3,
         recipeId=7,
         review='Little ingredients and easy to make!',
-        stars=3
+        stars=3,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
     review6_owner_3 = Review(
         ownerId=3,
         recipeId=8,
         review='Never made korean food before and this was a great first recipe!',
-        stars=4
+        stars=4,
+        createdAt=datetime.now(),
+        updatedAt=datetime.now()
     )
 
     
