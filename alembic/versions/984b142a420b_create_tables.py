@@ -55,7 +55,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('recipe_id', sa.Integer(), sa.ForeignKey('recipe.id'), nullable=False),
     sa.Column('step', sa.Integer(), nullable=False),
-    sa.Column('step_info', sa.String(length=255), nullable=False),
+    sa.Column('step_info', sa.String(length=5000), nullable=False),
     sa.ForeignKeyConstraint(['recipe_id'], ['recipe.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
