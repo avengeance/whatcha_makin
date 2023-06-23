@@ -10,7 +10,7 @@ class Direction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('recipes.id')), nullable=False)
     step = db.Column(db.Integer, nullable=False)
-    step_info = db.Column(db.String(255), nullable=False)
+    step_info = db.Column(db.String(500), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
     
