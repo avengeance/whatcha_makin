@@ -16,12 +16,13 @@ class Recipe(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
     
-    users = db.relationship('User', back_populates='user')
+    user = db.relationship('User', back_populates='recipe')
     reviews = db.relationship('Review', back_populates='recipe', lazy=True, cascade='all, delete-orphan')
     comments = db.relationship('Comment', back_populates='recipe', lazy=True, cascade='all, delete-orphan')
     likes = db.relationship('Like', back_populates='recipe', lazy=True, cascade='all')
     directions = db.relationship('Direction', back_populates='recipe', lazy=True, cascade='all')
     recipe_ingredients = db.relationship('RecipeIngredient', back_populates='recipe', lazy=True, cascade='all')
+    recipe_images = db.relationship('RecipeImage', back_populates='recipe', lazy=True, cascade='all')
     
     def to_dict(self):
         return {

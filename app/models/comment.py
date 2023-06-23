@@ -14,7 +14,7 @@ class Comment(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
     
-    users = db.relationship('User', back_populates='user', lazy=True, cascade='all, delete-orphan')
+    users = db.relationship('User', back_populates='comments', lazy=True, cascade='all, delete')
     recipe = db.relationship('Recipe', back_populates='comments', lazy=True, cascade='all, delete')
     
     def to_dict(self):

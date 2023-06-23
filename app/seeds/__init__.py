@@ -1,13 +1,13 @@
 from flask.cli import AppGroup
 from .users import seed_users, undo_users
-from .recipeIngredients import seed_recipe_ingredients, undo_recipe_ingredients
-from .likes import seed_likes, undo_likes
-from .comments import seed_comments, undo_comments
-from .reviews import seed_reviews, undo_reviews
-from .recipeImages import seed_recipe_images, undo_recipe_images
-from .directions import seed_directions, undo_directions
 from .ingredients import seed_ingredients, undo_ingredients
 from .recipes import seed_recipes, undo_recipes
+from .directions import seed_directions, undo_directions
+from .recipeImages import seed_recipe_images, undo_recipe_images
+from .reviews import seed_reviews, undo_reviews
+from .comments import seed_comments, undo_comments
+from .likes import seed_likes, undo_likes
+from .recipeIngredients import seed_recipe_ingredients, undo_recipe_ingredients
 
 
 from app.models.db import db, environment, SCHEMA

@@ -10,7 +10,8 @@ class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     is_seasoning = db.Column(db.Boolean, nullable=False)
-    recipe_ingredients = db.relationship('RecipeIngredient', backref='ingredients', lazy=True)
+    
+    recipe_ingredients = db.relationship('RecipeIngredient', back_populates='ingredients', lazy=True)
     
     def to_dict(self):
         return {

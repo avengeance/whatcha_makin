@@ -117,7 +117,7 @@ def seed_recipe_ingredients():
         {
             'recipe_id': 3,
             'ingredient_id': 27,
-            'qunantity': 1,
+            'quantity': 1,
             'measurement': 'tablespoons'
         },
         {
