@@ -68,6 +68,9 @@ def seed_ingredients():
     tuna_steak = Ingredient(
         name='tuna steak', is_seasoning=False
     )
+    bacon = Ingredient(
+        name='bacon', is_seasoning=False
+    )
     salt = Ingredient(
         name='salt', is_seasoning=True
     )
@@ -146,6 +149,9 @@ def seed_ingredients():
     olive_oil = Ingredient(
         name='olive oil', is_seasoning=True
     )
+    green_onion = Ingredient(
+        name='green onion', is_seasoning=True
+    )
     
     # none seasonings
     db.session.add(egg)
@@ -153,50 +159,60 @@ def seed_ingredients():
     db.session.add(bread)
     db.session.add(vegetables)
     db.session.add(flour)
+    
     db.session.add(milk)
     db.session.add(water)
     db.session.add(brioche)
     db.session.add(salmon)
     db.session.add(rice)
+    
     db.session.add(avocado)
     db.session.add(kimchi)
     db.session.add(ground_beef)
     db.session.add(buns)
     db.session.add(rye_bread)
+    
     db.session.add(swiss_cheese)
     db.session.add(deli_sliced_beef)
     db.session.add(beef_sirloin)
     db.session.add(broccoli)
     db.session.add(carrots)
-    db.session.add(tuna_steak)
     
+    db.session.add(tuna_steak)
+    db.session.add(bacon)
     # seasonings
     db.session.add(salt)
     db.session.add(pepper)
     db.session.add(garlic)
+    
     db.session.add(butter)
     db.session.add(maple_syrup)
     db.session.add(vanilla_extract)
     db.session.add(cooking_spray)
     db.session.add(soy_sauce)
+    
     db.session.add(hot_sauce)
     db.session.add(mayonaise)
     db.session.add(nori)
     db.session.add(onion)
     db.session.add(green_bell_pepper)
+    
     db.session.add(ketchup)
     db.session.add(brown_sugar)
     db.session.add(mustard)
     db.session.add(garlic_powder)
     db.session.add(thousand_island_dressing)
+    
     db.session.add(sauerkraut)
     db.session.add(vegetable_oil)
     db.session.add(red_bell_pepper)
     db.session.add(seasame_seed)
     db.session.add(ginger)
+    
     db.session.add(seasame_oil)
     db.session.add(cayenne_spice)
     db.session.add(olive_oil)
+    db.session.add(green_onion)
     
     
     db.session.commit()

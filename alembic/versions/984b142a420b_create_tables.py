@@ -29,7 +29,8 @@ def upgrade() -> None:
     sa.Column('hashed_password', sa.String(length=255), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id').
+    sa.UniqueConstraint('email')
     )
     op.create_table('ingredients', 
     sa.Column('id', sa.Integer(), nullable=False),
