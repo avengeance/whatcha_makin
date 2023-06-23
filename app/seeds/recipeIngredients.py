@@ -3,7 +3,7 @@ from sqlalchemy.sql import text
 
 def seed_recipe_ingredients():
     recipe_ingredients = [
-        # casserole
+                # casserole
         {
             'recipe_id': 1,
             'ingredient_id': 1,
@@ -21,7 +21,7 @@ def seed_recipe_ingredients():
             'ingredient_id': 22,
             'quantity': 6,
             'measurement': 'slices'
-        }
+        },
         {
             'recipe_id': 1,
             'ingredient_id': 3,
@@ -143,7 +143,7 @@ def seed_recipe_ingredients():
             'ingredient_id': 28,
             'quantity': 1,
             'measurement': 'tablespoons'
-        }
+        },
         # salmon bowl
         {
             'recipe_id': 4,
@@ -192,7 +192,7 @@ def seed_recipe_ingredients():
             'ingredient_id': 12,
             'quantity': 0.25,
             'measurement': 'cup'
-        }
+        },
         # sloppy joe
         {
             'recipe_id': 5,
@@ -253,7 +253,7 @@ def seed_recipe_ingredients():
             'ingredient_id': 14,
             'quantity': 6,
             'measurement': 'split'
-        }
+        },
         # reuben sandwich
         {
             'recipe_id': 6,
@@ -345,7 +345,7 @@ def seed_recipe_ingredients():
             'ingredient_id': 44,
             'quantity': 2,
             'measurement': 'tablespoons'
-        }
+        },
         # korean bowl
         {
             'recipe_id': 8,
@@ -400,7 +400,7 @@ def seed_recipe_ingredients():
             'ingredient_id': 44,
             'quantity': 1,
             'measurement': 'tablespoons'
-        }
+        },
         # tuna steak
         {
             'recipe_id': 9,
@@ -438,5 +438,17 @@ def seed_recipe_ingredients():
             'quantity': 1,
             'measurement': 'teaspoons'
         }
-        
     ]
+    for ingredient_data in recipe_ingredients:
+        ingredient = RecipeIngredient(**ingredient_data)
+        db.session.add(ingredient)
+        
+    db.session.commit()
+    
+def undo_recipe_ingredients():
+    if environment == "production":
+        db.session.execute(f"TRUNCATE table {SCHEMA}.recipe_ingredients RESTART IDENTITY CASCADE;")
+    else:
+        db.session.execute("DELETE FROM recipe_ingredients")
+    
+    db.session.commit()

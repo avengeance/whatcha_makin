@@ -1,5 +1,6 @@
 from flask.cli import AppGroup
 from .users import seed_users, undo_users
+from .recipeIngredients import seed_recipe_ingredients, undo_recipe_ingredients
 from .likes import seed_likes, undo_likes
 from .comments import seed_comments, undo_comments
 from .reviews import seed_reviews, undo_reviews
@@ -32,6 +33,7 @@ def seed():
         db.session.execute(f"TRUNCATE table {SCHEMA}.reviews RESTART IDENTITY CASCADE;")
         db.session.execute(f"TRUNCATE table {SCHEMA}.comments RESTART IDENTITY CASCADE;")
         db.session.execute(f"TRUNCATE table {SCHEMA}.likes RESTART IDENTITY CASCADE;")
+        db.session.execute(f"TRUNCATE table {SCHEMA}.recipe_ingredients RESTART IDENTITY CASCADE;")
         
         db.session.commit()
         
@@ -43,6 +45,7 @@ def seed():
     seed_reviews()
     seed_comments()
     seed_likes()
+    seed_recipe_ingredients()
     # Add other seed functions here
 
 
@@ -57,4 +60,5 @@ def undo():
     undo_reviews()
     undo_comments()
     undo_likes()
+    undo_recipe_ingredients()
     # Add other undo functions here
