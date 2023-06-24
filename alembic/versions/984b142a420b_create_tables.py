@@ -63,6 +63,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('recipe_id', sa.Integer(), sa.ForeignKey('recipe.id'), nullable=False),
     sa.Column('url', sa.String(length=255)),
+    sa.Column('is_preview', sa.Boolean(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['recipe_id'], ['recipe.id'], ),
