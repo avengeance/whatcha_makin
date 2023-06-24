@@ -3,4 +3,4 @@ from wtforms import StringField, IntegerField, BooleanField, TextAreaField, File
 from wtforms.validators import DataRequired
 
 class RecipeForm(FlaskForm):
-    
+    pass
