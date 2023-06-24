@@ -8,6 +8,8 @@ from ..models.comment import Comment
 from ..models.like import Like
 from ..models.recipeIngredient import RecipeIngredient
 
+from ..forms.recipe_form import RecipeForm
+
 from flask import Blueprint, redirect, url_for, render_template, jsonify, request
 from flask_login import login_required, current_user, logout_user
 
@@ -151,10 +153,36 @@ def get_recipe(id):
         "message": "Recipe not found"
     }), 404
 
-
 # Create a New Recipe
 @recipe_routes.route('/new', methods=['POST'])
 @login_required
 def create_recipe():
-    pass
-
+    form = RecipeForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    
+    if form.validate_on_submit():
+        name = form.name.data
+        ingredients = form.ingredients.data
+        directions = form.directions.data
+        time = form.time.data
+        preview_image = form.preview_image.data
+        recipe_image = form.recipe_image.data
+        description = form.description.data
+        
+        new_recipe = Recipe(
+            owner_id=current_user.id,
+            name=name,
+            ingredients=ingredients,
+            directions=directions,
+            time=time,
+            preview_image=preview_image,
+            recipe_image=recipe_image,
+            description=description,
+        )
+        
+        db.session.add(new_recipe)
+        db.session.commit()
+        
+        return jsonify(new_recipe.to_dict()), 200
+    else:
+        return jsonify(form.errors), 400

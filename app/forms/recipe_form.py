@@ -2,10 +2,20 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, FormField, FieldList, SubmitField
 from wtforms.validators import DataRequired
 
-from direction_form import DirectionForm
-from ingredient_form import IngredientForm
-from recipe_image_form import RecipeImageForm
-from time_form import TimeForm
+# from direction_form import DirectionForm
+# from ingredient_form import IngredientForm
+# from recipe_image_form import RecipeImageForm
+# from time_form import TimeForm
+
+from .direction_form import DirectionForm
+from .ingredient_form import IngredientForm
+from .recipe_image_form import RecipeImageForm
+from .time_form import TimeForm
+
+# from ..forms.direction_form import DirectionForm
+# from ..forms.ingredient_form import IngredientForm
+# from ..forms.recipe_image_form import RecipeImageForm
+# from ..forms.time_form import TimeForm
 
 class RecipeForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])

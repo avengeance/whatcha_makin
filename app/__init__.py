@@ -4,10 +4,13 @@ from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
 from flask_login import LoginManager
+
 from .models.user import User
 from .models.db import db
+
 from .api.user_routes import user_routes
 from .api.auth_routes import auth_routes
+
 from .seeds import seed_commands
 from .config import Config
 
