@@ -151,8 +151,10 @@ def get_recipe(id):
         "message": "Recipe not found"
     }), 404
 
+
 # Create a New Recipe
 @recipe_routes.route('/new', methods=['POST'])
 @login_required
 def create_recipe():
     pass
+
