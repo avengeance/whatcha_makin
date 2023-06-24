@@ -158,6 +158,11 @@ def get_recipe(id):
 @login_required
 def create_recipe():
     form = RecipeForm()
+    csrf_token = request.cookies.get('csrf_token')
+    
+    if csrf_token:
+        form['csrf_token'].data = csrf_token
+        
     form['csrf_token'].data = request.cookies['csrf_token']
     
     if form.validate_on_submit():
