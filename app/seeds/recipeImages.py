@@ -5,7 +5,8 @@ from datetime import datetime
 def seed_recipe_images():
     casserole_image1 = RecipeImage(
         recipe_id=1,
-        url='https://www.allrecipes.com/thmb/nXIcXYFyIRve_Kv2aq2opodIeyY=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/Super-Easy-Egg-Casserole-by-Chef-V-20e2aafba1e046fca31f2e66d5b468e1.jpg'
+        url='https://www.allrecipes.com/thmb/nXIcXYFyIRve_Kv2aq2opodIeyY=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/Super-Easy-Egg-Casserole-by-Chef-V-20e2aafba1e046fca31f2e66d5b468e1.jpg',
+        is_preview=True
     )
     casserole_image2 = RecipeImage(
         recipe_id=1,
@@ -22,7 +23,8 @@ def seed_recipe_images():
     
     crepe_image1 = RecipeImage(
         recipe_id=2,
-        url='https://www.allrecipes.com/thmb/UFacd3YjFX_NdQ065n6WjgHYNYI=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/16383-basic-crepes-mfs_003-f1033a4dbed74bc2b0d465c8de6026e2.jpg'
+        url='https://www.allrecipes.com/thmb/UFacd3YjFX_NdQ065n6WjgHYNYI=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/16383-basic-crepes-mfs_003-f1033a4dbed74bc2b0d465c8de6026e2.jpg',
+        is_preview=True
     )
     crepe_image2 = RecipeImage(
         recipe_id=2,
@@ -39,7 +41,8 @@ def seed_recipe_images():
     
     french_toast_image1 = RecipeImage(
         recipe_id=3,
-        url='https://www.allrecipes.com/thmb/VILnXpZhMiqEjMgLDiguu7YMWH0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/3327834-easy-french-toast-waffles-sanzoe-1x1-1-80ab8b28107c470695bdf2d74194b8b8.jpg'
+        url='https://www.allrecipes.com/thmb/VILnXpZhMiqEjMgLDiguu7YMWH0=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/3327834-easy-french-toast-waffles-sanzoe-1x1-1-80ab8b28107c470695bdf2d74194b8b8.jpg',
+        is_preview=True
     )
     french_toast_image2 = RecipeImage(
         recipe_id=3,
@@ -56,7 +59,8 @@ def seed_recipe_images():
     
     salmon_bowl_image1 = RecipeImage(
         recipe_id=4,
-        url='https://www.allrecipes.com/thmb/ZIn_GKfo0SS9P-dcyMEk4s1M1NQ=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/AllrecipesSalmonBowl-1-SaraHaas-4x3-1-58e05b9d5ea94027be97587c8a04a603.jpg'
+        url='https://www.allrecipes.com/thmb/ZIn_GKfo0SS9P-dcyMEk4s1M1NQ=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/AllrecipesSalmonBowl-1-SaraHaas-4x3-1-58e05b9d5ea94027be97587c8a04a603.jpg',
+        is_preview=True
     )
     salmon_bowl_image2 = RecipeImage(
         recipe_id=4,
@@ -73,7 +77,8 @@ def seed_recipe_images():
     
     sloppy_joe_image1 = RecipeImage(
         recipe_id=5,
-        url='https://www.allrecipes.com/thmb/ru7nWSmdrpp4W4JTekJJRluZF30=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/24264-sloppy-joes-dianne-1x1-1-ca246f276afe4196b0ea921df2574466.jpg'
+        url='https://www.allrecipes.com/thmb/ru7nWSmdrpp4W4JTekJJRluZF30=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/24264-sloppy-joes-dianne-1x1-1-ca246f276afe4196b0ea921df2574466.jpg',
+        is_preview=True
     )
     sloppy_joe_image2 = RecipeImage(
         recipe_id=5,
@@ -90,7 +95,8 @@ def seed_recipe_images():
     
     reuben_image1 = RecipeImage(
         recipe_id=6,
-        url='https://www.allrecipes.com/thmb/BRMuDyugSygcI52IsxkMgZFfxnM=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/9109692-d1046b5d2ca84f498691b31f9511e460.jpg'
+        url='https://www.allrecipes.com/thmb/BRMuDyugSygcI52IsxkMgZFfxnM=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/9109692-d1046b5d2ca84f498691b31f9511e460.jpg',
+        is_preview=True
     )
     reuben_image2 = RecipeImage(
         recipe_id=6,
@@ -107,7 +113,8 @@ def seed_recipe_images():
     
     stir_fry_image1 = RecipeImage(
         recipe_id=7,
-        url='https://www.allrecipes.com/thmb/OxGo7pkjOUWphh-DeA4ySgTUpvA=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/228823_QuickBeefStirFry-mfs-Step3-f59503188dcd4fc59db0bffbfad4fe25.jpg'
+        url='https://www.allrecipes.com/thmb/OxGo7pkjOUWphh-DeA4ySgTUpvA=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/228823_QuickBeefStirFry-mfs-Step3-f59503188dcd4fc59db0bffbfad4fe25.jpg',
+        is_preview=True
     )
     stir_fry_image2 = RecipeImage(
         recipe_id=7,
@@ -124,7 +131,8 @@ def seed_recipe_images():
     
     korean_image1 = RecipeImage(
         recipe_id=8,
-        url='https://www.allrecipes.com/thmb/4PIcvZvGnfgoJvVoQW7lXoLWbG8=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/5759837-b2371603be79499c9e1cfa7eeefc7b25.jpg'
+        url='https://www.allrecipes.com/thmb/4PIcvZvGnfgoJvVoQW7lXoLWbG8=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/5759837-b2371603be79499c9e1cfa7eeefc7b25.jpg',
+        is_preview=True
     )
     korean_image2 = RecipeImage(
         recipe_id=8,
@@ -141,7 +149,8 @@ def seed_recipe_images():
     
     tuna_steak_image1 = RecipeImage(
         recipe_id=9,
-        url='https://www.allrecipes.com/thmb/rGs4ZpanPC6awzhx6SnHI-IVlsg=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/160099-seared-ahi-tuna-steaks-DDMFS-4x3-26f4691e91bd434e9d96c1c601608cbc.jpg'
+        url='https://www.allrecipes.com/thmb/rGs4ZpanPC6awzhx6SnHI-IVlsg=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/160099-seared-ahi-tuna-steaks-DDMFS-4x3-26f4691e91bd434e9d96c1c601608cbc.jpg',
+        is_preview=True
     )
     tuna_steak_image2 = RecipeImage(
         recipe_id=9,
