@@ -163,7 +163,9 @@ def create_recipe():
     if csrf_token:
         form['csrf_token'].data = csrf_token
         
-    form['csrf_token'].data = request.cookies['csrf_token']
+    # form['csrf_token'].data = request.cookies['csrf_token']
+    
+    print(form.data)
     
     if form.validate_on_submit():
         name = form.name.data
@@ -183,11 +185,13 @@ def create_recipe():
             preview_image=preview_image,
             recipe_image=recipe_image,
             description=description,
-        )
-        
+            )
+            
         db.session.add(new_recipe)
         db.session.commit()
-        
         return jsonify(new_recipe.to_dict()), 200
+            
+            
     else:
+        print(form.errors)
         return jsonify(form.errors), 400
