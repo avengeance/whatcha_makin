@@ -154,74 +154,107 @@ def get_recipe(id):
     }), 404
 
 # # Create a New Recipe
+@recipe_routes.route('/new', methods=['POST'])
+@login_required
+def create_recipe():
+    form = RecipeForm()
+    # csrf_token = request.cookies.get('csrf_token')
+    
+    # if csrf_token:
+    form['csrf_token'].data = request.cookies['csrf_token']
+        
+    
+    if form.validate_on_submit():
+        name = form.name.data
+        ingredients = form.ingredients.data
+        directions = form.directions.data
+        time = form.time.data
+        preview_image = form.preview_image.data
+        recipe_image = form.recipe_image.data
+        description = form.description.data
+        
+        new_recipe = Recipe(
+            owner_id=current_user.id,
+            name=name,
+            ingredients=ingredients,
+            directions=directions,
+            time=time,
+            preview_image=preview_image,
+            recipe_image=recipe_image,
+            description=description,
+            )
+        
+        for ingredient_data in ingredients:
+            ingredient = Ingredient.query.get(ingredient_data['id'])
+            
+            if ingredient is not None:
+                new_recipe_ingredient = RecipeIngredient(
+                    recipe = new_recipe,
+                    ingredient = ingredient,
+                    quantity = ingredient_data.get('quantity'),
+                    measurement = ingredient_data.get('measurement')
+                )
+                new_recipe.recipe_ingredients.append(new_recipe_ingredient)
+                
+        for direction_data in directions:
+            new_direction = Direction(
+                recipe = new_recipe,
+                step = direction_data.get('step'),
+                step_info = direction_data.get('step_info'),
+            )
+            new_recipe.directions.append(new_direction)
+            
+        db.session.add(new_recipe)
+        db.session.commit()
+        return jsonify(new_recipe.to_dict()), 200       
+            
+    else:
+        return jsonify(form.errors), 400
+
 # @recipe_routes.route('/new', methods=['POST'])
 # @login_required
 # def create_recipe():
 #     form = RecipeForm()
-#     # csrf_token = request.cookies.get('csrf_token')
-    
-#     # if csrf_token:
-#     form['csrf_token'].data = request.cookies['csrf_token']
-        
-    
-#     # if form.validate_on_submit():
+#     csrf_token = request.cookies.get('csrf_token')
+#     if csrf_token:
+#         form['csrf_token'].data = csrf_token
+#     if form.validate_on_submit():
 #         name = form.name.data
-#         ingredients = form.ingredients.data
 #         directions = form.directions.data
 #         time = form.time.data
 #         preview_image = form.preview_image.data
 #         recipe_image = form.recipe_image.data
 #         description = form.description.data
-        
+#         # Create a new recipe
 #         new_recipe = Recipe(
 #             owner_id=current_user.id,
 #             name=name,
-#             ingredients=ingredients,
 #             directions=directions,
 #             time=time,
 #             preview_image=preview_image,
 #             recipe_image=recipe_image,
 #             description=description,
+#         )
+#         # Handle ingredients
+#         for ingredient_data in form.ingredients.data:
+#             ingredient_name = ingredient_data['name']
+#             quantity = ingredient_data['quantity']
+#             measurement = ingredient_data['measurement']
+#             # Create a new ingredient
+#             ingredient = Ingredient(
+#                 name=ingredient_name,
+#                 quantity=quantity,
+#                 measurement=measurement
 #             )
-            
+#             # Associate the ingredient with the recipe
+#             new_recipe.ingredients.append(ingredient)
+#         # Commit the changes to the database
 #         db.session.add(new_recipe)
 #         db.session.commit()
-#         return jsonify(new_recipe.to_dict()), 200       
-            
-#     # else:
-#     #     return jsonify(form.errors), 400
-
-@recipe_routes.route('/new', methods=['POST'])
-@login_required
-def create_recipe():
-    form = RecipeForm()
-    csrf_token = request.cookies.get('csrf_token')
-    if csrf_token:
-        form['csrf_token'].data = csrf_token
-    # if form.validate_on_submit():
-    name = form.name.data
-    ingredients = form.ingredients.data
-    directions = form.directions.data
-    time = form.time.data
-    preview_image = form.preview_image.data
-    recipe_image = form.recipe_image.data
-    description = form.description.data
-    new_recipe = Recipe(
-        owner_id=current_user.id,
-        name=name,
-        ingredients=ingredients,
-        directions=directions,
-        time=time,
-        preview_image=preview_image,
-        recipe_image=recipe_image,
-        description=description,
-    )
-    db.session.add(new_recipe)
-    db.session.commit()
-    return jsonify(new_recipe.to_dict()), 200
-    # else:
-    #     print(form.errors)
-    #     return jsonify(form.errors), 400
+#         return jsonify(new_recipe.to_dict()), 200
+#     else:
+#         print(form.errors)
+#         return jsonify(form.errors), 400
 
 # Update a Recipe
 @recipe_routes.route('/<int:id>', methods=['PUT'])

@@ -2,6 +2,8 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
 
 class Direction(db.Model):
+    class Meta:
+        csrf = False
     __tablename__ = 'directions'
     
     if environment == "production":

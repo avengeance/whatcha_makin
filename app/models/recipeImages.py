@@ -2,6 +2,8 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
 
 class RecipeImage(db.Model):
+    class Meta:
+        csrf = False
     __tablename__ = 'recipe_images'
     
     if environment == "production":
