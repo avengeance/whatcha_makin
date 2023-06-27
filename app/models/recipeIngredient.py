@@ -13,8 +13,8 @@ class RecipeIngredient(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     measurement = db.Column(db.String(255), nullable=False)
     
-    recipe = db.relationship('Recipe', back_populates='recipe_ingredients', lazy=True, cascade='all, delete')
-    ingredients = db.relationship('Ingredient', back_populates='recipe_ingredients', lazy=True, cascade='all, delete')
+    recipe = db.relationship('Recipe', back_populates='recipe_ingredients', lazy=True)
+    ingredients = db.relationship('Ingredient', back_populates='recipe_ingredients', lazy=True)
     
     def to_dict(self):
         return {

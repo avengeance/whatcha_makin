@@ -153,45 +153,102 @@ def get_recipe(id):
         "message": "Recipe not found"
     }), 404
 
-# Create a New Recipe
+# # Create a New Recipe
+# @recipe_routes.route('/new', methods=['POST'])
+# @login_required
+# def create_recipe():
+#     form = RecipeForm()
+#     # csrf_token = request.cookies.get('csrf_token')
+    
+#     # if csrf_token:
+#     form['csrf_token'].data = request.cookies['csrf_token']
+        
+    
+#     # if form.validate_on_submit():
+#         name = form.name.data
+#         ingredients = form.ingredients.data
+#         directions = form.directions.data
+#         time = form.time.data
+#         preview_image = form.preview_image.data
+#         recipe_image = form.recipe_image.data
+#         description = form.description.data
+        
+#         new_recipe = Recipe(
+#             owner_id=current_user.id,
+#             name=name,
+#             ingredients=ingredients,
+#             directions=directions,
+#             time=time,
+#             preview_image=preview_image,
+#             recipe_image=recipe_image,
+#             description=description,
+#             )
+            
+#         db.session.add(new_recipe)
+#         db.session.commit()
+#         return jsonify(new_recipe.to_dict()), 200       
+            
+#     # else:
+#     #     return jsonify(form.errors), 400
+
 @recipe_routes.route('/new', methods=['POST'])
 @login_required
 def create_recipe():
     form = RecipeForm()
     csrf_token = request.cookies.get('csrf_token')
-    
     if csrf_token:
         form['csrf_token'].data = csrf_token
-        
-    # form['csrf_token'].data = request.cookies['csrf_token']
-    
-    print(form.data)
-    
-    if form.validate_on_submit():
-        name = form.name.data
-        ingredients = form.ingredients.data
-        directions = form.directions.data
-        time = form.time.data
-        preview_image = form.preview_image.data
-        recipe_image = form.recipe_image.data
-        description = form.description.data
-        
-        new_recipe = Recipe(
-            owner_id=current_user.id,
-            name=name,
-            ingredients=ingredients,
-            directions=directions,
-            time=time,
-            preview_image=preview_image,
-            recipe_image=recipe_image,
-            description=description,
-            )
-            
-        db.session.add(new_recipe)
+    # if form.validate_on_submit():
+    name = form.name.data
+    ingredients = form.ingredients.data
+    directions = form.directions.data
+    time = form.time.data
+    preview_image = form.preview_image.data
+    recipe_image = form.recipe_image.data
+    description = form.description.data
+    new_recipe = Recipe(
+        owner_id=current_user.id,
+        name=name,
+        ingredients=ingredients,
+        directions=directions,
+        time=time,
+        preview_image=preview_image,
+        recipe_image=recipe_image,
+        description=description,
+    )
+    db.session.add(new_recipe)
+    db.session.commit()
+    return jsonify(new_recipe.to_dict()), 200
+    # else:
+    #     print(form.errors)
+    #     return jsonify(form.errors), 400
+
+# Update a Recipe
+@recipe_routes.route('/<int:id>', methods=['PUT'])
+@login_required
+def update_recipe(id):
+    pass
+
+# Delete a Recipe
+@recipe_routes.route('/<int:id>', methods=['DELETE'])
+@login_required
+def delete_recipe(id):
+    recipe = Recipe.query.get(id)
+    if recipe:
+        Recipe.query.filter_by(id=id).delete()
+        db.session.delete(recipe)
         db.session.commit()
-        return jsonify(new_recipe.to_dict()), 200
-            
-            
+        
+        res = {
+            "id": recipe.id,
+            "message": "Successfully deleted",
+            "status_code": 200
+        }
+        
+        return jsonify(res), 200
     else:
-        print(form.errors)
-        return jsonify(form.errors), 400
+        res = {
+            "message": "Recipe not found",
+            "status_code": 404
+        }
+        return jsonify(res), 404

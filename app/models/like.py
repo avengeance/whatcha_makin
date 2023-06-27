@@ -11,8 +11,8 @@ class Like(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id')), nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('recipes.id')), nullable=False)
     
-    users = db.relationship('User', back_populates='likes', lazy=True, cascade='all, delete')
-    recipe = db.relationship('Recipe', back_populates='likes', lazy=True, cascade='all, delete')
+    users = db.relationship('User', back_populates='likes', lazy=True)
+    recipe = db.relationship('Recipe', back_populates='likes', lazy=True)
     
     def to_dict(self):
         return {
