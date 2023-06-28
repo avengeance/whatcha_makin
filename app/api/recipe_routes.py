@@ -158,11 +158,7 @@ def get_recipe(id):
 @login_required
 def create_recipe():
     form = RecipeForm()
-    # csrf_token = request.cookies.get('csrf_token')
-    
-    # if csrf_token:
-    form['csrf_token'].data = request.cookies['csrf_token']
-        
+    form['csrf_token'].data = request.cookies['csrf_token']  
     
     if form.validate_on_submit():
         name = form.name.data
@@ -210,51 +206,6 @@ def create_recipe():
             
     else:
         return jsonify(form.errors), 400
-
-# @recipe_routes.route('/new', methods=['POST'])
-# @login_required
-# def create_recipe():
-#     form = RecipeForm()
-#     csrf_token = request.cookies.get('csrf_token')
-#     if csrf_token:
-#         form['csrf_token'].data = csrf_token
-#     if form.validate_on_submit():
-#         name = form.name.data
-#         directions = form.directions.data
-#         time = form.time.data
-#         preview_image = form.preview_image.data
-#         recipe_image = form.recipe_image.data
-#         description = form.description.data
-#         # Create a new recipe
-#         new_recipe = Recipe(
-#             owner_id=current_user.id,
-#             name=name,
-#             directions=directions,
-#             time=time,
-#             preview_image=preview_image,
-#             recipe_image=recipe_image,
-#             description=description,
-#         )
-#         # Handle ingredients
-#         for ingredient_data in form.ingredients.data:
-#             ingredient_name = ingredient_data['name']
-#             quantity = ingredient_data['quantity']
-#             measurement = ingredient_data['measurement']
-#             # Create a new ingredient
-#             ingredient = Ingredient(
-#                 name=ingredient_name,
-#                 quantity=quantity,
-#                 measurement=measurement
-#             )
-#             # Associate the ingredient with the recipe
-#             new_recipe.ingredients.append(ingredient)
-#         # Commit the changes to the database
-#         db.session.add(new_recipe)
-#         db.session.commit()
-#         return jsonify(new_recipe.to_dict()), 200
-#     else:
-#         print(form.errors)
-#         return jsonify(form.errors), 400
 
 # Update a Recipe
 @recipe_routes.route('/<int:id>', methods=['PUT'])

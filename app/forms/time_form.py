@@ -3,6 +3,6 @@ from wtforms import IntegerField
 from wtforms.validators import DataRequired
 
 class TimeForm(FlaskForm):
-    prep_time=IntegerField('Prep Time', validators=[DataRequired()])
-    cook_time=IntegerField('Cook Time', validators=[DataRequired()])
-    servings=IntegerField('Servings', validators=[DataRequired()])
+    prep_time=IntegerField('Prep Time')
+    cook_time=IntegerField('Cook Time')
+    servings=IntegerField('Servings')

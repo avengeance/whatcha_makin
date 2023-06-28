@@ -3,7 +3,7 @@ from wtforms import StringField, IntegerField, BooleanField
 from wtforms.validators import DataRequired
 
 class IngredientForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    quantity = IntegerField('Quantity', validators=[DataRequired()])
-    measurement = StringField('Measurement', validators=[DataRequired()])
+    id = IntegerField('ID')
+    quantity = IntegerField('Quantity')
+    measurement = StringField('Measurement')
     is_seasoning = BooleanField('Is Seasoning')
