@@ -153,17 +153,12 @@ def get_recipe(id):
         "message": "Recipe not found"
     }), 404
 
-# Create a New Recipe
+# # Create a New Recipe
 @recipe_routes.route('/new', methods=['POST'])
 @login_required
 def create_recipe():
     form = RecipeForm()
-    csrf_token = request.cookies.get('csrf_token')
-    
-    if csrf_token:
-        form['csrf_token'].data = csrf_token
-        
-    form['csrf_token'].data = request.cookies['csrf_token']
+    form['csrf_token'].data = request.cookies['csrf_token']  
     
     if form.validate_on_submit():
         name = form.name.data
@@ -183,11 +178,61 @@ def create_recipe():
             preview_image=preview_image,
             recipe_image=recipe_image,
             description=description,
-        )
+            )
         
+        for ingredient_data in ingredients:
+            ingredient = Ingredient.query.get(ingredient_data['id'])
+            
+            if ingredient is not None:
+                new_recipe_ingredient = RecipeIngredient(
+                    recipe = new_recipe,
+                    ingredient = ingredient,
+                    quantity = ingredient_data.get('quantity'),
+                    measurement = ingredient_data.get('measurement')
+                )
+                new_recipe.recipe_ingredients.append(new_recipe_ingredient)
+                
+        for direction_data in directions:
+            new_direction = Direction(
+                recipe = new_recipe,
+                step = direction_data.get('step'),
+                step_info = direction_data.get('step_info'),
+            )
+            new_recipe.directions.append(new_direction)
+            
         db.session.add(new_recipe)
         db.session.commit()
-        
-        return jsonify(new_recipe.to_dict()), 200
+        return jsonify(new_recipe.to_dict()), 200       
+            
     else:
         return jsonify(form.errors), 400
+
+# Update a Recipe
+@recipe_routes.route('/<int:id>', methods=['PUT'])
+@login_required
+def update_recipe(id):
+    pass
+
+# Delete a Recipe
+@recipe_routes.route('/<int:id>', methods=['DELETE'])
+@login_required
+def delete_recipe(id):
+    recipe = Recipe.query.get(id)
+    if recipe:
+        Recipe.query.filter_by(id=id).delete()
+        db.session.delete(recipe)
+        db.session.commit()
+        
+        res = {
+            "id": recipe.id,
+            "message": "Successfully deleted",
+            "status_code": 200
+        }
+        
+        return jsonify(res), 200
+    else:
+        res = {
+            "message": "Recipe not found",
+            "status_code": 404
+        }
+        return jsonify(res), 404

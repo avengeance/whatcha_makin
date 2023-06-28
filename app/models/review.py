@@ -15,7 +15,7 @@ class Review(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
     
-    users = db.relationship('User', back_populates='reviews', lazy=True, cascade='all, delete')
+    users = db.relationship('User', back_populates='reviews', lazy=True)
     recipe = db.relationship('Recipe', back_populates='reviews', lazy=True, cascade='all, delete')
     
     def to_dict(self):

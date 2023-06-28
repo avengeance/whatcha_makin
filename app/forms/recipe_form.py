@@ -21,3 +21,8 @@ class RecipeForm(FlaskForm):
     def __init__(self,*args,**kwargs):
         data = request.get_json()
         super(RecipeForm, self).__init__(data=data, *args, **kwargs)
+
+
+# ingredients_name = StringField('Name', validators=[DataRequired()])
+# ingredients_quantity = IntegerField('Quantity', validators=[DataRequired()])
+# ingredients_measurement = StringField('Measurement', validators=[DataRequired()])

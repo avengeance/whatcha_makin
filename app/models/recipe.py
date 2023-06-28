@@ -19,7 +19,7 @@ class Recipe(db.Model):
     user = db.relationship('User', back_populates='recipe')
     reviews = db.relationship('Review', back_populates='recipe', lazy=True, cascade='all, delete-orphan')
     comments = db.relationship('Comment', back_populates='recipe', lazy=True, cascade='all, delete-orphan')
-    likes = db.relationship('Like', back_populates='recipe', lazy=True, cascade='all')
+    likes = db.relationship('Like', back_populates='recipe', lazy=True, cascade='all, delete-orphan')
     directions = db.relationship('Direction', back_populates='recipe', lazy=True, cascade='all')
     recipe_ingredients = db.relationship('RecipeIngredient', back_populates='recipe', lazy=True, cascade='all')
     recipe_images = db.relationship('RecipeImage', back_populates='recipe', lazy=True, cascade='all')

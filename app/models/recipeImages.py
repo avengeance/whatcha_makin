@@ -2,6 +2,8 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
 
 class RecipeImage(db.Model):
+    class Meta:
+        csrf = False
     __tablename__ = 'recipe_images'
     
     if environment == "production":
@@ -14,7 +16,7 @@ class RecipeImage(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
     
-    recipe = db.relationship('Recipe', back_populates='recipe_images', lazy=True, cascade='all, delete')
+    recipe = db.relationship('Recipe', back_populates='recipe_images')
     
     def to_dict(self):
         return {

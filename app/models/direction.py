@@ -2,6 +2,8 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 from datetime import datetime
 
 class Direction(db.Model):
+    class Meta:
+        csrf = False
     __tablename__ = 'directions'
     
     if environment == "production":
@@ -14,7 +16,7 @@ class Direction(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now)
     
-    recipe = db.relationship('Recipe', back_populates='directions', lazy=True, cascade='all, delete')
+    recipe = db.relationship('Recipe', back_populates='directions', lazy=True)
     
     def to_dict(self):
         return {
