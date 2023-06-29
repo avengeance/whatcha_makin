@@ -228,7 +228,6 @@ def create_recipe():
         print(f"Error committing recipe ingredient: {e}")
         db.session.rollback()
 
-    
     return jsonify(new_recipe.to_dict()), 200
         
 # Update a Recipe
