@@ -14,6 +14,7 @@ from flask import Blueprint, redirect, url_for, render_template, jsonify, reques
 from flask_login import login_required, current_user, logout_user
 
 from statistics import mean
+from datetime import datetime
 
 import json
 
@@ -157,56 +158,79 @@ def get_recipe(id):
 @recipe_routes.route('/new', methods=['POST'])
 @login_required
 def create_recipe():
-    form = RecipeForm()
-    form['csrf_token'].data = request.cookies['csrf_token']  
-    
-    if form.validate_on_submit():
-        name = form.name.data
-        ingredients = form.ingredients.data
-        directions = form.directions.data
-        time = form.time.data
-        preview_image = form.preview_image.data
-        recipe_image = form.recipe_image.data
-        description = form.description.data
+    data = request.get_json()  
         
-        new_recipe = Recipe(
+    new_recipe = Recipe(
             owner_id=current_user.id,
-            name=name,
-            ingredients=ingredients,
-            directions=directions,
-            time=time,
-            preview_image=preview_image,
-            recipe_image=recipe_image,
-            description=description,
+            name=data['name'],
+            description=data['description'],
+            prep_time = data['prep_time'],
+            cook_time = data['cook_time'],
+            servings = data['servings'],
             )
+    
+    preview_image = RecipeImage(url=data['preview_image'], is_preview=True)
+    recipe_image = RecipeImage(url=data['recipe_image'], is_preview=False)
         
-        for ingredient_data in ingredients:
-            ingredient = Ingredient.query.get(ingredient_data['id'])
-            
-            if ingredient is not None:
-                new_recipe_ingredient = RecipeIngredient(
-                    recipe = new_recipe,
-                    ingredient = ingredient,
-                    quantity = ingredient_data.get('quantity'),
-                    measurement = ingredient_data.get('measurement')
-                )
-                new_recipe.recipe_ingredients.append(new_recipe_ingredient)
-                
-        for direction_data in directions:
-            new_direction = Direction(
-                recipe = new_recipe,
-                step = direction_data.get('step'),
-                step_info = direction_data.get('step_info'),
-            )
-            new_recipe.directions.append(new_direction)
-            
-        db.session.add(new_recipe)
-        db.session.commit()
-        return jsonify(new_recipe.to_dict()), 200       
-            
-    else:
-        return jsonify(form.errors), 400
+    new_recipe.recipe_images.append(preview_image)
+    new_recipe.recipe_images.append(recipe_image)
+        
+    db.session.add(new_recipe)
+    db.session.commit()
+    
+    for direction in request.json.get('directions'):
+        new_direction = Direction(
+            recipe_id=new_recipe.id,
+            step=direction.get('step'),
+            step_info=direction.get('step_info'),
+        )
+        db.session.add(new_direction)
+        try:
+            db.session.commit()
+            print(f"Successfully committed direction: {new_direction.step_number}")
+        except Exception as e:
+            print(f"Error committing direction: {e}")
+            db.session.rollback()
+    
+    for ingredient_data in request.json.get('ingredients'):
 
+        new_ingredient = Ingredient(
+            name=ingredient_data.get('name'),
+            is_seasoning=ingredient_data.get('is_seasoning')
+        )
+
+        db.session.add(new_ingredient)
+    
+        try:
+            db.session.commit()
+            print(f"Committed ingredient with ID: {new_ingredient.id}")
+            print("All ingredients:", Ingredient.query.all())
+        except Exception as e:
+            print(f"Error committing ingredient: {e}")
+            db.session.rollback()
+            continue
+
+        new_recipe_ingredient = RecipeIngredient(
+            recipe_id=new_recipe.id,
+            ingredient_id=new_ingredient.id,
+            quantity=ingredient_data.get('quantity'),
+            measurement=ingredient_data.get('measurement')
+        )
+
+        db.session.add(new_recipe_ingredient)
+
+    try:
+        db.session.commit()
+        print(f"Committed recipe ingredient with ID: {new_recipe_ingredient.ingredient_id}")
+        print("All recipe ingredients:", RecipeIngredient.query.all())
+
+    except Exception as e:
+        print(f"Error committing recipe ingredient: {e}")
+        db.session.rollback()
+
+    
+    return jsonify(new_recipe.to_dict()), 200
+        
 # Update a Recipe
 @recipe_routes.route('/<int:id>', methods=['PUT'])
 @login_required
