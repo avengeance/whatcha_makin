@@ -23,3 +23,21 @@ class RecipeForm(FlaskForm):
     preview_image = StringField('Preview Image', validators=[DataRequired()])
     recipe_image = StringField('Recipe Image')
     
+class EditRecipeForm(FlaskForm):
+    name = StringField('Name')
+    description = TextAreaField('Description')
+    
+    ingredient_name = StringField('Name')
+    ingredient_quantity = IntegerField('Quantity')
+    ingredient_measurement = StringField('Measurement')
+    ingredient_seasoning = BooleanField('Is Seasoning')
+    
+    direction_step = IntegerField('Step')
+    direction_step_info = StringField('Step Info')
+    
+    prep_time = IntegerField('Prep Time')
+    cook_time = IntegerField('Cook Time')
+    servings = IntegerField('Servings')
+    
+    preview_image = StringField('Preview Image')
+    recipe_image = StringField('Recipe Image')

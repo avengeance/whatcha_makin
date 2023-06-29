@@ -8,7 +8,7 @@ from ..models.comment import Comment
 from ..models.like import Like
 from ..models.recipeIngredient import RecipeIngredient
 
-from ..forms.recipe_form import RecipeForm
+from ..forms.recipe_form import RecipeForm, EditRecipeForm
 
 from flask import Blueprint, redirect, url_for, render_template, jsonify, request
 from flask_login import login_required, current_user, logout_user
@@ -231,10 +231,124 @@ def create_recipe():
     return jsonify(new_recipe.to_dict()), 200
 
 # Update a Recipe
-@recipe_routes.route('/<int:id>', methods=['PUT'])
+@recipe_routes.route('/<int:id>/edit', methods=['PUT'])
 @login_required
 def update_recipe(id):
-    pass
+    form = EditRecipeForm(request.form)
+    
+    if form.validate_on_submit():
+        recipe = Recipe.query.get(id)
+        
+        if recipe is None:
+            return jsonify({
+                "message": "Could not find a recipe with that ID",
+                "status_code": 404
+            }), 404
+        
+        if form.name.data is not None:
+            recipe.name = form.name.data
+        if form.description.data is not None:
+            recipe.description = form.description.data
+        if form.prep_time.data is not None:
+            recipe.prep_time = form.prep_time.data
+        if form.cook_time.data is not None:
+            recipe.cook_time.data = form.cook_time.data
+        if form.servings.data is not None:
+            recipe.servings.data = form.servings.data
+        if form.preview_image.data is not None:
+            recipe.preview_image.data = form.preview_image.data
+        if form.recipe_image.data is not None:
+            recipe.recipe_image.data = form.recipe_image.data
+        
+        # if request.json.get('directions'):
+        # handle directions
+        direction_ids = []
+        for direction_data in request.json.get('directions', []):
+            direction_id = direction_data.get('id')
+            if direction_id is None: # new direction
+                direction = Direction(
+                    recipe_id=recipe.id,
+                    step=direction_data.get('step'),
+                    step_info=direction_data.get('step_info'),
+                    )
+                db.session.add(direction)
+            else: # exisiting direction
+                direction = Direction.query.get(direction_id)
+                if direction:
+                    direction.step = direction_data.get('step',direction.step)
+                    direction.step_info = direction_data.get('step_info',direction.step_info)
+                else:
+                    return jsonify({
+                        "message": f"Could not find a direction with ID {direction_id}",
+                        "status_code": 400
+                        }), 400
+                direction_ids.append(direction.id)
+            # delete directions not included in the PUT request
+            for direction in recipe.directions:
+                if direction.id not in direction_ids:
+                    db.session.delete(direction)
+                
+        
+        # if request.json.get('ingredients'):
+        # handle ingredient and recipe ingredients
+        ingredient_ids = []
+        for ingredient_data in request.json.get('ingredients', []):
+            ingredient_id = ingredient_data.get('id')
+            if ingredient_id is None: # new ingredient
+                ingredient = Ingredient(
+                    name = ingredient_data.get('name'),
+                    is_seasoning = ingredient_data.get('is_seasoning')
+                    )
+                db.session.add(ingredient)
+            else: # exisiting ingredient
+                ingredient = Ingredient.query.get(ingredient_id)
+                if ingredient:
+                    ingredient.name = ingredient_data.get('name',ingredient.name)
+                    ingredient.is_seasoning = ingredient_data.get('is_seasoning',ingredient.is_seasoning)
+                else:
+                    return jsonify({
+                        "message": f"Could not find an ingredient with ID {ingredient_id}",
+                        "status_code": 400 
+                        }), 400
+                ingredient_ids.append(ingredient.id)
+                
+            # handle RecipeIngredient
+            recipe_ingredient = RecipeIngredient.query.filter_by(recipe_id=recipe.id, ingredient_id=ingredient.id).first()
+            if recipe_ingredient is None: # new recipe ingredient
+                recipe_ingredient = RecipeIngredient(
+                    recipe_id=recipe.id,
+                    ingredient_id=ingredient.id,
+                    quantity=ingredient_data.get('quantity'),
+                    measurement=ingredient_data.get('measurement')
+                    )
+                db.session.add(recipe_ingredient)
+            else: # exisiting recipe ingredient
+                recipe_ingredient.quantity = ingredient_data.get('quantity',recipe_ingredient.quantity)
+                recipe_ingredient.measurement = ingredient_data.get('measurement',recipe_ingredient.measurement)
+                    
+        # delete ingredients and recipe ingredients not included in the PUT
+        for recipe_ingredient in RecipeIngredient.query.filter_by(recipe_id=recipe.id):
+            if recipe_ingredient.ingredient_id not in ingredient_ids:
+                db.session.delete(recipe_ingredient)
+                # also delete the ingredient itself if it's not used by other recipes
+                ingredient = Ingredient.query.get(recipe_ingredient.ingredient_id)
+                if ingredient and not ingredient.recipe_ingredients:
+                    db.session.delete(ingredient)
+            
+        try:
+            db.session.commit()
+            return jsonify(recipe.to_dict()), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({
+                "message": f"Error while updating the recipe: {str(e)}",
+                "status_code": 500 
+                }), 500
+    else:
+        return jsonify({
+            "message": "Body validation error",
+            "status_code": 400
+        })
 
 # Delete a Recipe
 @recipe_routes.route('/<int:id>', methods=['DELETE'])
