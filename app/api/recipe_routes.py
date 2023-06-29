@@ -340,6 +340,7 @@ def update_recipe(id):
             return jsonify(recipe.to_dict()), 200
         except Exception as e:
             db.session.rollback()
+            print(f"Error while updating the recipe: {str(e)}")
             return jsonify({
                 "message": f"Error while updating the recipe: {str(e)}",
                 "status_code": 500 
