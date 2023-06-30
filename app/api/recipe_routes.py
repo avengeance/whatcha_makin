@@ -146,7 +146,11 @@ def get_recipe(id):
             "ingredients": ingredients,
             "directions": directions_list,
             "reviews": reviews_list,
-            "comments": comments_list
+            "comments": comments_list,
+            "description": recipe.description,
+            "prep_time": recipe.prep_time,
+            "cook_time": recipe.cook_time,
+            "servings": recipe.servings
         }
         return jsonify(recipe_dict), 200
 
@@ -234,11 +238,19 @@ def create_recipe():
 @recipe_routes.route('/<int:id>/edit', methods=['PUT'])
 @login_required
 def update_recipe(id):
-    form = EditRecipeForm(request.form)
+    form = EditRecipeForm(data=request.json)
+    form['csrf_token'].data = request.cookies['csrf_token']
+    
+    form.name.data = request.json.get('name')
+    form.description.data = request.json.get('description')
+    form.prep_time.data = request.json.get('prep_time')
+    form.cook_time.data = request.json.get('cook_time')
+    form.servings.data = request.json.get('servings')
+    form.preview_image.data = request.json.get('preview_image')
+    form.recipe_image.data = request.json.get('recipe_image')
     
     if form.validate_on_submit():
         recipe = Recipe.query.get(id)
-        
         if recipe is None:
             return jsonify({
                 "message": "Could not find a recipe with that ID",
@@ -252,13 +264,16 @@ def update_recipe(id):
         if form.prep_time.data is not None:
             recipe.prep_time = form.prep_time.data
         if form.cook_time.data is not None:
-            recipe.cook_time.data = form.cook_time.data
+            recipe.cook_time = form.cook_time.data
         if form.servings.data is not None:
-            recipe.servings.data = form.servings.data
-        if form.preview_image.data is not None:
-            recipe.preview_image.data = form.preview_image.data
-        if form.recipe_image.data is not None:
-            recipe.recipe_image.data = form.recipe_image.data
+            recipe.servings = form.servings.data
+            
+        if 'preview_image' in request.json:
+            recipe.preview_image = request.json['preview_image']
+            
+        if 'recipe_image' in request.json:
+            recipe.recipe_image = request.json['recipe_image']
+    
         
         # if request.json.get('directions'):
         # handle directions
@@ -289,7 +304,6 @@ def update_recipe(id):
                     db.session.delete(direction)
                 
         
-        # if request.json.get('ingredients'):
         # handle ingredient and recipe ingredients
         ingredient_ids = []
         for ingredient_data in request.json.get('ingredients', []):
@@ -336,7 +350,8 @@ def update_recipe(id):
                     db.session.delete(ingredient)
             
         try:
-            db.session.commit()
+            with db.session.no_autoflush:
+                db.session.commit()
             return jsonify(recipe.to_dict()), 200
         except Exception as e:
             db.session.rollback()
@@ -347,9 +362,10 @@ def update_recipe(id):
                 }), 500
     else:
         return jsonify({
+            "errors": form.errors,
             "message": "Body validation error",
             "status_code": 400
-        })
+        }), 400
 
 # Delete a Recipe
 @recipe_routes.route('/<int:id>', methods=['DELETE'])
