@@ -162,77 +162,96 @@ def get_recipe(id):
 @recipe_routes.route('/new', methods=['POST'])
 @login_required
 def create_recipe():
-    data = request.get_json()  
-        
-    new_recipe = Recipe(
-            owner_id=current_user.id,
-            name=data['name'],
-            description=data['description'],
-            prep_time = data['prep_time'],
-            cook_time = data['cook_time'],
-            servings = data['servings'],
+    data = request.get_json()
+    
+    form = RecipeForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+        try:
+            new_recipe = Recipe(
+                    owner_id = current_user.id,
+                    name = form.name.data,
+                    description = form.description.data,
+                    prep_time = form.prep_time.data,
+                    cook_time = form.cook_time.data,
+                    servings = form.servings.data,
+                    )
+            
+            new_recipe_image = RecipeImage(
+                url=form.preview_image.data,
+                is_preview=True,
+                recipe=new_recipe
             )
-    
-    preview_image = RecipeImage(url=data['preview_image'], is_preview=True)
-    recipe_image = RecipeImage(url=data['recipe_image'], is_preview=False)
-        
-    new_recipe.recipe_images.append(preview_image)
-    new_recipe.recipe_images.append(recipe_image)
-        
-    db.session.add(new_recipe)
-    db.session.commit()
-    
-    for direction in request.json.get('directions'):
-        new_direction = Direction(
-            recipe_id=new_recipe.id,
-            step=direction.get('step'),
-            step_info=direction.get('step_info'),
-        )
-        db.session.add(new_direction)
-        try:
+            new_recipe_image2 = RecipeImage(
+                url=form.recipe_image.data,
+                is_preview=False,
+                recipe=new_recipe
+            )
+            
+            db.session.add(new_recipe)
+            db.session.add(new_recipe_image)
+            db.session.add(new_recipe_image2)
             db.session.commit()
-            print(f"Successfully committed direction: {new_direction.step_number}")
-        except Exception as e:
-            print(f"Error committing direction: {e}")
-            db.session.rollback()
-    
-    for ingredient_data in request.json.get('ingredients'):
 
-        new_ingredient = Ingredient(
-            name=ingredient_data.get('name'),
-            is_seasoning=ingredient_data.get('is_seasoning')
-        )
-
-        db.session.add(new_ingredient)
-    
-        try:
             db.session.commit()
-            print(f"Committed ingredient with ID: {new_ingredient.id}")
-            print("All ingredients:", Ingredient.query.all())
+                
+            db.session.add(new_recipe)
+            db.session.commit()
+            
+            if 'directions' in data:
+                for direction in data['directions']:
+                    try:
+                        new_direction = Direction(
+                            recipe_id=new_recipe.id,
+                            step=direction.get('step'),
+                            step_info=direction.get('step_info'),
+                        )
+                        db.session.add(new_direction)
+                    # try:
+                        db.session.commit()
+                        print(f"Successfully committed direction: {new_direction.step_number}")
+                    except Exception as e:
+                        print(f"Error committing direction: {e}")
+                        db.session.rollback()
+            
+            if 'ingredients' in data:
+                for ingredient_data in data['ingredients']:
+                    try:
+                        new_ingredient = Ingredient(
+                            name=ingredient_data.get('name'),
+                            is_seasoning=ingredient_data.get('is_seasoning')
+                        )
+
+                        db.session.add(new_ingredient)
+                
+                    # try:
+                        db.session.commit()
+                        print(f"Committed ingredient with ID: {new_ingredient.id}")
+                        print("All ingredients:", Ingredient.query.all())
+                    except Exception as e:
+                        print(f"Error committing ingredient: {e}")
+                        db.session.rollback()
+                        continue
+
+                    new_recipe_ingredient = RecipeIngredient(
+                        recipe_id=new_recipe.id,
+                        ingredient_id=new_ingredient.id,
+                        quantity=ingredient_data.get('quantity'),
+                        measurement=ingredient_data.get('measurement')
+                    )
+
+                    db.session.add(new_recipe_ingredient)
+            db.session.commit()
+
         except Exception as e:
-            print(f"Error committing ingredient: {e}")
+            print(f"Exception occurred:: {str(e)}")
             db.session.rollback()
-            continue
 
-        new_recipe_ingredient = RecipeIngredient(
-            recipe_id=new_recipe.id,
-            ingredient_id=new_ingredient.id,
-            quantity=ingredient_data.get('quantity'),
-            measurement=ingredient_data.get('measurement')
-        )
-
-        db.session.add(new_recipe_ingredient)
-
-    try:
-        db.session.commit()
-        print(f"Committed recipe ingredient with ID: {new_recipe_ingredient.ingredient_id}")
-        print("All recipe ingredients:", RecipeIngredient.query.all())
-
-    except Exception as e:
-        print(f"Error committing recipe ingredient: {e}")
-        db.session.rollback()
-
-    return jsonify(new_recipe.to_dict()), 200
+        return jsonify(new_recipe.to_dict()), 201
+    else:
+        return(jsonify({
+            'errors': form.errors
+            })), 400
         
 # Update a Recipe
 @recipe_routes.route('/<int:id>/edit', methods=['PUT'])
