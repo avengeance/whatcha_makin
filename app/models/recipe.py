@@ -25,19 +25,27 @@ class Recipe(db.Model):
     recipe_images = db.relationship('RecipeImage', back_populates='recipe', lazy=True, cascade='all')
     
     def to_dict(self):
-        return {
-            'id': self.id,
-            'owner_id': self.owner_id,
-            'name': self.name,
-            'description': self.description,
-            'prep_time': self.prep_time,
-            'cook_time': self.cook_time,
-            'servings': self.servings,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
-            'reviews': [review.to_dict() for review in self.reviews],
-            'comments': [comment.to_dict() for comment in self.comments],
-            'likes': [like.to_dict() for like in self.likes],
-            'directions': [direction.to_dict() for direction in self.directions],
-            'recipe_ingredients': [ingredient.to_dict() for ingredient in self.recipe_ingredients]
-        }
+
+        try:
+            result = {
+                'id': self.id,
+                'name': self.name,
+                'owner_id': self.owner_id,
+                'name': self.name,
+                'description': self.description,
+                'prep_time': self.prep_time,
+                'cook_time': self.cook_time,
+                'servings': self.servings,
+                'created_at': self.created_at,
+                'updated_at': self.updated_at,
+                'reviews': [review.to_dict() for review in self.reviews],
+                'comments': [comment.to_dict() for comment in self.comments],
+                'likes': [like.to_dict() for like in self.likes],
+                'directions': [direction.to_dict() for direction in self.directions],
+                'recipe_ingredients': [ingredient.to_dict() for ingredient in self.recipe_ingredients]
+            }
+            print("Result before returning from to_dict:", result)
+            return result
+        except Exception as e:
+            print("Exception in to_dict:", e)
+            return None
