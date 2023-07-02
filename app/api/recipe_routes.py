@@ -613,3 +613,28 @@ def view_comments(id):
             "message": "Recipe does not exist",
             "status_code": 404
         }), 404
+        
+# Create a Comment
+@recipe_routes.route('/<int:id>/comments/new', methods=['POST'])
+@login_required
+def create_comment(id):
+    recipe = Recipe.query.get(id)
+    if recipe:
+        if request.is_json:
+            data = request.get_json()
+            data = json.loads(data) if isinstance(data,str) else data
+            comment = Comment(
+                owner_id = current_user.id,
+                recipe_id = id,
+                comment=data['comment']
+            )
+            db.session.add(comment)
+            db.session.commit()
+            
+            return jsonify(comment.to_dict()), 201
+    else:
+        res = {
+            "message": "Recipe does not exist",
+            "status_code": 404
+        }
+        return jsonify(res), 404
