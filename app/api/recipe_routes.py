@@ -9,6 +9,7 @@ from ..models.like import Like
 from ..models.recipeIngredient import RecipeIngredient
 
 from ..forms.recipe_form import RecipeForm, EditRecipeForm
+from ..forms.review_form import ReviewForm
 
 from flask import Blueprint, redirect, url_for, render_template, jsonify, request
 from flask_login import login_required, current_user, logout_user
@@ -452,3 +453,35 @@ def get_all_recipe_reviews(id):
             "message": "Recipe does not exist",
             "status_code": 404
         }), 404
+
+# Create a review
+@recipe_routes.route('/<int:id>/reviews/new', methods=['POST'])
+@login_required
+def create_review(id):
+    form = ReviewForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    
+    exisiting_review = Review.query.filter_by(owner_id=current_user.id, recipe_id=id).first()
+    if exisiting_review:
+        return jsonify({
+            "message": "You have already reviewed this recipe",
+            "status_code": 400
+        }), 400
+    
+    if form.validate_on_submit():
+        review = form.review.data
+        stars = form.stars.data
+        
+        new_review = Review(
+            owner_id = current_user.id,
+            recipe_id = id,
+            review=review,
+            stars=stars
+        )
+        
+        db.session.add(new_review)
+        db.session.commit()
+        
+        return jsonify(new_review.to_dict()), 201
+    else:
+        return jsonify(form.errors), 400
