@@ -561,3 +561,17 @@ def view_likes(id):
             "status_code": 404
         }), 404
     
+# Create a Like
+@recipe_routes.route('/<int:id>/likes/new', methods=['POST'])
+@login_required
+def create_like(id):
+    user_id = current_user.id
+    new_like = Like(
+        user_id = user_id,
+        recipe_id = id
+    )
+    db.session.add(new_like)
+    db.session.commit()
+    
+    return jsonify(new_like.to_dict()), 201
+        
