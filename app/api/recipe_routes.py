@@ -575,3 +575,26 @@ def create_like(id):
     
     return jsonify(new_like.to_dict()), 201
         
+# Delete a Like
+@recipe_routes.route('/<int:id>/likes/<int:like_id>/delete', methods=['DELETE'])
+@login_required
+def delete_like(id,like_id):
+    like = Like.query.get(like_id)
+    
+    if like:
+        db.session.delete(like)
+        db.session.commit()
+        
+        res = {
+            "id": like.id,
+            "message": "Successfully deleted",
+            "status_code": 200
+        }
+        
+        return jsonify(res),200
+    else:
+        res = {
+            "message": "Like not found",
+            "status_code": 404
+        }
+        return jsonify(res), 404
