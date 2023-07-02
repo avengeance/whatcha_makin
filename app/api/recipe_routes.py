@@ -545,3 +545,19 @@ def delete_review(id,review_id):
             "status_code": 404
         }
         return jsonify(res), 404
+
+# View Likes by Recipe ID (Bonus Feature)
+@recipe_routes.route('/<int:id>/likes', methods=['GET'])
+def view_likes(id):
+    recipe = Recipe.query.get(id)
+    
+    if recipe:
+        likes = Like.query.filter_by(recipe_id=id).all()
+        likes_dict = [like.to_dict() for like in likes]
+        return jsonify(likes_dict), 200
+    else:
+        return jsonify({
+            "message": "Recipe does not exist",
+            "status_code": 404
+        }), 404
+    
