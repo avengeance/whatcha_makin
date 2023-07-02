@@ -522,3 +522,26 @@ def update_review(id,review_id):
             "status_code": 400
         }), 400
         
+# Delete a Review
+@recipe_routes.route('/<int:id>/reviews/<int:review_id>/delete', methods=['DELETE'])
+@login_required
+def delete_review(id,review_id):
+    review = Review.query.get(review_id)
+    
+    if review:
+        db.session.delete(review)
+        db.session.commit()
+        
+        res = {
+            "id": review.id,
+            "message": "Successfully deleted",
+            "status_code": 200
+        }
+        
+        return jsonify(res), 200
+    else:
+        res = {
+            "message": "Review not found",
+            "status_code": 404
+        }
+        return jsonify(res), 404
