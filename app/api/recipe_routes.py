@@ -436,3 +436,19 @@ def delete_recipe(id):
             "status_code": 404
         }
         return jsonify(res), 404
+
+# View all Reviews by Recipe ID
+@recipe_routes.route('/<int:id>/reviews', methods=['GET'])
+def get_all_recipe_reviews(id):
+    recipe = Recipe.query.get(id)
+    
+    if(recipe):
+        reviews = Review.query.filter_by(recipe_id=id).all()
+        reviews_dict = [review.to_dict() for review in reviews]
+        return jsonify(reviews_dict), 200
+
+    else:
+        return jsonify({
+            "message": "Recipe does not exist",
+            "status_code": 404
+        }), 404
