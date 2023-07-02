@@ -598,3 +598,18 @@ def delete_like(id,like_id):
             "status_code": 404
         }
         return jsonify(res), 404
+
+# View Comments by Recipe ID
+@recipe_routes.route('/<int:id>/comments', methods=['GET'])
+def view_comments(id):
+    recipe = Recipe.query.get(id)
+    
+    if recipe:
+        comments = Comment.query.filter_by(recipe_id=id).all()
+        comments_dict = [comment.to_dict() for comment in comments]
+        return jsonify(comments_dict), 200
+    else:
+        return jsonify({
+            "message": "Recipe does not exist",
+            "status_code": 404
+        }), 404
