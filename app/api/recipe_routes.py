@@ -638,3 +638,27 @@ def create_comment(id):
             "status_code": 404
         }
         return jsonify(res), 404
+
+# Delete a Comment
+@recipe_routes.route('/<int:id>/comments/<int:comment_id>/delete', methods=['DELETE'])
+@login_required
+def delete_comment(id,comment_id):
+    comment = Comment.query.get(comment_id)
+    
+    if comment:
+        db.session.delete(comment)
+        db.session.commit()
+        
+        res = {
+            "id": comment.id,
+            "message": "Successfully deleted",
+            "status_code": 200
+        }
+        
+        return jsonify(res), 200
+    else:
+        res = {
+            "message": "Comment not found",
+            "status_code": 404
+        }
+        return jsonify(res), 404
