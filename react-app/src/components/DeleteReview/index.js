@@ -6,7 +6,7 @@ import { useModal } from "../../context/Modal";
 import * as ReviewActions from "./store/reviews";
 import "./DeleteReview.css";
 
-const DeleteReview = ({recipeId, reviewId, refreshKey,setRefreshKey}) => {
+const DeleteReviewModal = ({recipeId, reviewId, refreshKey,setRefreshKey}) => {
     const { closeModal } = useModal();
     const dispatch = useDispatch();
     const history = useHistory();
@@ -29,3 +29,5 @@ const DeleteReview = ({recipeId, reviewId, refreshKey,setRefreshKey}) => {
         </div>
     )
 }
+
+export default DeleteReviewModal
