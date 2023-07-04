@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 // Constants
 const GET_ALL_REVIEWS = "reviews/GET_ALL_REVIEWS";
+const GET_REVIEW = "reviews/GET_REVIEW";
 const CREATE_REVIEW = "reviews/CREATE_REVIEW";
 const UPDATE_REVIEW = "reviews/UPDATE_REVIEW";
 const DELETE_REVIEW = "reviews/DELETE_REVIEW";
@@ -10,6 +11,10 @@ const DELETE_REVIEW = "reviews/DELETE_REVIEW";
 const getAllReviews = (reviews) => ({
     type: GET_ALL_REVIEWS,
     reviews,
+})
+const getReview = (review) => ({
+    type: GET_REVIEW,
+    review,
 })
 const createReview = (review) => ({
     type: CREATE_REVIEW,
@@ -31,6 +36,15 @@ export const getAllReviewsThunk = (recipedId) => async (dispatch) => {
     });
     const data = await res.json();
     dispatch(getAllReviews(data))
+    return data
+}
+
+export const getReviewThunk = (recipeId, reviewId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}`, {
+        method: "GET",
+    });
+    const data = await res.json();
+    dispatch(getReview(data))
     return data
 }
 
@@ -82,12 +96,14 @@ const reviewsReducer = (state = initialState, action) => {
                 newState.reviews[review.id] = review;
             });
             return newState;
+        case GET_REVIEW:
+            newState.reviews[action.recipes.review.id] = action.recipes.review;
         case CREATE_REVIEW:
             newState.reviews.push(action.reviews)
             return newState;
         case UPDATE_REVIEW:
             const indexToUpdate = newState.reviews.findIndex((review) => review.id === action.reviews.id);
-            if(indexToUpdate !== -1){
+            if (indexToUpdate !== -1) {
                 newState.reviews[indexToUpdate] = action.reviews;
             }
             return newState
