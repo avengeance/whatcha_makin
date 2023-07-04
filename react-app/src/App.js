@@ -12,6 +12,7 @@ import LoginFormPage from "./components/LoginFormPage";
 import Navigation from "./components/Navigation";
 import Recipe from "./components/Recipe";
 import CreateRecipe from "./components/CreateRecipe";
+import UpdateRecipe from "./components/UpdateRecipe";
 
 function App() {
   const dispatch = useDispatch();
@@ -38,6 +39,9 @@ function App() {
           </Route>
           <Route exact path="/recipes/new">
             <CreateRecipe />
+          </Route>
+          <Route path="/recipes/:recipeId/edit" component={UpdateRecipe}>
+            <UpdateRecipe />
           </Route>
         </Switch>
       )}
