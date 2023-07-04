@@ -71,9 +71,11 @@ export const createRecipeThunk = (recipe) => async (dispatch) => {
             "Content-Type": "application/json",
         }
     });
-    const data = await res.json();
-    dispatch(createRecipe(data));
-    return data;
+    if (res.ok){
+        const data = await res.json();
+        dispatch(createRecipe(data));
+        return data;
+    }
 }
 
 export const updateRecipeThunk = (recipe) => async (dispatch) => {
