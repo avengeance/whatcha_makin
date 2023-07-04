@@ -12,32 +12,32 @@ const GET_RECIPES_BY_USER = 'recipes/GET_RECIPES_BY_USER';
 // Actions
 const getAllRecipes = (recipes) => ({
     type: GET_ALL_RECIPES,
-        recipes,
+    recipes,
 })
 
 const getRecipe = (recipe) => ({
     type: GET_RECIPE,
-        recipe,
+    recipe,
 })
 
 const createRecipe = (recipe) => ({
     type: CREATE_RECIPE,
-        recipe,
+    recipe,
 })
 
 const updateRecipe = (recipe) => ({
     type: UPDATE_RECIPE,
-        recipe,
+    recipe,
 })
 
 const deleteRecipe = (recipe) => ({
     type: DELETE_RECIPE,
-        recipe,
+    recipe,
 })
 
 const getRecipesByUser = (recipes) => ({
     type: GET_RECIPES_BY_USER,
-        recipes,
+    recipes,
 })
 
 // Thunks
@@ -64,14 +64,23 @@ export const getRecipeThunk = (recipeId) => async (dispatch) => {
 }
 
 export const createRecipeThunk = (recipe) => async (dispatch) => {
+    const formData = new FormData();
+    Object.keys(recipe).forEach((key) => {
+        if (Array.isArray(recipe[key])) {
+            recipe[key].forEach((item, index) => {
+                Object.keys(item.forEach((subKey) => {
+                    formData.append(`${key}[${index}].${subKey}`, item[subKey])
+                }))
+            })
+        } else {
+            formData.append(key, recipe[key])
+        }
+    })
     const res = await csrfFetch("/api/recipes/new", {
         method: "POST",
-        body: JSON.stringify(recipe),
-        headers: {
-            "Content-Type": "application/json",
-        }
+        body: formData,
     });
-    if (res.ok){
+    if (res.ok) {
         const data = await res.json();
         dispatch(createRecipe(data));
         return data;
@@ -79,14 +88,23 @@ export const createRecipeThunk = (recipe) => async (dispatch) => {
 }
 
 export const updateRecipeThunk = (recipe) => async (dispatch) => {
+    const formData = new FormData();
+    Object.keys(recipe).forEach((key) => {
+        if (Array.isArray(recipe[key])) {
+            recipe[key].forEach((item, index) => {
+                Object.keys(item.forEach((subKey) => {
+                    formData.append(`${key}[${index}].${subKey}`, item[subKey])
+                }))
+            })
+        } else {
+            formData.append(key, recipe[key])
+        }
+    })
     const res = await csrfFetch(`/api/recipes/${recipe.id}/edit`, {
         method: "PUT",
-        body: JSON.stringify(recipe),
-        headers: {
-            "Content-Type": "application/json",
-        }
+        body: formData,
     });
-    if (res.ok){
+    if (res.ok) {
         const data = await res.json();
         dispatch(updateRecipe(data));
         return data;
@@ -120,8 +138,8 @@ const recipesReducer = (state = intialState, action) => {
     let newState = { ...state };
     switch (action.type) {
         case GET_ALL_RECIPES:
-            action.songs.Songs.forEach((recipe)=>{
-                newState.recipes[recipe.id]= recipe
+            action.songs.Songs.forEach((recipe) => {
+                newState.recipes[recipe.id] = recipe
             })
             return newState
         case GET_RECIPE:
@@ -138,7 +156,7 @@ const recipesReducer = (state = intialState, action) => {
             return newState
         case GET_RECIPES_BY_USER:
             if (!newState.recipes.user) newState.recipes.user = {}
-            bindActionCreators.recipes.UserRecipes.forEach((recipe)=>{
+            bindActionCreators.recipes.UserRecipes.forEach((recipe) => {
                 newState.recipes.user[recipe.id] = recipe
             })
             return newState
