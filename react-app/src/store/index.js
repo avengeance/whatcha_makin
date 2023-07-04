@@ -13,7 +13,6 @@ const rootReducer = combineReducers({
   reviews: reviewsReducer,
   likes: likesReducer,
   comments: commentsReducer
-});
 
 
 let enhancer;
