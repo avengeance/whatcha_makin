@@ -11,6 +11,7 @@ import SignupFormPage from "./components/SignupFormPage";
 import LoginFormPage from "./components/LoginFormPage";
 import Navigation from "./components/Navigation";
 import Recipe from "./components/Recipe";
+import CreateRecipe from "./components/CreateRecipe";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +35,9 @@ function App() {
           </Route>
           <Route exact path="/">
             <Recipe />
+          </Route>
+          <Route exact path="/recipes/new">
+            <CreateRecipe />
           </Route>
         </Switch>
       )}
