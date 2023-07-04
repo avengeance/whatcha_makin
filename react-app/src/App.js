@@ -20,7 +20,7 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
     dispatch(SessionActions.authenticate()).then(() => setIsLoaded(true));
-    dispatch(RecipeActions.getAllRecipes());
+    dispatch(RecipeActions.getAllRecipesThunk());
     setIsLoaded(true);
   }, [dispatch]);
 

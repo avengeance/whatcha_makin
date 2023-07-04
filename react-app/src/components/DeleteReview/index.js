@@ -1,27 +1,31 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 
-import * as ReviewActions from "./store/reviews";
+import * as ReviewActions from "../../store/reviews";
 import "./DeleteReview.css";
 
-const DeleteReviewModal = ({recipeId, reviewId, refreshKey,setRefreshKey}) => {
+const DeleteReviewModal = ({ recipeId, reviewId, refreshKey }) => {
     const { closeModal } = useModal();
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const recipes = useSelector((state) => state.recipes);
+    const reviews = useSelector((state) => state.reviews);
+
     const deleteReview = async (e) => {
-        await dispatch(ReviewActions.deleteReviewThunk(recipeId, reviewId));
-        setReFreshKey(refreshKey +1)
-        closeModal()
-        history.push(`/recipes/${recipeId}`)
+        if (reviewId.length > 0) {
+            const currentRecipeReview = recipes.find((recipe) => recipe.id === reviewId)
+            await dispatch(ReviewActions.deleteReviewThunk(recipeId, reviewId));
+            history.push(`/recipes/${recipeId}`);
+        }
     }
     const handleNoClick = () => {
         closeModal()
     }
 
-    return(
+    return (
         <div className="delete-modal">
             <h3>Are you sure you want to delete this review?</h3>
             <button onClick={deleteReview}>Yes</button>
