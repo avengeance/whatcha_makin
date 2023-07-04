@@ -12,11 +12,11 @@ const getAllComments = (comments) => ({
 })
 const createComment = (comment) => ({
     type: CREATE_COMMENT,
-        comments,
+        comment,
 })
 const deleteComment = (comment) => ({
     type: DELETE_COMMENT,
-        comments,
+        comment,
 })
 
 // Thunks

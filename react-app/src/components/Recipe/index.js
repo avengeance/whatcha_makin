@@ -11,7 +11,7 @@ function Recipe(){
     const recipes = useSelector((state) => Object.values(state.recipes.recipes));
 
     useEffect(() => {
-        dispatch(RecipeActions.getAllRecipes());
+        dispatch(RecipeActions.getAllRecipesThunk());
     }, [dispatch]);
 
     const handleRecipeClick = (recipeId) => {

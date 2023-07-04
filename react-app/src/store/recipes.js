@@ -55,7 +55,7 @@ export const getAllRecipesThunk = () => async (dispatch) => {
 }
 
 export const getRecipeThunk = (recipeId) => async (dispatch) => {
-    const res = await csrfFetch(`/api/recipes/${id}`, {
+    const res = await csrfFetch(`/api/recipes/${recipeId}`, {
         method: "GET",
     });
     const recipeDetails = await res.json();
@@ -138,7 +138,7 @@ const recipesReducer = (state = intialState, action) => {
     let newState = { ...state };
     switch (action.type) {
         case GET_ALL_RECIPES:
-            action.songs.Songs.forEach((recipe) => {
+            action.recipe.Recipes.forEach((recipe) => {
                 newState.recipes[recipe.id] = recipe
             })
             return newState
