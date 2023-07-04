@@ -5,12 +5,14 @@ import session from './session';
 import recipesReducer from './recipes';
 import reviewsReducer from './reviews';
 import likesReducer from './likes';
+import commentsReducer from './comments';
 
 const rootReducer = combineReducers({
   session,
   recipes: recipesReducer,
   reviews: reviewsReducer,
-  likes: likesReducer
+  likes: likesReducer,
+  comments: commentsReducer
 });
 
 
