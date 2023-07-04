@@ -46,3 +46,57 @@ export const createReviewThunk = (recipeId, review) => async (dispatch) => {
     dispatch(createReview(data));
     return data;
 }
+
+export const updateReviewThunk = (recipeId, review) => async (dispatch) => {
+    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${review.id}`, {
+        method: "PUT",
+        body: JSON.stringify(review),
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    const data = await res.json();
+    dispatch(updateReview(data));
+    return data
+}
+
+export const deleteReviewThunk = (recipeId, reviewId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}/delete`, {
+        method: "DELETE",
+    })
+    const data = await res.json();
+    dispatch(deleteReview(data));
+    return data
+}
+
+// Reducer
+const initialState = {
+    reviews: []
+}
+
+const reviewsReducer = (state = initialState, action) => {
+    let newState = { ...state };
+    switch (action.type) {
+        case GET_ALL_REVIEWS:
+            action.reviews.forEach((review) => {
+                newState.reviews[review.id] = review;
+            });
+            return newState;
+        case CREATE_REVIEW:
+            newState.reviews.push(action.reviews)
+            return newState;
+        case UPDATE_REVIEW:
+            const indexToUpdate = newState.reviews.findIndex((review) => review.id === action.reviews.id);
+            if(indexToUpdate !== -1){
+                newState.reviews[indexToUpdate] = action.reviews;
+            }
+            return newState
+        case DELETE_REVIEW:
+            delete newState[action.reviews.id]
+            return newState
+        default:
+            return state;
+    }
+}
+
+export default reviewsReducer;
