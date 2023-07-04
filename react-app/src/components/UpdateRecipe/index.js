@@ -140,3 +140,5 @@ function UpdateRecipe() {
         }
     }
 }
+
+export default UpdateRecipe
