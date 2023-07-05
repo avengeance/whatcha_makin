@@ -5,3 +5,162 @@
 .hidden {
   display: none;
 }
+
+ul {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+li {
+  position: relative;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid red;
+}
+
+.home-button {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  width: 50%;
+  right: 40px;
+}
+
+.navigation-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 50px;
+  border-bottom: 2px solid lightgray;
+  border: 1px solid black;
+
+}
+
+.profile-button {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 25px;
+  width: 40%;
+  border: 1px solid green;
+}
+
+#profile-button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  border: 1px lightgray solid;
+  width: 75px;
+  height: 42px;
+  margin: 1px;
+  padding: 1px;
+  border-radius: 50px;
+  opacity: 0.6;
+  border: 1px solid black;
+}
+
+#profile-button:hover {
+  cursor: pointer;
+}
+
+#profile-dropdown {
+  position: absolute;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px #888;
+  font-size: 12px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  right: 0px;
+  top: 50px;
+  width: 200px;
+  text-align: start;
+  background-color: white;
+}
+
+#profile-dropdown.hidden {
+  display: none;
+}
+
+.logo-link {
+  order: 1;
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  /* background-image: url("/logo.png"); */
+  background-size: cover;
+  background-position: center;
+  border: 1px solid green;
+}
+
+.logo-image {
+  order: 2;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  border: 1px solid red;
+}
+
+.header-text {
+  display: flex;
+  border: 1px solid blue;
+}
+
+.login-button {
+  display: flex;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+  margin-left: 0;
+}
+
+.login-button:hover {
+  background-color: #ddd;
+}
+
+.login-button:hover>button {
+  color: blue;
+}
+
+.signup-button {
+  display: flex;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+  margin-left: 0;
+  text-decoration: none;
+}
+
+.signup-button:hover {
+  background-color: #ddd;
+}
+
+#create-spot-button {
+  display: flex;
+  align-self: center;
+  border: 0;
+  width: 170px;
+  color: blue;
+  text-decoration: none !important;
+
+}

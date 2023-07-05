@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-import * as RecipeActions from './store/recipes';
+import * as RecipeActions from '../../store/recipes';
 import "./DeleteRecipe.css"
 
 const DeleteRecipeModal = ({ recipeId, ownerId, closeModal }) => {

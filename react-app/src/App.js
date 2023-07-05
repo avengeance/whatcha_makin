@@ -10,10 +10,14 @@ import * as SessionActions from "./store/session";
 import SignupFormPage from "./components/SignupFormPage";
 import LoginFormPage from "./components/LoginFormPage";
 import Navigation from "./components/Navigation";
+
 import Recipe from "./components/Recipe";
 import RecipeDetail from "./components/RecipeDetail";
+
 import CreateRecipe from "./components/CreateRecipe";
 import UpdateRecipe from "./components/UpdateRecipe";
+
+import UserRecipes from "./components/UserRecipe";
 
 function App() {
   const dispatch = useDispatch();
@@ -40,6 +44,9 @@ function App() {
           </Route>
           <Route exact path="/recipes/new">
             <CreateRecipe />
+          </Route>
+          <Route exact path="/users/:userId/recipes">
+            <UserRecipes />
           </Route>
           <Route path="/recipes/:recipeId/edit" component={UpdateRecipe}>
             <UpdateRecipe />

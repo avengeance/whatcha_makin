@@ -138,7 +138,10 @@ const recipesReducer = (state = intialState, action) => {
     let newState = { ...state };
     switch (action.type) {
         case GET_ALL_RECIPES:
-            action.recipe.Recipes.forEach((recipe) => {
+            // action.recipes.Recipes.forEach((recipe) => {
+            //     newState.recipes[recipe.id] = recipe
+            // })
+            Object.values(action.recipes).forEach((recipe) => {
                 newState.recipes[recipe.id] = recipe
             })
             return newState
