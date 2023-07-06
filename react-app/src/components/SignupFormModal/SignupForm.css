@@ -1,0 +1,39 @@
+.signup-modal {
+    display: inline-block;
+    flex-direction: column;
+    align-items: flex-end;
+    height: 400px;
+}
+
+#signup-text {
+    display: flex;
+    justify-content: center;
+    width: 500px;
+    height: 40px;
+    /* border: 1px solid black; */
+}
+.signup-form{
+    /* border: 1px solid black; */
+    margin: 0;
+}
+.form-input {
+    display: flex;
+    justify-content: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    /* border: 1px solid black; */
+}
+#div-signup-submit{
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+    height: 50px;
+}
+
+.signup-errors{
+    color: red;
+    font-size: small;
+}
+
+
+
