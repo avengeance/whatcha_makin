@@ -72,7 +72,7 @@ function ProfileButton({ user }) {
             <li id="firstname">{user.first_name}</li>
             <li id="email">{user.email}</li>
             <li id="manage-recipes">
-              <NavLink to={`/users/${user.id}/recipes`} id="manage-recipes-link" style={{textDecoration: 'none'}}>
+              <NavLink to={`/users/${user.id}/recipes`} id="manage-recipes-link" style={{ textDecoration: 'none' }}>
                 Manage Recipes
               </NavLink>
             </li>
@@ -82,17 +82,20 @@ function ProfileButton({ user }) {
           </>
         ) : (
           <>
-            <OpenModalButton
-              buttonText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-
-            <OpenModalButton
-              buttonText="Sign Up"
-              onItemClick={closeMenu}
-              modalComponent={<SignupFormModal />}
-            />
+            <div className="login-button">
+              <OpenModalButton
+                buttonText="Log In"
+                onItemClick={closeMenu}
+                modalComponent={<LoginFormModal />}
+              />
+            </div>
+            <div className="signup-button">
+              <OpenModalButton
+                buttonText="Sign Up"
+                onItemClick={closeMenu}
+                modalComponent={<SignupFormModal />}
+              />
+            </div>
           </>
         )}
       </ul>
