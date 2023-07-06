@@ -24,9 +24,9 @@ function Navigation({ isLoaded }) {
 								></span>
 							</NavLink>
 						</li>
-						<div className='header-text'>
+						{/* <div className='header-text'>
 							<h1>Whatcha Makin</h1>
-						</div>
+						</div> */}
 					</div>
 					{isLoaded && (
 						<div className='profile-button'>
