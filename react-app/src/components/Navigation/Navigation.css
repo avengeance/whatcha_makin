@@ -19,13 +19,13 @@ li {
   justify-content: space-evenly;
 }
 
-.header {
+/* .header {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   border: 1px solid red;
-}
+} */
 
 .home-button {
   position: relative;
@@ -43,7 +43,7 @@ li {
   padding: 10px;
   margin-bottom: 50px;
   border-bottom: 2px solid lightgray;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 
 }
 
@@ -53,7 +53,7 @@ li {
   justify-content: flex-end;
   padding-right: 25px;
   width: 40%;
-  border: 1px solid green;
+  /* border: 1px solid green; */
 }
 
 #profile-button {
@@ -104,10 +104,9 @@ li {
   display: inline-block;
   width: 80px;
   height: 80px;
-  /* background-image: url("/logo.png"); */
   background-size: cover;
   background-position: center;
-  border: 1px solid green;
+  /* border: 1px solid green; */
 }
 
 .logo-image {
@@ -118,7 +117,7 @@ li {
   align-items: center;
   width: 80px;
   height: 80px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 
 .header-text {
@@ -155,12 +154,20 @@ li {
   background-color: #ddd;
 }
 
-#create-spot-button {
+#create-recipe-button {
   display: flex;
   align-self: center;
   border: 0;
   width: 170px;
   color: blue;
   text-decoration: none !important;
+}
 
+#recipe-button-link {
+  display: flex;
+  align-self: center;
+  border: 0;
+  width: 170px;
+  color: #4D7E3E;
+  text-decoration: none !important;
 }

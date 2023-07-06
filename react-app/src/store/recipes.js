@@ -159,9 +159,11 @@ const recipesReducer = (state = intialState, action) => {
             return newState
         case GET_RECIPES_BY_USER:
             if (!newState.recipes.user) newState.recipes.user = {}
-            bindActionCreators.recipes.UserRecipes.forEach((recipe) => {
-                newState.recipes.user[recipe.id] = recipe
-            })
+            if (action.recipes && action.recipes.UserRecipes) {
+                action.recipes.UserRecipes.forEach((recipe) => {
+                    newState.recipes.user[recipe.id] = recipe
+                })
+            }
             return newState
         default:
             return state;
