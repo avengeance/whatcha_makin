@@ -6,26 +6,26 @@ import "./LoginForm.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
-  const [credential, setCredential] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
 
-  const MIN_EMAIL_LENGTH = 5;
+  const MIN_EMAIL_LENGTH = 3;
   const MIN_PASSWORD_LENGTH = 6;
 
-  const validCredential = credential.length >= MIN_EMAIL_LENGTH;
+  const validEmail = email.length >= MIN_EMAIL_LENGTH;
   const validPassword = password.length >= MIN_PASSWORD_LENGTH;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = await dispatch(login(email, password));
-    if (data) {
-      setErrors(data);
+    if (data && data.errors) {
+      setErrors(data.errors);
     } else {
-      closeModal()
+      setErrors(["The provided credentials are invalid"])
     }
+    closeModal();
   };
 
   const handleDemoLogin = (e) => {
@@ -47,7 +47,7 @@ function LoginFormModal() {
           <input
             type="text"
             value={email}
-            onChange={(e) => setCredential(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
             placeholder="Email"
           />
@@ -63,13 +63,13 @@ function LoginFormModal() {
         </label>
         <div id="div-login-submit">
           <button type="submit"
-          disabled={!validCredential || !validPassword}
-          id="login-sbumit"
+            disabled={!validEmail || !validPassword}
+            id="login-submit"
           >Log In</button>
         </div>
         <div className="demo-login">
           <a href="javascript:void(0)"
-          onClick={handleDemoLogin}
+            onClick={handleDemoLogin}
           >Demo Login</a>
         </div>
       </form>

@@ -13,7 +13,7 @@ function Navigation({ isLoaded }) {
 			<div className='header'>
 				<ul>
 					<div className='home-button'>
-						<li>
+						<li id='home-button'>
 							<NavLink exact to="/"
 								className='logo-link'
 							>
@@ -24,9 +24,6 @@ function Navigation({ isLoaded }) {
 								></span>
 							</NavLink>
 						</li>
-						{/* <div className='header-text'>
-							<h1>Whatcha Makin</h1>
-						</div> */}
 					</div>
 					{isLoaded && (
 						<div className='profile-button'>
