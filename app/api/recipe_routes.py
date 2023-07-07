@@ -54,7 +54,7 @@ def get_all_recipes():
         recipe_list.append(recipe_dict)
     
     return jsonify({
-        "Recipes": recipe_list
+        "recipes": recipe_list
     }), 200
 
 # View Receipe Details by Id

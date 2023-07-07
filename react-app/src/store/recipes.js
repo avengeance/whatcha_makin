@@ -46,11 +46,17 @@ export const getAllRecipesThunk = () => async (dispatch) => {
         method: "GET",
     });
     const data = await res.json()
-    let recipes = {}
-    data.Recipes.forEach(recipe => {
-        recipes[recipe.id] = recipe
-    })
-    dispatch(getAllRecipes(recipes))
+    // let recipes = {}
+    // data.recipes.forEach(recipe => {
+    //     recipes[recipe.id] = recipe
+    // })
+    // dispatch(getAllRecipes(recipes))
+    if(res.ok){
+        dispatch(getAllRecipes(data.recipes))
+    }
+    else {
+        throw new Error(data.error)
+    }
     return data
 }
 
@@ -156,6 +162,7 @@ const recipesReducer = (state = intialState, action) => {
             return newState
         case DELETE_RECIPE:
             const { [action.recipes.id]: deletedRecipe, ...updatedRecipes } = newState.recipes
+            newState.recipes = updatedRecipes
             return newState
         case GET_RECIPES_BY_USER:
             if (!newState.recipes.user) newState.recipes.user = {}
