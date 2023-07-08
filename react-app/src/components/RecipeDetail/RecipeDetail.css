@@ -14,6 +14,7 @@
 #recipe.detail-info,h2 {
     display: flex;
     justify-content: center;
+    flex-direction: wrap;
     /* border: 1px solid black; */
 }
 
@@ -120,6 +121,22 @@
 .fa-solid.fa-heart{
     color: #4D7E3E
 }
+
+.recipe-description{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    border: 1px solid blue;
+}
+
+#review-created{
+    font-size: x-small;
+}
+
+
+
+
+
 
 #hosted {
     font-size: x-large;
