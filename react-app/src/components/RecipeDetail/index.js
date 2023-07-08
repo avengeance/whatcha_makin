@@ -109,8 +109,19 @@ const RecipeDetail = () => {
                                 </div>
                             </div>
                             <div className='recipe-description-time-container'>
-                                <div className='recipe-description'>
-                                    <h2>{currentRecipes?.owner_name}</h2>
+                                <div className='recipe-description-owner-container'>
+                                    <div className='recipe-owner-name'>
+                                        <h2>{currentRecipes?.owner_name}</h2>
+                                    </div>
+                                    <div className='recipe-description'>
+                                        <p>{currentRecipes?.description}</p>
+                                    </div>
+                                </div>
+                                <div className='recipe-time'>
+                                    <h3>Total Time to Cook - {currentRecipes?.total_time} min</h3>
+                                    <h4>Prep Time - {currentRecipes?.prep_time} min</h4>
+                                    <h4>Cook Time - {currentRecipes?.cook_time} min</h4>
+                                    <h3>Servings - {currentRecipes?.servings}</h3>
                                 </div>
                             </div>
                         </div>
