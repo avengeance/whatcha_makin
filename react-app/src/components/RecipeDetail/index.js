@@ -31,25 +31,25 @@ const RecipeDetail = () => {
     const [refreshKey, setRefreshKey] = useState(0);
     const [isLoading, setIsloading] = useState(true);
 
-    // useEffect(() => {
-    //     dispatch(RecipeActions.getRecipeThunk(recipeId))
-    //         .then(currentRecipe => setCurrentRecipe(currentRecipe))
-    //         .then(currentRecipe => {
-    //             if (currentRecipe?.Owner?.id) {
-    //                 setCurrentRecipe(currentRecipe);
-    //             }
-    //         })
-    //         .catch(err => console.log(err))
-    //     }, [dispatch, recipeId]);
-
     useEffect(() => {
-        setIsloading(true);
         dispatch(RecipeActions.getRecipeThunk(recipeId))
-            .then((data) => {
-                console.log("this is data:", data)
-                setIsloading(false);
+            .then(currentRecipes => setCurrentRecipes(currentRecipes))
+            .then(currentRecipes => {
+                if (currentRecipes?.Owner?.id) {
+                    setCurrentRecipes(currentRecipes);
+                }
             })
-    }, [dispatch, recipeId])
+            .catch(err => console.log(err))
+    }, [dispatch, recipeId]);
+
+    // useEffect(() => {
+    //     setIsloading(true);
+    //     dispatch(RecipeActions.getRecipeThunk(recipeId))
+    //         .then((data) => {
+    //             console.log("this is data:", data)
+    //             setIsloading(false);
+    //         })
+    // }, [dispatch, recipeId])
 
     function handlePostReview() {
         const modalContent = <CreateReviewModal />;
@@ -73,28 +73,44 @@ const RecipeDetail = () => {
             .catch(err => console.log(err))
     }, [dispatch, recipeId])
 
-    if (isLoading) {
-        return <div>Loading.....</div>
-    }
+    // if (isLoading) {
+    //     return <div>Loading.....</div>
+    // }
 
     return (
         <div>
-            {currentRecipe && (
+            {currentRecipes && (
                 <div>
                     <div className="recipe-name-detail">
+                        <div id='recipe-name'>
+                            <h2>{currentRecipes?.name}</h2>
+                        </div>
+                        <div className='recipe-review-likes-container'>
+                            <div className='recipe-review'>
+                                <i className='fas fa-star'></i>
+                                {currentRecipes.avg_rating ? currentRecipes.avg_rating.toFixed(1) : 'New'}
+                            </div>
+                            <div className='recipe-likes'>
+                                {currentRecipes?.likes > 0
+                                    ? <><i className="fa-solid fa-heart"></i>  {currentRecipes?.likes} </>
+                                    : <><i className="far fa-heart"></i> New</>}
+                            </div>
+                        </div>
                         <div id='recipe-detail-info'>
-                            <h2>{currentRecipe?.name}</h2>
                             <div className='recipe-image'>
                                 <div id='main-recipe-image'>
-                                    <img src={currentRecipe?.images && currentRecipe.images.length > 0
-                                        ? currentRecipe.images[0].url : null} alt='Main Image'
-                                        onLoad={() => console.log('Image loaded')}
-                                        onError={() => console.log('Image failed to load')} />
-
+                                    <img src={currentRecipes?.images && currentRecipes.images.length > 0
+                                        ? currentRecipes.images[0].url : null} alt='Main Image' />
                                 </div>
-
                                 <div className='recipe-image-overlay'>
-                                    {/* {currentRecipe?.images?.filter(image => image.)} */}
+                                    {currentRecipes?.images?.filter(image => image.is_preview !== true).map((images, i) => (
+                                        <img key={i} className="recipe-images" src={images.url} alt={currentRecipes.name} />
+                                    ))}
+                                </div>
+                            </div>
+                            <div className='recipe-description-time-container'>
+                                <div className='recipe-description'>
+                                    <h2>{currentRecipes?.owner_name}</h2>
                                 </div>
                             </div>
                         </div>

@@ -16,6 +16,7 @@ from flask_login import login_required, current_user, logout_user
 
 from statistics import mean
 from datetime import datetime
+from sqlalchemy.orm import joinedload
 
 import json
 
@@ -62,7 +63,8 @@ def get_all_recipes():
 # display a more detailed view of the recipe
 @recipe_routes.route('/<int:id>', methods=['GET'])
 def get_recipe(id):
-    recipe = Recipe.query.get(id)
+    # recipe = Recipe.query.get(id)
+    recipe = Recipe.query.options(joinedload('user')).get(id)
     
     if (recipe):
         images = RecipeImage.query.filter_by(recipe_id=id).all()
@@ -136,10 +138,13 @@ def get_recipe(id):
                 "updated_at": comment.updated_at
             }
             comments_list.append(comment_dict)
+            
+        owner= recipe.user
         
         recipe_dict = {
             "id": recipe.id,
             "owner_id": recipe.owner_id,
+            "owner_name": f"{owner.first_name} {owner.last_name}",
             "name": recipe.name,
             "images": image_list,
             "avg_rating": avg_rating,
