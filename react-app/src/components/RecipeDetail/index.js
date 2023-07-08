@@ -20,8 +20,9 @@ const RecipeDetail = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const currentRecipe = useSelector((state) => state.recipes.recipes[recipeId]);
+    // const currentRecipe = useSelector((state) => state.recipes.recipes[recipeId]);
     const currentReviews = useSelector((state) => state.reviews.reviews);
+    const currentComments = useSelector((state) => state.comments.comments);
     const ownerId = useSelector((state) => state.session.user?.id);
     const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
 
@@ -163,7 +164,11 @@ const RecipeDetail = () => {
                         </div>
                         <div className='recipe-reviews-container'>
                             <div className='recipe-reviews'>
-                                <h3>Reviews</h3>
+                                <div className='recipe-review-header'>
+                                    <h3>{currentRecipes?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipes.reviews.length === 1 ? 'Review' : 'Reviews'}</h3>
+                                </div>
+                                <p>Number of Reviews: {currentRecipes?.reviews?.length}</p>
+                                <p> Rating: <i className='fas fa-star'></i> {currentRecipes.avg_rating}</p>
                                 {currentReviews.map((review, i) => (
                                     <div key={i} className='recipe-review-container'>
                                         <div className='recipe-review-user'>
@@ -174,6 +179,25 @@ const RecipeDetail = () => {
                                             <p id='review-created'>{review?.created_at}</p>
                                         </div>
                                         <p>{review?.review}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className='recipe-comments-container'>
+                            <div className='recipe-comments'>
+                                <div className='recipe-comment-header'>
+                                    <h3>{currentRecipes?.comments?.length === 0 ? 'No Comments Yet' : currentRecipes.comments.length === 1 ? 'Comment' : 'Comments'}</h3>
+                                </div>
+                                {/* <p>Number of Comments: {currentRecipes?.comments?.length}</p> */}
+                                {currentRecipes.comments.map((comment, i) => (
+                                    <div key={i} className='recipe-comment-container'>
+                                        <div className='recipe-comment-user'>
+                                            <div className='recipe-comment-user-name'>
+                                                <h3>{comment?.owner_name}</h3>
+                                            </div>
+                                            <p id='comment-created'>{comment?.created_at}</p>
+                                        </div>
+                                        <p>{comment?.comment}</p>
                                     </div>
                                 ))}
                             </div>
