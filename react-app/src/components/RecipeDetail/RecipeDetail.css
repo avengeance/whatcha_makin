@@ -1,0 +1,294 @@
+#recipe-box {
+    display: flex;
+    justify-content: center;
+}
+
+#recipe-detail-info{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: row;
+    border: 1px solid orange;
+}
+
+#recipe.detail-info,h2 {
+    display: flex;
+    justify-content: center;
+    flex-direction: wrap;
+    /* border: 1px solid black; */
+}
+
+.recipe-image {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 450px;
+    margin: 0 auto; /* centers the container */
+}
+
+/* .recipe-image {
+    display: flex;
+    padding-bottom: 10px;
+    /* border: 1px solid orange; */
+/* } */ */
+
+/* #main-recipe-image {
+    display: flex;
+    width: 450px;
+    height: 450px;
+    /* border: 1px solid black; */
+/* } */ */
+
+#main-recipe-image {
+    width: 100%; /* makes image full width of .recipe-image */
+    height: 450px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: 3px solid red;
+}
+
+/* #preview-image {
+    width: 450px;
+    height: 450px;
+} */
+
+#preview-image {
+    width: 100%;
+    height: 450px;
+}
+
+/* .recipe-image-overlay {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 500px;
+    height: 450px;
+    border-radius: 20px;
+    /* border: 2px solid red; */
+/* } */ */
+
+.recipe-image-overlay {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* Adjust the number based on your number of images */
+    gap: 10px;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+}
+
+/* added css*/
+.recipe-image-overlay img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.recipe-image-overlay img:hover {
+    transform: scale(1.1);
+}
+
+.recipe-review-likes-container{
+    display: flex;
+    justify-content: center;
+    justify-content: space-around;
+    /* align-items: center; */
+    /* border: 1px solid blue; */
+}
+
+.recipe-review{
+    display: flex;
+    padding-left: 250px;
+    /* border: 1px solid black; */
+}
+
+.fas.fa-star{
+    color: yellow
+}
+
+.recipe-likes{
+    display: flex;
+    align-content: center;
+    padding-right: 250px;
+    /* margin-right: 5px; */
+    /* border: 1px solid green; */
+}
+
+.fa-solid.fa-heart{
+    color: #4D7E3E
+}
+
+.recipe-description{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+    border: 1px solid blue;
+}
+
+#review-created{
+    font-size: x-small;
+}
+
+
+#comment-created{
+    font-size: x-small;
+}
+
+
+
+#hosted {
+    font-size: x-large;
+    padding-bottom: 10px;
+    width: 50%;
+}
+
+#description {
+    width: 50%;
+    font-size: large;
+    margin-left: 10px;
+}
+
+#hosted-description {
+    display: flex;
+    width: 600px;
+    flex-direction: column;
+}
+
+#hosted-description-rating-box {
+    display: flex;
+    justify-content: space-between;
+    /* border: 1px solid green; */
+}
+
+#rat-rev-box {
+    display: flex;
+    justify-content: flex-end;
+    /* border: 3px solid black; */
+}
+
+#rating-review-box {
+    display: flex;
+    justify-content: flex-end;
+    width: 45%;
+    /* border: 1px solid blue; */
+}
+
+#test {
+    border-radius: 10px;
+    height: 150px;
+    border: 3px solid black;
+}
+
+#rating-review {
+    display: flex;
+    justify-content: space-between;
+    width: 450px;
+    height: fit-content;
+    margin-top: 20px;
+    /* padding-top: 10px; */
+    /* border: 3px solid green; */
+}
+
+#price {
+    display: flex;
+    justify-content: flex-start;
+    font-size: x-large;
+    width: 50%;
+    height: fit-content;
+    padding-left: 20px;
+    /* border: 1px solid black; */
+}
+
+#stars-review {
+    display: flex;
+    justify-content: space-evenly;
+    width: 50%;
+    height: fit-content;
+    font-size: large;
+    /* border: 1px solid orange; */
+}
+
+#reserve-button {
+    display: flex;
+    justify-content: center;
+    /* border: 1px solid red; */
+}
+
+.post-review {
+    padding-bottom: 20px;
+    /* border: 1px solid black; */
+}
+
+#post-review {
+    width: 20%;
+    height: 30px;
+    margin-top: 15px;
+    background-color: darkgrey;
+    color: white;
+    box-shadow: 4px 4px 0px 0px #000000;
+}
+
+#reserve {
+    width: 75%;
+    height: 50px;
+    margin-top: 15px;
+    background-color: red;
+    color: white;
+    box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.centered-dot {
+    font-weight: bold;
+    font-size: large;
+}
+
+#reviews-box {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 15px;
+    border-top: 2px solid lightgray;
+    /* border: 2px solid blue; */
+}
+
+#reviews-box #stars-review {
+    display: flex;
+    justify-content: space-evenly;
+    padding-top: 10px;
+    width: 25%;
+    /* border: 2px solid blue; */
+}
+
+#review-map {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* border: 2px solid red; */
+}
+
+#first-name {
+    font-weight: bold;
+    color: black;
+    padding: 0px;
+    padding-bottom: 5px;
+    /* border: 2px solid blue; */
+}
+
+#createdAt {
+    color: lightgray;
+    padding: 0px;
+    padding-bottom: 5px;
+    /* border:1px solid red; */
+}
+
+#no-reviews {
+    color: black;
+    font-size: x-large;
+    margin-top: 15px;
+    padding: 0px;
+    padding-bottom: 5px;
+    /* border:1px solid red; */
+}

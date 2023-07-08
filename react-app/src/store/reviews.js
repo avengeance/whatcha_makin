@@ -30,8 +30,8 @@ const deleteReview = (review) => ({
 });
 
 // Thunks
-export const getAllReviewsThunk = (recipedId) => async (dispatch) => {
-    const res = await csrfFetch("/api/recipes/{$recipeId}/reviews", {
+export const getAllReviewsThunk = (recipeId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews`, {
         method: "GET",
     });
     const data = await res.json();
