@@ -156,6 +156,7 @@ def get_recipe(id):
             "description": recipe.description,
             "prep_time": recipe.prep_time,
             "cook_time": recipe.cook_time,
+            "total_time": recipe.prep_time + recipe.cook_time,
             "servings": recipe.servings
         }
         return jsonify(recipe_dict), 200
