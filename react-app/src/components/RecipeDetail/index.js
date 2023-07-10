@@ -5,6 +5,7 @@ import { useModal } from '../../context/Modal';
 
 import OpenModalButton from '../OpenModalButton';
 import CreateReviewModal from '../CreateReview';
+import UpdateReviewModal from '../UpdateReview';
 import DeleteReviewModal from '../DeleteReview';
 
 import * as RecipeActions from '../../store/recipes';
@@ -20,10 +21,9 @@ const RecipeDetail = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    // const currentRecipe = useSelector((state) => state.recipes.recipes[recipeId]);
     const currentReviews = useSelector((state) => state.reviews.reviews);
     const currentComments = useSelector((state) => state.comments.comments);
-    const ownerId = useSelector((state) => state.session.user?.id);
+    const user = useSelector((state) => state.session.user);
     const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
 
     const [currentRecipes, setCurrentRecipes] = useState(null);
@@ -32,6 +32,7 @@ const RecipeDetail = () => {
     const [liked, setLiked] = useState(false);
     const [refreshKey, setRefreshKey] = useState(0);
     const [isLoading, setIsloading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         dispatch(RecipeActions.getRecipeThunk(recipeId))
@@ -44,14 +45,6 @@ const RecipeDetail = () => {
             .catch(err => console.log(err))
     }, [dispatch, recipeId]);
 
-    // useEffect(() => {
-    //     setIsloading(true);
-    //     dispatch(RecipeActions.getRecipeThunk(recipeId))
-    //         .then((data) => {
-    //             console.log("this is data:", data)
-    //             setIsloading(false);
-    //         })
-    // }, [dispatch, recipeId])
 
     function handlePostReview() {
         const modalContent = <CreateReviewModal />;
@@ -74,10 +67,6 @@ const RecipeDetail = () => {
             .then(likes => setLiked(likes.likes))
             .catch(err => console.log(err))
     }, [dispatch, recipeId])
-
-    // if (isLoading) {
-    //     return <div>Loading.....</div>
-    // }
 
     return (
         <div>
@@ -179,6 +168,13 @@ const RecipeDetail = () => {
                                             <p id='review-created'>{review?.created_at}</p>
                                         </div>
                                         <p>{review?.review}</p>
+                                        {user && user.id === review.owner_id && (
+                                            <div>
+                                                <button onClick={() => setIsModalOpen(true)}>Update</button>
+                                                {isModalOpen && <UpdateReviewModal onClose={() => setIsModalOpen(false)} />}
+                                                <button onClick={() => DeleteReviewModal(review)}>Delete</button>
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -188,7 +184,6 @@ const RecipeDetail = () => {
                                 <div className='recipe-comment-header'>
                                     <h3>{currentRecipes?.comments?.length === 0 ? 'No Comments Yet' : currentRecipes.comments.length === 1 ? 'Comment' : 'Comments'}</h3>
                                 </div>
-                                {/* <p>Number of Comments: {currentRecipes?.comments?.length}</p> */}
                                 {currentRecipes.comments.map((comment, i) => (
                                     <div key={i} className='recipe-comment-container'>
                                         <div className='recipe-comment-user'>

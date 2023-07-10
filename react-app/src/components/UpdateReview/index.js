@@ -3,14 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 
-import * as ReviewActions from "./store/reviews";
+import * as ReviewActions from "../../store/reviews";
 import { csrfFetch } from "../../store/csrf";
 import Cookies from "js-cookie";
 
 import "./UpdateReview.css";
 
-const updateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
-    const user = useSelector((state) => state.session.user);
+const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { id } = useParams();
@@ -66,7 +65,7 @@ const updateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
             stars,
         }
 
-        const updatedReview = await ReviewActions.updateReviewThunk(recipeId, reviewId, payload);
+        const updatedReview = ReviewActions.updateReviewThunk(recipeId, reviewId, payload);
 
         if (updatedReview && !updatedReview.errors) {
             closeModal();
@@ -104,9 +103,10 @@ const updateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
                     <div id="stars">
                         <StarRating stars={stars} setStars={setStars} />
                     </div>
+                    <button type="submit">Submit</button>
                 </form>
             </div></div>
     )
 }
 
-export default updateReviewModal;
+export default UpdateReviewModal;
