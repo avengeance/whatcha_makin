@@ -24,6 +24,27 @@ function CreateReviewModal({ recipeId }) {
     const MIN_REVIEW_LENGTH = 10;
     const validReview = review.length >= MIN_REVIEW_LENGTH
 
+    function StarRating({ stars, setStars }) {
+        const createStars = () => {
+            let starArray = [];
+            for (let i = 1; i <= 5; i++) {
+                starArray.push(
+                    <span
+                        key={i}
+                        className={i <= stars ? "active" : "inactive"}
+                        onClick={() => handleStarClick(i)}>
+                        <i class="fas fa-star"></i>
+                    </span>
+                )
+            }
+            return starArray
+        }
+        const handleStarClick = (i) => {
+            setStars(i)
+        }
+        return <div className="star-rating">{createStars()}</div>
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors([]);
@@ -40,7 +61,35 @@ function CreateReviewModal({ recipeId }) {
     }
 
     return (
-        <></>
+        <div className="create-review-modal">
+            <div className="modal-backdrop" onClick={closeModal} />
+            <div className="modal">
+                <h1 id="modal-title">How was this recipe?</h1>
+                <form onSubmit={handleSubmit}>
+                    {errors.length > 0 && (
+                        <ul className="error">
+                            {errors.map((error, i) => (
+                                <li key={i}>{error}</li>
+                            ))}
+                            {!validReview && (<li>Review must be at least {MIN_REVIEW_LENGTH} characters long</li>)}
+                        </ul>
+                    )}
+                    <label id="review-label">
+                        <textarea
+                            placeholder="Leave your review here..."
+                            onChange={(e) => setReview(e.target.value)}
+                            type="text"
+                            id="review-input"
+                            name="review"
+                            value={review}
+                            required></textarea>
+                    </label>
+                    <div id="stars">
+                        <StarRating stars={stars} setStars={setStars} />
+                    </div>
+                </form>
+            </div>
+        </div>
     )
 
 }
