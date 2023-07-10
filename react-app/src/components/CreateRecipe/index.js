@@ -14,7 +14,7 @@ const initialIngredient = {
     isSeasoning: false,
 }
 const initialDirection = {
-    step: 0,
+    step: 1,
     stepInfo: "",
 }
 
@@ -46,7 +46,7 @@ function CreateRecipe() {
     }
 
     function handleAddIngredient() {
-        setIngredients([...ingredients, { ...initialIngredient }])
+        setIngredients([...ingredients, { name: '', quantity: 0, measurement: '', isSeasoning: false }])
     }
 
     function handleRemoveIngredient(i) {
@@ -61,7 +61,8 @@ function CreateRecipe() {
         setDirections(values)
     }
     function handleAdddirection() {
-        setDirections([...directions, { ...initialDirection }])
+        const newStep = directions.length +1
+        setDirections([...directions, { step: newStep, stepInfo: "" }])
     }
     function handleRemoveDirection(i) {
         const values = [...directions];
@@ -82,7 +83,7 @@ function CreateRecipe() {
         e.preventDefault();
         setErrors({})
 
-        const formData = FormData()
+        const formData = new FormData()
         const totalPrepTime = (parseInt(prepHours) || 0) * 60 + (parseInt(prepMinutes) || 0);
         const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
 
@@ -222,7 +223,7 @@ function CreateRecipe() {
                         <input
                             type='text'
                             name='step'
-                            value={`Step ${index + 1}`}
+                            value={`Step ${direction.step}`}
                             readOnly
                         />
                         <input
@@ -323,6 +324,15 @@ function CreateRecipe() {
                     onChange={handleOtherImages}
                 >
                 </input>
+                <div id="form-submit-button">
+                    <button
+                        type="submit"
+                        className="submit-button"
+                        onClick={handleSubmit}
+                    >
+                        Create Recipe
+                    </button>
+                </div>
             </form >
         </div >
     )

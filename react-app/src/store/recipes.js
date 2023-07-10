@@ -74,9 +74,9 @@ export const createRecipeThunk = (recipe) => async (dispatch) => {
     Object.keys(recipe).forEach((key) => {
         if (Array.isArray(recipe[key])) {
             recipe[key].forEach((item, index) => {
-                Object.keys(item.forEach((subKey) => {
+                Object.keys(item).forEach((subKey) => {
                     formData.append(`${key}[${index}].${subKey}`, item[subKey])
-                }))
+                })
             })
         } else {
             formData.append(key, recipe[key])
@@ -98,9 +98,9 @@ export const updateRecipeThunk = (recipe) => async (dispatch) => {
     Object.keys(recipe).forEach((key) => {
         if (Array.isArray(recipe[key])) {
             recipe[key].forEach((item, index) => {
-                Object.keys(item.forEach((subKey) => {
+                Object.keys(item).forEach((subKey) => {
                     formData.append(`${key}[${index}].${subKey}`, item[subKey])
-                }))
+                })
             })
         } else {
             formData.append(key, recipe[key])
