@@ -46,10 +46,10 @@ const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
 
     useEffect(() => {
         async function getReviewThunk() {
-            const res = await csrfFetch(`/api/recipes/${id}/reviews/${reviewId}`);
+            const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}`);
             if (res.ok) {
                 const review = await res.json();
-                setReview(review);
+                setReview(review.review);
                 setStars(review.stars);
             }
         }
@@ -69,7 +69,6 @@ const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
 
         if (updatedReview && !updatedReview.errors) {
             closeModal();
-            handleSubmit();
             dispatch(ReviewActions.getAllReviewsThunk(recipeId));
             history.push(`/recipes/${recipeId}`);
         } else {
