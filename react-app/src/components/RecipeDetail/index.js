@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { useModal } from '../../context/Modal';
 
+
+
 import OpenModalButton from '../OpenModalButton';
+
 import CreateReviewModal from '../CreateReview';
 import UpdateReviewModal from '../UpdateReview';
 import DeleteReviewModal from '../DeleteReview';
@@ -53,6 +56,12 @@ const RecipeDetail = () => {
     }
 
     useEffect(() => {
+        dispatch(ReviewActions.getAllReviewsThunk(recipeId))
+            .then(reviews => setReviews(reviews.Reviews))
+            .catch(err => console.log(err))
+    }, [dispatch, recipeId, refreshKey])
+
+    useEffect(() => {
         if (!recipeId) {
             console.error('No recipeId');
             return
@@ -66,7 +75,8 @@ const RecipeDetail = () => {
         dispatch(LikeActions.getLikesByRecipeThunk(recipeId))
             .then(likes => setLiked(likes.likes))
             .catch(err => console.log(err))
-    }, [dispatch, recipeId])
+    }, [dispatch, recipeId, refreshKey])
+
 
     return (
         <div>
@@ -157,7 +167,7 @@ const RecipeDetail = () => {
                                     <h3>{currentRecipes?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipes.reviews.length === 1 ? 'Review' : 'Reviews'}</h3>
                                 </div>
                                 <p>Number of Reviews: {currentRecipes?.reviews?.length}</p>
-                                <p> Rating: <i className='fas fa-star'></i> {currentRecipes.avg_rating}</p>
+                                <p> Rating: <i className='fas fa-star'></i> {currentRecipes.avg_rating.toFixed(1)}</p>
                                 {currentReviews.map((review, i) => (
                                     <div key={i} className='recipe-review-container'>
                                         <div className='recipe-review-user'>
@@ -170,9 +180,29 @@ const RecipeDetail = () => {
                                         <p>{review?.review}</p>
                                         {user && user.id === review.owner_id && (
                                             <div>
-                                                <button onClick={() => setIsModalOpen(true)}>Update</button>
-                                                {isModalOpen && <UpdateReviewModal onClose={() => setIsModalOpen(false)} />}
-                                                <button onClick={() => DeleteReviewModal(review)}>Delete</button>
+                                                <OpenModalButton
+                                                    buttonText={<i class="fas fa-edit">Update</i>}
+                                                    modalComponent={
+                                                        <UpdateReviewModal
+                                                            recipeId={recipeId}
+                                                            reviewId={review.id}
+                                                            closeModal={closeModal}
+                                                            refreshKey={refreshKey}
+                                                            setRefreshKey={setRefreshKey}
+                                                        />
+                                                    }
+                                                />
+                                                <OpenModalButton
+                                                    buttonText={<i class="fas fa-trash">Delete Review</i>}
+                                                    modalComponent={
+                                                        <DeleteReviewModal
+                                                            recipeId={recipeId}
+                                                            reviewId={review.id}
+                                                            closeModal={closeModal}
+                                                            refreshKey={refreshKey}
+                                                            setRefreshKey={setRefreshKey}
+                                                        />}
+                                                />
                                             </div>
                                         )}
                                     </div>
