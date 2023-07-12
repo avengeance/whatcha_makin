@@ -1,0 +1,17 @@
+.recipe-tile{
+    display: flex;
+    justify-content: center;
+    border: 1px solid black;
+}
+.recipe-review-likes-container{
+    border: 1px solid red;
+}
+#recipe-name{
+    border: 1px solid blue;
+}
+.recipe-review-likes{
+    border: 1px solid orange;
+}
+.recipe-tile-image{
+    border: 1px solid white;
+}

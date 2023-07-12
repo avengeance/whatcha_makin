@@ -46,7 +46,7 @@ const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
 
     useEffect(() => {
         async function getReviewThunk() {
-            const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}`);
+            const res = await csrfFetch(`/reviews/${reviewId}`);
             if (res.ok) {
                 const review = await res.json();
                 setReview(review.review);

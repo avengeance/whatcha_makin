@@ -12,9 +12,9 @@ const getAllReviews = (reviews) => ({
     type: GET_ALL_REVIEWS,
     reviews,
 })
-const getReview = (reviews) => ({
+const getReview = (review) => ({
     type: GET_REVIEW,
-    reviews,
+    review,
 })
 const createReview = (reviews) => ({
     type: CREATE_REVIEW,
@@ -61,7 +61,7 @@ export const createReviewThunk = (recipeId, review, stars) => async (dispatch) =
     return data;
 }
 
-export const updateReviewThunk = (recipeId,payload, reviewId) => async (dispatch) => {
+export const updateReviewThunk = (reviewId, payload) => async (dispatch) => {
     const res = await csrfFetch(`/api/reviews/${reviewId}`, {
         method: "PUT",
         body: JSON.stringify(payload),
@@ -79,7 +79,6 @@ export const deleteReviewThunk = (reviewId) => async (dispatch) => {
         const res = await csrfFetch(`/api/reviews/${reviewId}/delete`, { method: "DELETE" });
         if (!res.ok) throw res;
         const data = await res.json();
-        console.log("server response:", data);
         dispatch(deleteReview(data));
         return data;
     } catch (error) {
@@ -104,6 +103,7 @@ const reviewsReducer = (state = initialState, action) => {
             return newState;
         case GET_REVIEW:
             newState.reviews[action.recipes.review.id] = action.recipes.review;
+            return newState
         case CREATE_REVIEW:
             newState.reviews.push(action.reviews)
             return newState;
