@@ -3,8 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { useModal } from '../../context/Modal';
 
+
+
 import OpenModalButton from '../OpenModalButton';
+
 import CreateReviewModal from '../CreateReview';
+import UpdateReviewModal from '../UpdateReview';
 import DeleteReviewModal from '../DeleteReview';
 
 import * as RecipeActions from '../../store/recipes';
@@ -20,10 +24,9 @@ const RecipeDetail = () => {
     const dispatch = useDispatch();
     const history = useHistory();
 
-    // const currentRecipe = useSelector((state) => state.recipes.recipes[recipeId]);
     const currentReviews = useSelector((state) => state.reviews.reviews);
     const currentComments = useSelector((state) => state.comments.comments);
-    const ownerId = useSelector((state) => state.session.user?.id);
+    const user = useSelector((state) => state.session.user);
     const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
 
     const [currentRecipes, setCurrentRecipes] = useState(null);
@@ -32,6 +35,7 @@ const RecipeDetail = () => {
     const [liked, setLiked] = useState(false);
     const [refreshKey, setRefreshKey] = useState(0);
     const [isLoading, setIsloading] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         dispatch(RecipeActions.getRecipeThunk(recipeId))
@@ -44,20 +48,18 @@ const RecipeDetail = () => {
             .catch(err => console.log(err))
     }, [dispatch, recipeId]);
 
-    // useEffect(() => {
-    //     setIsloading(true);
-    //     dispatch(RecipeActions.getRecipeThunk(recipeId))
-    //         .then((data) => {
-    //             console.log("this is data:", data)
-    //             setIsloading(false);
-    //         })
-    // }, [dispatch, recipeId])
 
     function handlePostReview() {
         const modalContent = <CreateReviewModal />;
         history.push(`/recipes/${recipeId}`);
         setModalContent(modalContent);
     }
+
+    useEffect(() => {
+        dispatch(ReviewActions.getAllReviewsThunk(recipeId))
+            .then(reviews => setReviews(reviews.Reviews))
+            .catch(err => console.log(err))
+    }, [dispatch, recipeId, refreshKey])
 
     useEffect(() => {
         if (!recipeId) {
@@ -73,11 +75,8 @@ const RecipeDetail = () => {
         dispatch(LikeActions.getLikesByRecipeThunk(recipeId))
             .then(likes => setLiked(likes.likes))
             .catch(err => console.log(err))
-    }, [dispatch, recipeId])
+    }, [dispatch, recipeId, refreshKey])
 
-    // if (isLoading) {
-    //     return <div>Loading.....</div>
-    // }
 
     return (
         <div>
@@ -168,7 +167,7 @@ const RecipeDetail = () => {
                                     <h3>{currentRecipes?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipes.reviews.length === 1 ? 'Review' : 'Reviews'}</h3>
                                 </div>
                                 <p>Number of Reviews: {currentRecipes?.reviews?.length}</p>
-                                <p> Rating: <i className='fas fa-star'></i> {currentRecipes.avg_rating}</p>
+                                <p> Rating: <i className='fas fa-star'></i> {currentRecipes.avg_rating.toFixed(1)}</p>
                                 {currentReviews.map((review, i) => (
                                     <div key={i} className='recipe-review-container'>
                                         <div className='recipe-review-user'>
@@ -179,6 +178,33 @@ const RecipeDetail = () => {
                                             <p id='review-created'>{review?.created_at}</p>
                                         </div>
                                         <p>{review?.review}</p>
+                                        {user && user.id === review.owner_id && (
+                                            <div>
+                                                <OpenModalButton
+                                                    buttonText={<i class="fas fa-edit">Update</i>}
+                                                    modalComponent={
+                                                        <UpdateReviewModal
+                                                            recipeId={recipeId}
+                                                            reviewId={review.id}
+                                                            closeModal={closeModal}
+                                                            refreshKey={refreshKey}
+                                                            setRefreshKey={setRefreshKey}
+                                                        />
+                                                    }
+                                                />
+                                                <OpenModalButton
+                                                    buttonText={<i class="fas fa-trash">Delete Review</i>}
+                                                    modalComponent={
+                                                        <DeleteReviewModal
+                                                            recipeId={recipeId}
+                                                            reviewId={review.id}
+                                                            closeModal={closeModal}
+                                                            refreshKey={refreshKey}
+                                                            setRefreshKey={setRefreshKey}
+                                                        />}
+                                                />
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -188,7 +214,6 @@ const RecipeDetail = () => {
                                 <div className='recipe-comment-header'>
                                     <h3>{currentRecipes?.comments?.length === 0 ? 'No Comments Yet' : currentRecipes.comments.length === 1 ? 'Comment' : 'Comments'}</h3>
                                 </div>
-                                {/* <p>Number of Comments: {currentRecipes?.comments?.length}</p> */}
                                 {currentRecipes.comments.map((comment, i) => (
                                     <div key={i} className='recipe-comment-container'>
                                         <div className='recipe-comment-user'>

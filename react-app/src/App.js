@@ -48,7 +48,7 @@ function App() {
           <Route exact path="/users/:userId/recipes">
             <UserRecipes />
           </Route>
-          <Route path="/recipes/:recipeId/edit" component={UpdateRecipe}>
+          <Route exact path="/recipes/:recipeId/edit">
             <UpdateRecipe />
           </Route>
           <Route path='/recipes/:recipeId'>

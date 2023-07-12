@@ -16,17 +16,17 @@ const getReview = (review) => ({
     type: GET_REVIEW,
     review,
 })
-const createReview = (review) => ({
+const createReview = (reviews) => ({
     type: CREATE_REVIEW,
-    review,
+    reviews,
 })
-const updateReview = (review) => ({
+const updateReview = (reviews) => ({
     type: UPDATE_REVIEW,
-    review,
+    reviews,
 })
-const deleteReview = (review) => ({
+const deleteReview = (reviews) => ({
     type: DELETE_REVIEW,
-    review,
+    reviews,
 });
 
 // Thunks
@@ -61,10 +61,10 @@ export const createReviewThunk = (recipeId, review, stars) => async (dispatch) =
     return data;
 }
 
-export const updateReviewThunk = (recipeId, review) => async (dispatch) => {
-    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${review.id}`, {
+export const updateReviewThunk = (reviewId, payload) => async (dispatch) => {
+    const res = await csrfFetch(`/api/reviews/${reviewId}`, {
         method: "PUT",
-        body: JSON.stringify(review),
+        body: JSON.stringify(payload),
         headers: {
             "Content-Type": "application/json",
         }
@@ -74,14 +74,19 @@ export const updateReviewThunk = (recipeId, review) => async (dispatch) => {
     return data
 }
 
-export const deleteReviewThunk = (recipeId, reviewId) => async (dispatch) => {
-    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}/delete`, {
-        method: "DELETE",
-    })
-    const data = await res.json();
-    dispatch(deleteReview(data));
-    return data
+export const deleteReviewThunk = (reviewId) => async (dispatch) => {
+    try {
+        const res = await csrfFetch(`/api/reviews/${reviewId}/delete`, { method: "DELETE" });
+        if (!res.ok) throw res;
+        const data = await res.json();
+        dispatch(deleteReview(data));
+        return data;
+    } catch (error) {
+        console.error("Failed to delete review:", error);
+        throw error;
+    }
 }
+
 
 // Reducer
 const initialState = {
@@ -98,6 +103,7 @@ const reviewsReducer = (state = initialState, action) => {
             return newState;
         case GET_REVIEW:
             newState.reviews[action.recipes.review.id] = action.recipes.review;
+            return newState
         case CREATE_REVIEW:
             newState.reviews.push(action.reviews)
             return newState;
@@ -108,7 +114,8 @@ const reviewsReducer = (state = initialState, action) => {
             }
             return newState
         case DELETE_REVIEW:
-            delete newState[action.reviews.id]
+            console.log("Deleting review:", action.reviews.id)
+            delete newState.reviews[action.reviews.id]
             return newState
         default:
             return state;
