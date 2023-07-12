@@ -6,6 +6,21 @@ from .. import db
 
 review_routes = Blueprint('reviews', __name__)
 
+# Get a Review
+@review_routes.route('/<int:review_id>', methods=['GET'])
+def get_review(review_id):
+    review = Review.query.get(review_id)
+
+    if review is None:
+        return jsonify({
+            "error": "Review does not exist",
+            "status_code": 404
+        }), 404
+
+    review_dict = review.to_dict()
+    return jsonify(review_dict), 200
+
+
 # Update a Review
 @review_routes.route('/<int:review_id>', methods=['PUT'])
 @login_required
@@ -65,20 +80,3 @@ def delete_review(review_id):
             "status_code": 404
         }
         return jsonify(res), 404
-    
-    # if review is None:
-    #     return jsonify({
-    #         "error": "Review does not exist",
-    #     }), 404
-        
-    # if review.owner_id != current_user.id:
-    #     return jsonify({
-    #         "message": "You do not have permission to delete this review",
-    # }),403
-    
-    # db.session.delete(review)
-    # db.session.commit()
-    
-    # return jsonify({
-    #     "message": "Successfully deleted",
-    # }),200
