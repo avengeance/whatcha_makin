@@ -16,9 +16,9 @@ const getReview = (review) => ({
     type: GET_REVIEW,
     review,
 })
-const createReview = (reviews) => ({
+const createReview = (review) => ({
     type: CREATE_REVIEW,
-    reviews,
+    review,
 })
 const updateReview = (reviews) => ({
     type: UPDATE_REVIEW,
@@ -49,7 +49,7 @@ export const getReviewThunk = (recipeId, reviewId) => async (dispatch) => {
 }
 
 export const createReviewThunk = (recipeId, review, stars) => async (dispatch) => {
-    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/new`, {
+    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/`, {
         method: "POST",
         body: JSON.stringify({ review, stars }),
         headers: {
@@ -105,8 +105,10 @@ const reviewsReducer = (state = initialState, action) => {
             newState.reviews[action.recipes.review.id] = action.recipes.review;
             return newState
         case CREATE_REVIEW:
-            newState.reviews.push(action.reviews)
-            return newState;
+            // newState.reviews.push(action.reviews)
+            // return newState;
+            newState.reviews = action.payload
+            return { ...state, reviews: [...state.reviews, action.review] }
         case UPDATE_REVIEW:
             const indexToUpdate = newState.reviews.findIndex((review) => review.id === action.reviews.id);
             if (indexToUpdate !== -1) {
@@ -114,9 +116,9 @@ const reviewsReducer = (state = initialState, action) => {
             }
             return newState
         case DELETE_REVIEW:
-            console.log("Deleting review:", action.reviews.id)
             delete newState.reviews[action.reviews.id]
-            return newState
+            return {...state,
+                reviews: state.reviews.filter(review => review.id !== action.payload.id)}
         default:
             return state;
     }

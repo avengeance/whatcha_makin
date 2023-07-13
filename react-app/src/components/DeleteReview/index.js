@@ -11,16 +11,13 @@ const DeleteReviewModal = ({ recipeId, reviewId, refreshKey, setRefreshKey }) =>
     const dispatch = useDispatch();
     const history = useHistory();
 
-    // const recipes = useSelector((state) => state.recipes);
-    // const reviews = useSelector((state) => state.reviews);
-
     const deleteReview = async () => {
-        await dispatch(ReviewActions.deleteReviewThunk(reviewId))
-        setRefreshKey(refreshKey + 1)
-        closeModal()
-        history.push(`/recipes/${recipeId}`)
+        dispatch(ReviewActions.deleteReviewThunk(reviewId));
+        setRefreshKey(refreshKey + 1);
+        closeModal();
+        history.push(`/recipes/${recipeId}`);
     }
-
+    
     const handleNoClick = () => {
         closeModal()
     }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, useHistory } from "react-router-dom";
 import { useModal } from "../../context/Modal";
@@ -10,14 +10,13 @@ import "./CreateReview.css";
 function CreateReviewModal({ recipeId }) {
     const dispatch = useDispatch();
     const history = useHistory();
-    const params = useParams();
 
     const [review, setReview] = useState("");
     const [stars, setStars] = useState(0);
     const [errors, setErrors] = useState([]);
     const [refreshKey, setRefreshKey] = useState(0);
 
-    const currentRecipe = useSelector((state) => state.recipes.currentRecipe);
+    const currentRecipe = useSelector((state) => state.recipes.recipes);
 
     const { closeModal } = useModal();
 
@@ -45,18 +44,18 @@ function CreateReviewModal({ recipeId }) {
         return <div className="star-rating">{createStars()}</div>
     }
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors([]);
-        const data = await (ReviewActions.createReviewThunk(currentRecipe.id, review, stars));
-        setReview("");
 
-        if (data && !data.errors) {
-            closeModal()
-            dispatch(ReviewActions.getAllReviewsThunk(recipeId));
-            setRefreshKey(prevKey => prevKey + 1)
-        } else if (data.errors) {
-            setErrors(data.errors);
+        try {
+            await dispatch(ReviewActions.createReviewThunk(recipeId, review, stars));
+            closeModal();
+            setRefreshKey(refreshKey + 1)
+            history.push(`/recipes/${recipeId}`);
+        } catch (error) {
+            setErrors([...errors, errors.message]);
         }
     }
 
@@ -86,6 +85,16 @@ function CreateReviewModal({ recipeId }) {
                     </label>
                     <div id="stars">
                         <StarRating stars={stars} setStars={setStars} />
+                    </div>
+                    <div className="modal-button">
+                        <button
+                            type="submit"
+                            id="submit-button"
+                            className="submit-button"
+                            disabled={!validReview}
+                        >
+                            Submit Your Review
+                        </button>
                     </div>
                 </form>
             </div>

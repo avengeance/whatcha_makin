@@ -461,7 +461,7 @@ def get_all_recipe_reviews(id):
         }), 404
 
 # Create a review
-@recipe_routes.route('/<int:id>/reviews/new', methods=['POST'])
+@recipe_routes.route('/<int:id>/reviews/', methods=['POST'])
 @login_required
 def create_review(id):
     form = ReviewForm()

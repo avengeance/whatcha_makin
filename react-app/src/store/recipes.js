@@ -51,7 +51,7 @@ export const getAllRecipesThunk = () => async (dispatch) => {
     //     recipes[recipe.id] = recipe
     // })
     // dispatch(getAllRecipes(recipes))
-    if(res.ok){
+    if (res.ok) {
         dispatch(getAllRecipes(data.recipes))
     }
     else {
@@ -65,6 +65,7 @@ export const getRecipeThunk = (recipeId) => async (dispatch) => {
         method: "GET",
     });
     const recipeDetails = await res.json();
+    console.log("This is recipe details:", recipeDetails)
     dispatch(getRecipe(recipeDetails));
     return recipeDetails;
 }
@@ -93,7 +94,8 @@ export const createRecipeThunk = (recipe) => async (dispatch) => {
     }
 }
 
-export const updateRecipeThunk = (recipe) => async (dispatch) => {
+export const updateRecipeThunk = (recipe, payload) => async (dispatch) => {
+    console.log("This is thunk Recipe:", recipe)
     const formData = new FormData();
     Object.keys(recipe).forEach((key) => {
         if (Array.isArray(recipe[key])) {
@@ -106,7 +108,7 @@ export const updateRecipeThunk = (recipe) => async (dispatch) => {
             formData.append(key, recipe[key])
         }
     })
-    const res = await csrfFetch(`/api/recipes/${recipe.id}/edit`, {
+    const res = await csrfFetch(`/api/recipes/${recipe}/edit`, {
         method: "PUT",
         body: formData,
     });
