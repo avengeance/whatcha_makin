@@ -127,16 +127,6 @@ function UpdateRecipe() {
     }
 
     function handleDirectionChange(i, event) {
-        // const { step, stepInfo } = event.target
-
-        // const values = [...directions];
-
-        // values[i] = {
-        //     ...values[i],
-        //     [step]: stepInfo,
-        // }
-        // setDirections(values)
-
         const { name, value } = event.target;
 
         const values = [...directions];
@@ -156,7 +146,6 @@ function UpdateRecipe() {
         setDirections(values);
     }
     function handleAdddirection() {
-        // setDirections([...directions, { ...initialDirection }])
         setDirections((prevDirections) => [
             ...prevDirections,
             {
@@ -166,20 +155,6 @@ function UpdateRecipe() {
           ])
     }
     function handleRemoveDirection(i) {
-        // // const values = [...directions];
-        // // values.splice(i, 1);
-        // // setDirections(values)
-
-        // let values = [...directions];
-        // values.splice(i, 1);
-
-        // // Update the step values after splicing
-        // values = values.map((direction, index) => ({
-        //     ...direction,
-        //     step: index + 1,
-        // }));
-
-        // setDirections(values);
 
         setDirections((prevDirections) => {
             const updatedDirections = [...prevDirections];
@@ -412,8 +387,8 @@ function UpdateRecipe() {
                     <h4>Prep time:</h4>
                     <select
                         name='hours'
-                        value={prepHours || ''}
-                        onChange={(e) => setPrepHours(e.target.value !== "" ? e.target.value : null)}
+                        value={prepHours !== null ? prepHours.toString() : ''}
+                        onChange={(e) => setPrepHours(e.target.value !== "" ? parseInt(e.target.value) : null)}
                     >
                         {[...Array(169).keys()].map((i) =>
                             <option key={i} value={i}>{i} Hours</option>
@@ -421,8 +396,8 @@ function UpdateRecipe() {
                     </select>
                     <select
                         name='minutes'
-                        value={prepTime || ''}
-                        onChange={(e) => setPrepMinutes(e.target.value !== "" ? e.target.value : null)}
+                        value={prepTime !== null ? prepTime.toString() : ''}
+                        onChange={(e) => setPrepTime(e.target.value !== "" ? parseInt(e.target.value) : null)}
                         required
                     >
                         {Array.from({ length: 60 }, (_, i) => i + 1).map((i) =>
@@ -433,8 +408,8 @@ function UpdateRecipe() {
                     <h4>Cook time:</h4>
                     <select
                         name='hours'
-                        value={cookHours || ''}
-                        onChange={(e) => setCookHours(e.target.value || null)}
+                        value={cookHours !== null ? cookHours.toString() : ''}
+                        onChange={(e) => setCookHours(e.target.value !== "" ? parseInt(e.target.value) : null)}
                     >
                         {[...Array(169).keys()].map((i) =>
                             <option key={i} value={i}>{i} Hours</option>
@@ -442,8 +417,8 @@ function UpdateRecipe() {
                     </select>
                     <select
                         name='minutes'
-                        value={cookTime || ''}
-                        onChange={(e) => setCookMinutes(e.target.value || null)}
+                        value={cookTime !== null ? cookTime.toString() : ''}
+                        onChange={(e) => setCookTime(e.target.value !== "" ? parseInt(e.target.value) : null)}
                         required
                     >
                         {Array.from({ length: 60 }, (_, i) => i + 1).map((i) =>

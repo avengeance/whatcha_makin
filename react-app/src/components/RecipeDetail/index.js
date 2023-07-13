@@ -80,7 +80,7 @@ const RecipeDetail = () => {
         dispatch(ReviewActions.getAllReviewsThunk(recipeId))
             .then(reviews => {
                 setReviews(reviews.Reviews)
-                setHasReviewed(currentReviews.some(review => review?.owner_id === user.id))
+                setHasReviewed(currentReviews?.some(review => review?.owner_id === user?.id))
                 setReviewPosted(false)
             })
             .catch(err => console.log(err))

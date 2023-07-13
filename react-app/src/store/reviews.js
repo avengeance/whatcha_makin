@@ -40,7 +40,7 @@ export const getAllReviewsThunk = (recipeId) => async (dispatch) => {
 }
 
 export const getReviewThunk = (recipeId, reviewId) => async (dispatch) => {
-    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}`, {
+    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}/`, {
         method: "GET",
     })
     const reviewDetails = await res.json()
@@ -62,7 +62,7 @@ export const createReviewThunk = (recipeId, review, stars) => async (dispatch) =
 }
 
 export const updateReviewThunk = (recipeId, reviewId, payload) => async (dispatch) => {
-    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}`, {
+    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}/`, {
         method: "PUT",
         body: JSON.stringify(payload),
         headers: {
