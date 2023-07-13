@@ -46,6 +46,7 @@ function UpdateRecipe() {
     const [otherImages, setOtherImages] = useState([]);
 
     const [loading, setLoading] = useState(true)
+    const [stepCounter, setStepCounter] = useState(1)
 
     const [errors, setErrors] = useState({});
 
@@ -66,17 +67,6 @@ function UpdateRecipe() {
                 setDescription(recipe.description || "")
                 setIngredients(recipe.ingredients || [])
                 setDirections(recipe.directions || [])
-
-                // const totalPrepTime = recipe.prepTime
-                // setPrepHours(Math.floor(totalPrepTime / 60) || 0);
-                // console.log("This is prep hours:", prepHours)
-                // setPrepMinutes(totalPrepTime % 60 || 0);
-                // console.log("This is prep minutes:", prepMinutes)
-                // const totalCookTime = recipe.cookTime;
-                // setCookHours(Math.floor(totalCookTime / 60) || 0);
-                // console.log("This is cook hours:", cookHours)
-                // setCookMinutes(totalCookTime % 60 || 0);
-                // console.log("This is cook minutes:", cookMinutes)
 
                 setPrepTime(recipe.prep_time)
                 setCookTime(recipe.cook_time)
@@ -137,23 +127,68 @@ function UpdateRecipe() {
     }
 
     function handleDirectionChange(i, event) {
-        const { step, stepInfo } = event.target
+        // const { step, stepInfo } = event.target
+
+        // const values = [...directions];
+
+        // values[i] = {
+        //     ...values[i],
+        //     [step]: stepInfo,
+        // }
+        // setDirections(values)
+
+        const { name, value } = event.target;
 
         const values = [...directions];
 
-        values[i] = {
-            ...values[i],
-            [step]: stepInfo,
+        if (name === 'step') {
+            values[i] = {
+                ...values[i],
+                step: parseInt(value.replace('Step ', '')),
+            };
+        } else {
+            values[i] = {
+                ...values[i],
+                step_info: value,
+            };
         }
-        setDirections(values)
+
+        setDirections(values);
     }
     function handleAdddirection() {
-        setDirections([...directions, { ...initialDirection }])
+        // setDirections([...directions, { ...initialDirection }])
+        setDirections((prevDirections) => [
+            ...prevDirections,
+            {
+              step: `${prevDirections.length + 1}`,
+              stepInfo: "",
+            },
+          ])
     }
     function handleRemoveDirection(i) {
-        const values = [...directions];
-        values.splice(i, 1);
-        setDirections(values)
+        // // const values = [...directions];
+        // // values.splice(i, 1);
+        // // setDirections(values)
+
+        // let values = [...directions];
+        // values.splice(i, 1);
+
+        // // Update the step values after splicing
+        // values = values.map((direction, index) => ({
+        //     ...direction,
+        //     step: index + 1,
+        // }));
+
+        // setDirections(values);
+
+        setDirections((prevDirections) => {
+            const updatedDirections = [...prevDirections];
+            updatedDirections.splice(i, 1);
+            return updatedDirections.map((direction, i) => ({
+              ...direction,
+              step: `${i + 1}`,
+            }));
+          });
     }
 
     const handleOtherImages = (e) => {
@@ -219,32 +254,32 @@ function UpdateRecipe() {
 
         const ingredientData = [];
         ingredients.forEach((ingredient) => {
-          const ingredientObj = {
-            name: ingredient.name,
-            quantity: ingredient.quantity,
-            measurement: ingredient.measurement,
-            is_seasoning: ingredient.isSeasoning,
-          };
-          ingredientData.push(ingredientObj);
+            const ingredientObj = {
+                name: ingredient.name,
+                quantity: ingredient.quantity,
+                measurement: ingredient.measurement,
+                is_seasoning: ingredient.isSeasoning,
+            };
+            ingredientData.push(ingredientObj);
         });
         const directionData = [];
         directions.forEach((direction) => {
-          const directionObj = {
-            step: direction.step,
-            step_info: direction.stepInfo,
-          };
-          directionData.push(directionObj);
+            const directionObj = {
+                step: direction.step,
+                step_info: direction.stepInfo,
+            };
+            directionData.push(directionObj);
         });
         const payload = {
-          name: name,
-          description: description,
-          prep_time: totalPrepTime,
-          cook_time: totalCookTime,
-          servings: servings,
-          preview_image: previewImage,
-          recipe_image: recipeImage,
-          ingredients: ingredientData,
-          directions: directionData,
+            name: name,
+            description: description,
+            prep_time: totalPrepTime,
+            cook_time: totalCookTime,
+            servings: servings,
+            preview_image: previewImage,
+            recipe_image: recipeImage,
+            ingredients: ingredientData,
+            directions: directionData,
         };
 
         console.log("This is recipeId:", recipeId)

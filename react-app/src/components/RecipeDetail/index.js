@@ -37,10 +37,6 @@ const RecipeDetail = () => {
     const [liked, setLiked] = useState(false);
     const [refreshKey, setRefreshKey] = useState(0);
 
-
-    console.log("this is current reviews:", currentReviews)
-
-
     useEffect(() => {
         dispatch(RecipeActions.getRecipeThunk(recipeId))
             .then(currentRecipes => setCurrentRecipes(currentRecipes))
