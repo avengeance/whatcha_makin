@@ -7,7 +7,7 @@ import * as ReviewActions from "../../store/reviews";
 
 import "./CreateReview.css";
 
-function CreateReviewModal({ recipeId }) {
+function CreateReviewModal({ recipeId, onReviewSubmit }) {
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -49,8 +49,14 @@ function CreateReviewModal({ recipeId }) {
         e.preventDefault();
         setErrors([]);
 
+        if (!recipeId) {
+            console.log('recipeId is missing')
+            return
+        }
+
         try {
             await dispatch(ReviewActions.createReviewThunk(recipeId, review, stars));
+            onReviewSubmit()
             closeModal();
             setRefreshKey(refreshKey + 1)
             history.push(`/recipes/${recipeId}`);

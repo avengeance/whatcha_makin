@@ -65,7 +65,6 @@ export const getRecipeThunk = (recipeId) => async (dispatch) => {
         method: "GET",
     });
     const recipeDetails = await res.json();
-    console.log("This is recipe details:", recipeDetails)
     dispatch(getRecipe(recipeDetails));
     return recipeDetails;
 }

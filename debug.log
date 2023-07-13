@@ -1,0 +1,262 @@
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 103-948-887
+INFO:werkzeug: * Detected change in '/home/avengeance/course/capstone/app/api/review_routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 103-948-887
+INFO:werkzeug:127.0.0.1 - - [13/Jul/2023 11:33:13] "[32mGET /api/recipes HTTP/1.1[0m" 308 -
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:SELECT users.id AS users_id, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.hashed_password AS users_hashed_password, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = ?
+INFO:sqlalchemy.engine.Engine:[generated in 0.00034s] (1,)
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+INFO:werkzeug:127.0.0.1 - - [13/Jul/2023 11:33:13] "GET /api/auth/ HTTP/1.1" 200 -
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:SELECT recipes.id AS recipes_id, recipes.owner_id AS recipes_owner_id, recipes.name AS recipes_name, recipes.description AS recipes_description, recipes.prep_time AS recipes_prep_time, recipes.cook_time AS recipes_cook_time, recipes.servings AS recipes_servings, recipes.created_at AS recipes_created_at, recipes.updated_at AS recipes_updated_at 
+FROM recipes 
+WHERE recipes.id = ?
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:SELECT recipes.id AS recipes_id, recipes.owner_id AS recipes_owner_id, recipes.name AS recipes_name, recipes.description AS recipes_description, recipes.prep_time AS recipes_prep_time, recipes.cook_time AS recipes_cook_time, recipes.servings AS recipes_servings, recipes.created_at AS recipes_created_at, recipes.updated_at AS recipes_updated_at, users_1.id AS users_1_id, users_1.first_name AS users_1_first_name, users_1.last_name AS users_1_last_name, users_1.email AS users_1_email, users_1.hashed_password AS users_1_hashed_password, users_1.created_at AS users_1_created_at, users_1.updated_at AS users_1_updated_at 
+FROM recipes LEFT OUTER JOIN users AS users_1 ON users_1.id = recipes.owner_id 
+WHERE recipes.id = ?
+INFO:sqlalchemy.engine.Engine:SELECT recipes.id AS recipes_id, recipes.owner_id AS recipes_owner_id, recipes.name AS recipes_name, recipes.description AS recipes_description, recipes.prep_time AS recipes_prep_time, recipes.cook_time AS recipes_cook_time, recipes.servings AS recipes_servings, recipes.created_at AS recipes_created_at, recipes.updated_at AS recipes_updated_at 
+FROM recipes 
+WHERE recipes.id = ?
+INFO:sqlalchemy.engine.Engine:[generated in 0.00429s] (3,)
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:SELECT recipes.id AS recipes_id, recipes.owner_id AS recipes_owner_id, recipes.name AS recipes_name, recipes.description AS recipes_description, recipes.prep_time AS recipes_prep_time, recipes.cook_time AS recipes_cook_time, recipes.servings AS recipes_servings, recipes.created_at AS recipes_created_at, recipes.updated_at AS recipes_updated_at 
+FROM recipes 
+WHERE recipes.id = ?
+INFO:sqlalchemy.engine.Engine:[generated in 0.00335s] (3,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.0067s ago] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT recipes.id AS recipes_id, recipes.owner_id AS recipes_owner_id, recipes.name AS recipes_name, recipes.description AS recipes_description, recipes.prep_time AS recipes_prep_time, recipes.cook_time AS recipes_cook_time, recipes.servings AS recipes_servings, recipes.created_at AS recipes_created_at, recipes.updated_at AS recipes_updated_at 
+FROM recipes
+INFO:sqlalchemy.engine.Engine:[cached since 0.008352s ago] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT likes.id AS likes_id, likes.user_id AS likes_user_id, likes.recipe_id AS likes_recipe_id 
+FROM likes 
+WHERE likes.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[generated in 0.00324s] ()
+INFO:sqlalchemy.engine.Engine:SELECT recipe_images.id AS recipe_images_id, recipe_images.recipe_id AS recipe_images_recipe_id, recipe_images.url AS recipe_images_url, recipe_images.is_preview AS recipe_images_is_preview, recipe_images.created_at AS recipe_images_created_at, recipe_images.updated_at AS recipe_images_updated_at 
+FROM recipe_images 
+WHERE recipe_images.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[generated in 0.00413s] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT comments.id AS comments_id, comments.owner_id AS comments_owner_id, comments.recipe_id AS comments_recipe_id, comments.comment AS comments_comment, comments.created_at AS comments_created_at, comments.updated_at AS comments_updated_at 
+FROM comments 
+WHERE comments.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[generated in 0.00631s] (3,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00437s] (3,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00194s] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT recipe_images.id AS recipe_images_id, recipe_images.recipe_id AS recipe_images_recipe_id, recipe_images.url AS recipe_images_url, recipe_images.is_preview AS recipe_images_is_preview, recipe_images.created_at AS recipe_images_created_at, recipe_images.updated_at AS recipe_images_updated_at 
+FROM recipe_images 
+WHERE recipe_images.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+INFO:sqlalchemy.engine.Engine:[cached since 0.01253s ago] (1,)
+INFO:werkzeug:127.0.0.1 - - [13/Jul/2023 11:33:13] "GET /api/recipes/3/likes HTTP/1.1" 200 -
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:SELECT users.id AS users_id, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.hashed_password AS users_hashed_password, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = ?
+INFO:sqlalchemy.engine.Engine:SELECT users.id AS users_id, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.hashed_password AS users_hashed_password, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = ?
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.0168s ago] (3,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00567s] (1,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00475s] (1,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.01766s ago] (1,)
+INFO:sqlalchemy.engine.Engine:SELECT count(*) AS count_1 
+FROM (SELECT likes.id AS likes_id, likes.user_id AS likes_user_id, likes.recipe_id AS likes_recipe_id 
+FROM likes 
+WHERE likes.recipe_id = ?) AS anon_1
+INFO:sqlalchemy.engine.Engine:SELECT users.id AS users_id, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.hashed_password AS users_hashed_password, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = ?
+INFO:sqlalchemy.engine.Engine:SELECT users.id AS users_id, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.hashed_password AS users_hashed_password, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.0184s ago] (2,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.01746s ago] (2,)
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+INFO:werkzeug:127.0.0.1 - - [13/Jul/2023 11:33:13] "GET /api/recipes/3/reviews HTTP/1.1" 200 -
+INFO:sqlalchemy.engine.Engine:[generated in 0.00553s] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT users.id AS users_id, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.hashed_password AS users_hashed_password, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = ?
+INFO:sqlalchemy.engine.Engine:SELECT likes.id AS likes_id, likes.user_id AS likes_user_id, likes.recipe_id AS likes_recipe_id 
+FROM likes 
+WHERE likes.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.02294s ago] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT comments.id AS comments_id, comments.owner_id AS comments_owner_id, comments.recipe_id AS comments_recipe_id, comments.comment AS comments_comment, comments.created_at AS comments_created_at, comments.updated_at AS comments_updated_at 
+FROM comments 
+WHERE comments.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.0466s ago] (1,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.04157s ago] (3,)
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+INFO:werkzeug:127.0.0.1 - - [13/Jul/2023 11:33:13] "GET /api/recipes/3/comments HTTP/1.1" 200 -
+INFO:sqlalchemy.engine.Engine:SELECT recipe_images.id AS recipe_images_id, recipe_images.recipe_id AS recipe_images_recipe_id, recipe_images.url AS recipe_images_url, recipe_images.is_preview AS recipe_images_is_preview, recipe_images.created_at AS recipe_images_created_at, recipe_images.updated_at AS recipe_images_updated_at 
+FROM recipe_images 
+WHERE recipe_images.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:SELECT recipes.id AS recipes_id, recipes.owner_id AS recipes_owner_id, recipes.name AS recipes_name, recipes.description AS recipes_description, recipes.prep_time AS recipes_prep_time, recipes.cook_time AS recipes_cook_time, recipes.servings AS recipes_servings, recipes.created_at AS recipes_created_at, recipes.updated_at AS recipes_updated_at 
+FROM recipes 
+WHERE recipes.id = ?
+INFO:sqlalchemy.engine.Engine:SELECT directions.id AS directions_id, directions.recipe_id AS directions_recipe_id, directions.step AS directions_step, directions.step_info AS directions_step_info, directions.created_at AS directions_created_at, directions.updated_at AS directions_updated_at 
+FROM directions 
+WHERE directions.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.05956s ago] (2,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.07476s ago] (3,)
+INFO:sqlalchemy.engine.Engine:[generated in 0.00259s] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.05804s ago] (2,)
+INFO:sqlalchemy.engine.Engine:SELECT recipe_ingredients.id AS recipe_ingredients_id, recipe_ingredients.recipe_id AS recipe_ingredients_recipe_id, recipe_ingredients.ingredient_id AS recipe_ingredients_ingredient_id, recipe_ingredients.quantity AS recipe_ingredients_quantity, recipe_ingredients.measurement AS recipe_ingredients_measurement 
+FROM recipe_ingredients 
+WHERE recipe_ingredients.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[generated in 0.00096s] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT likes.id AS likes_id, likes.user_id AS likes_user_id, likes.recipe_id AS likes_recipe_id 
+FROM likes 
+WHERE likes.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.06133s ago] (3,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.07138s ago] (2,)
+INFO:sqlalchemy.engine.Engine:SELECT ingredients.id AS ingredients_id, ingredients.name AS ingredients_name, ingredients.is_seasoning AS ingredients_is_seasoning 
+FROM ingredients 
+WHERE ingredients.id IN (?, ?, ?, ?, ?, ?, ?)
+INFO:sqlalchemy.engine.Engine:SELECT users.id AS users_id, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.hashed_password AS users_hashed_password, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = ?
+INFO:sqlalchemy.engine.Engine:SELECT recipe_images.id AS recipe_images_id, recipe_images.recipe_id AS recipe_images_recipe_id, recipe_images.url AS recipe_images_url, recipe_images.is_preview AS recipe_images_is_preview, recipe_images.created_at AS recipe_images_created_at, recipe_images.updated_at AS recipe_images_updated_at 
+FROM recipe_images 
+WHERE recipe_images.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[generated in 0.00306s] (6, 1, 27, 28, 23, 8, 28)
+INFO:sqlalchemy.engine.Engine:[cached since 0.05645s ago] (1,)
+INFO:sqlalchemy.engine.Engine:[cached since 0.07413s ago] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT users.id AS users_id, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.hashed_password AS users_hashed_password, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = ?
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.06182s ago] (2,)
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+INFO:sqlalchemy.engine.Engine:[cached since 0.07679s ago] (3,)
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+INFO:werkzeug:127.0.0.1 - - [13/Jul/2023 11:33:13] "GET /api/recipes/3 HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [13/Jul/2023 11:33:13] "GET /api/recipes/3/reviews HTTP/1.1" 200 -
+INFO:sqlalchemy.engine.Engine:SELECT likes.id AS likes_id, likes.user_id AS likes_user_id, likes.recipe_id AS likes_recipe_id 
+FROM likes 
+WHERE likes.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.09522s ago] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT recipe_images.id AS recipe_images_id, recipe_images.recipe_id AS recipe_images_recipe_id, recipe_images.url AS recipe_images_url, recipe_images.is_preview AS recipe_images_is_preview, recipe_images.created_at AS recipe_images_created_at, recipe_images.updated_at AS recipe_images_updated_at 
+FROM recipe_images 
+WHERE recipe_images.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.09426s ago] (4,)
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.09045s ago] (4,)
+INFO:sqlalchemy.engine.Engine:SELECT likes.id AS likes_id, likes.user_id AS likes_user_id, likes.recipe_id AS likes_recipe_id 
+FROM likes 
+WHERE likes.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.1014s ago] (4,)
+INFO:sqlalchemy.engine.Engine:SELECT recipe_images.id AS recipe_images_id, recipe_images.recipe_id AS recipe_images_recipe_id, recipe_images.url AS recipe_images_url, recipe_images.is_preview AS recipe_images_is_preview, recipe_images.created_at AS recipe_images_created_at, recipe_images.updated_at AS recipe_images_updated_at 
+FROM recipe_images 
+WHERE recipe_images.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.09986s ago] (5,)
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.0964s ago] (5,)
+INFO:sqlalchemy.engine.Engine:SELECT likes.id AS likes_id, likes.user_id AS likes_user_id, likes.recipe_id AS likes_recipe_id 
+FROM likes 
+WHERE likes.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.1078s ago] (5,)
+INFO:sqlalchemy.engine.Engine:SELECT recipe_images.id AS recipe_images_id, recipe_images.recipe_id AS recipe_images_recipe_id, recipe_images.url AS recipe_images_url, recipe_images.is_preview AS recipe_images_is_preview, recipe_images.created_at AS recipe_images_created_at, recipe_images.updated_at AS recipe_images_updated_at 
+FROM recipe_images 
+WHERE recipe_images.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.106s ago] (6,)
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.1066s ago] (6,)
+INFO:sqlalchemy.engine.Engine:SELECT likes.id AS likes_id, likes.user_id AS likes_user_id, likes.recipe_id AS likes_recipe_id 
+FROM likes 
+WHERE likes.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.1193s ago] (6,)
+INFO:sqlalchemy.engine.Engine:SELECT recipe_images.id AS recipe_images_id, recipe_images.recipe_id AS recipe_images_recipe_id, recipe_images.url AS recipe_images_url, recipe_images.is_preview AS recipe_images_is_preview, recipe_images.created_at AS recipe_images_created_at, recipe_images.updated_at AS recipe_images_updated_at 
+FROM recipe_images 
+WHERE recipe_images.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.1169s ago] (7,)
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.113s ago] (7,)
+INFO:sqlalchemy.engine.Engine:SELECT likes.id AS likes_id, likes.user_id AS likes_user_id, likes.recipe_id AS likes_recipe_id 
+FROM likes 
+WHERE likes.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.1248s ago] (7,)
+INFO:sqlalchemy.engine.Engine:SELECT recipe_images.id AS recipe_images_id, recipe_images.recipe_id AS recipe_images_recipe_id, recipe_images.url AS recipe_images_url, recipe_images.is_preview AS recipe_images_is_preview, recipe_images.created_at AS recipe_images_created_at, recipe_images.updated_at AS recipe_images_updated_at 
+FROM recipe_images 
+WHERE recipe_images.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.123s ago] (8,)
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.1183s ago] (8,)
+INFO:sqlalchemy.engine.Engine:SELECT likes.id AS likes_id, likes.user_id AS likes_user_id, likes.recipe_id AS likes_recipe_id 
+FROM likes 
+WHERE likes.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.1298s ago] (8,)
+INFO:sqlalchemy.engine.Engine:SELECT recipe_images.id AS recipe_images_id, recipe_images.recipe_id AS recipe_images_recipe_id, recipe_images.url AS recipe_images_url, recipe_images.is_preview AS recipe_images_is_preview, recipe_images.created_at AS recipe_images_created_at, recipe_images.updated_at AS recipe_images_updated_at 
+FROM recipe_images 
+WHERE recipe_images.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.1289s ago] (9,)
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.1255s ago] (9,)
+INFO:sqlalchemy.engine.Engine:SELECT likes.id AS likes_id, likes.user_id AS likes_user_id, likes.recipe_id AS likes_recipe_id 
+FROM likes 
+WHERE likes.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.1408s ago] (9,)
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+INFO:werkzeug:127.0.0.1 - - [13/Jul/2023 11:33:13] "GET /api/recipes/ HTTP/1.1" 200 -
+INFO:sqlalchemy.engine.Engine:BEGIN (implicit)
+INFO:sqlalchemy.engine.Engine:SELECT recipes.id AS recipes_id, recipes.owner_id AS recipes_owner_id, recipes.name AS recipes_name, recipes.description AS recipes_description, recipes.prep_time AS recipes_prep_time, recipes.cook_time AS recipes_cook_time, recipes.servings AS recipes_servings, recipes.created_at AS recipes_created_at, recipes.updated_at AS recipes_updated_at 
+FROM recipes 
+WHERE recipes.id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.3743s ago] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT reviews.id AS reviews_id, reviews.owner_id AS reviews_owner_id, reviews.recipe_id AS reviews_recipe_id, reviews.review AS reviews_review, reviews.stars AS reviews_stars, reviews.created_at AS reviews_created_at, reviews.updated_at AS reviews_updated_at 
+FROM reviews 
+WHERE reviews.recipe_id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.3553s ago] (3,)
+INFO:sqlalchemy.engine.Engine:SELECT users.id AS users_id, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.hashed_password AS users_hashed_password, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.345s ago] (1,)
+INFO:sqlalchemy.engine.Engine:SELECT users.id AS users_id, users.first_name AS users_first_name, users.last_name AS users_last_name, users.email AS users_email, users.hashed_password AS users_hashed_password, users.created_at AS users_created_at, users.updated_at AS users_updated_at 
+FROM users 
+WHERE users.id = ?
+INFO:sqlalchemy.engine.Engine:[cached since 0.346s ago] (2,)
+INFO:sqlalchemy.engine.Engine:ROLLBACK
+INFO:werkzeug:127.0.0.1 - - [13/Jul/2023 11:33:13] "GET /api/recipes/3/reviews HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [13/Jul/2023 11:33:18] "[35m[1mGET /api/recipes/3/reviews/3 HTTP/1.1[0m" 500 -
+INFO:werkzeug: * Detected change in '/home/avengeance/course/capstone/app/api/review_routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 103-948-887
+INFO:werkzeug: * Detected change in '/home/avengeance/course/capstone/app/api/review_routes.py', reloading
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 103-948-887
+INFO:werkzeug: * Detected change in '/home/avengeance/course/capstone/app/api/review_routes.py', reloading

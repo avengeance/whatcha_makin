@@ -12,13 +12,13 @@ import "./UpdateReview.css";
 const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const { id } = useParams();
-    const { closeModal } = useModal();
 
     const [review, setReview] = useState("");
     const [stars, setStars] = useState(0);
 
     const [errors, setErrors] = useState({});
+    const [refreshKey, setRefreshKey] = useState(0)
+    const { closeModal } = useModal();
 
     const MIN_REVIEW_LENGTH = 10;
     const validReview = review.length >= MIN_REVIEW_LENGTH
@@ -44,17 +44,36 @@ const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
         return <div className="star-rating">{createStars()}</div>
     }
 
+    // useEffect(() => {
+    //     async function getReviewThunk() {
+    //         const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}`);
+    //             if (res.ok) {
+    //                 console.log("this is res:",res)
+    //                 const reviewData = await res.json();
+    //                 setReview(reviewData.review);
+    //                 setStars(reviewData.stars);
+    //             }
+
+    //     }
+    //     getReviewThunk();
+    // }, [reviewId])
+
     useEffect(() => {
-        async function getReviewThunk() {
-            const res = await csrfFetch(`/reviews/${reviewId}`);
-            if (res.ok) {
-                const review = await res.json();
-                setReview(review.review);
-                setStars(review.stars);
+        async function getReviewData() {
+            const reviewData = await dispatch(ReviewActions.getReviewThunk(recipeId, reviewId));
+            console.log("This is review data:", reviewData)
+
+            if (reviewData.error) {
+                console.log('Error fetching review:', reviewData.error)
+                return
+            } else {
+                setReview(reviewData.review);
+                setStars(reviewData.stars);
             }
         }
-        getReviewThunk();
-    }, [id])
+        getReviewData();
+    }, [dispatch, recipeId, reviewId]);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -65,10 +84,13 @@ const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
             stars,
         }
 
-        const updatedReview = ReviewActions.updateReviewThunk(recipeId, reviewId, payload);
+        const updatedReview = await dispatch(
+            ReviewActions.updateReviewThunk(recipeId, reviewId, payload)
+        )
 
         if (updatedReview && !updatedReview.errors) {
             closeModal();
+            setRefreshKey(refreshKey + 1)
             dispatch(ReviewActions.getAllReviewsThunk(recipeId));
             history.push(`/recipes/${recipeId}`);
         } else {

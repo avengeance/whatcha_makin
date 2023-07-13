@@ -491,6 +491,20 @@ def create_review(id):
         return jsonify(new_review.to_dict()), 201
     else:
         return jsonify(form.errors), 400
+    
+# Get a review
+@recipe_routes.route('/<int:id>/reviews/<int:review_id>', methods=['GET'])
+def get_review(review_id):
+    review = Review.query.get(review_id)
+
+    if review is None:
+        return jsonify({
+            "error": "Review does not exist",
+            "status_code": 404
+        }), 404
+
+    review_dict = review.to_dict()
+    return jsonify(review_dict), 200
 
 # View Likes by Recipe ID (Bonus Feature)
 @recipe_routes.route('/<int:id>/likes', methods=['GET'])

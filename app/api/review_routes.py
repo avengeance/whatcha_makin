@@ -2,6 +2,7 @@ from ..forms.review_form import ReviewForm, EditReviewForm
 from flask import Blueprint,redirect,url_for, render_template,jsonify,request
 from flask_login import login_required,current_user,logout_user
 from ..models.review import Review
+from ..models.recipe import Recipe
 from .. import db
 
 review_routes = Blueprint('reviews', __name__)
@@ -19,6 +20,28 @@ def get_review(review_id):
 
     review_dict = review.to_dict()
     return jsonify(review_dict), 200
+
+# Get a Review
+# @review_routes.route('/recipes/<int:recipe_id>/reviews/<int:review_id>', methods=['GET'])
+# def get_review(recipe_id, review_id):
+#     recipe = Recipe.query.get(recipe_id)
+
+#     if recipe is None:
+#         return jsonify({
+#             "error": "Recipe does not exist",
+#             "status_code": 404
+#         }), 404
+
+#     review = next((r for r in recipe.reviews if r.id == review_id), None)
+#     if review is None:
+#         return jsonify({
+#             "error": "Review does not exist",
+#             "status_code": 404
+#         }), 404
+
+#     review_dict = review.to_dict()
+#     return jsonify(review_dict), 200
+
 
 
 # Update a Review
