@@ -13,6 +13,7 @@ from ..forms.review_form import ReviewForm, EditReviewForm
 
 from flask import Blueprint, redirect, url_for, render_template, jsonify, request
 from flask_login import login_required, current_user, logout_user
+from werkzeug.datastructures import MultiDict
 
 from statistics import mean
 from datetime import datetime
@@ -165,7 +166,7 @@ def get_recipe(id):
         "message": "Recipe not found"
     }), 404
 
-# # Create a New Recipe
+# Create a New Recipe
 @recipe_routes.route('/new', methods=['POST'])
 @login_required
 def create_recipe():
@@ -199,12 +200,7 @@ def create_recipe():
             db.session.add(new_recipe_image)
             db.session.add(new_recipe_image2)
             db.session.commit()
-
-            db.session.commit()
-                
-            db.session.add(new_recipe)
-            db.session.commit()
-            
+        
             if 'directions' in data:
                 for direction in data['directions']:
                     try:
@@ -214,7 +210,6 @@ def create_recipe():
                             step_info=direction.get('step_info'),
                         )
                         db.session.add(new_direction)
-                    # try:
                         db.session.commit()
                         print(f"Successfully committed direction: {new_direction.step_number}")
                     except Exception as e:
@@ -230,8 +225,6 @@ def create_recipe():
                         )
 
                         db.session.add(new_ingredient)
-                
-                    # try:
                         db.session.commit()
                         print(f"Committed ingredient with ID: {new_ingredient.id}")
                         print("All ingredients:", Ingredient.query.all())
@@ -259,6 +252,7 @@ def create_recipe():
         return(jsonify({
             'errors': form.errors
             })), 400
+
         
 # Update a Recipe
 @recipe_routes.route('/<int:id>/edit', methods=['PUT'])
@@ -493,18 +487,18 @@ def create_review(id):
         return jsonify(form.errors), 400
     
 # Get a review
-@recipe_routes.route('/<int:id>/reviews/<int:review_id>', methods=['GET'])
-def get_review(review_id):
-    review = Review.query.get(review_id)
+# @recipe_routes.route('/<int:id>/reviews/<int:review_id>', methods=['GET'])
+# def get_review(review_id):
+#     review = Review.query.get(review_id)
 
-    if review is None:
-        return jsonify({
-            "error": "Review does not exist",
-            "status_code": 404
-        }), 404
+#     if review is None:
+#         return jsonify({
+#             "error": "Review does not exist",
+#             "status_code": 404
+#         }), 404
 
-    review_dict = review.to_dict()
-    return jsonify(review_dict), 200
+#     review_dict = review.to_dict()
+#     return jsonify(review_dict), 200
 
 # View Likes by Recipe ID (Bonus Feature)
 @recipe_routes.route('/<int:id>/likes', methods=['GET'])

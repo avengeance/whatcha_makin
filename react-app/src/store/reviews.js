@@ -40,7 +40,7 @@ export const getAllReviewsThunk = (recipeId) => async (dispatch) => {
 }
 
 export const getReviewThunk = (recipeId, reviewId) => async (dispatch) => {
-    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}/`, {
+    const res = await csrfFetch(`/api/reviews/${reviewId}/`, {
         method: "GET",
     })
     const reviewDetails = await res.json()
@@ -61,14 +61,17 @@ export const createReviewThunk = (recipeId, review, stars) => async (dispatch) =
     return data;
 }
 
-export const updateReviewThunk = (recipeId, reviewId, payload) => async (dispatch) => {
-    const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}/`, {
+export const updateReviewThunk = (reviewId, payload) => async (dispatch) => {
+    console.log("this is payload:",payload)
+    console.log("this is reviewId:", reviewId)
+    const res = await csrfFetch(`/api/reviews/${reviewId}`, {
         method: "PUT",
         body: JSON.stringify(payload),
         headers: {
             "Content-Type": "application/json",
         }
     })
+    console.log("this is res:",res)
     const data = await res.json();
     dispatch(updateReview(data));
     return data
@@ -112,7 +115,7 @@ const reviewsReducer = (state = initialState, action) => {
         case UPDATE_REVIEW:
             const indexToUpdate = newState.reviews.findIndex((review) => review.id === action.reviews.id);
             if (indexToUpdate !== -1) {
-                newState.reviews[indexToUpdate] = action.reviews;
+                newState.reviews[indexToUpdate] = action.review;
             }
             return newState
         case DELETE_REVIEW:
@@ -125,3 +128,38 @@ const reviewsReducer = (state = initialState, action) => {
 }
 
 export default reviewsReducer;
+// const initialState = {
+//     reviews: []
+// };
+// const reviewsReducer = (state = initialState, action) => {
+//     let newState = { ...state };
+//     switch (action.type) {
+//         case GET_ALL_REVIEWS:
+//             action.reviews.forEach((review) => {
+//                 newState.reviews[review.id] = review;
+//             });
+//             return newState;
+//         case GET_REVIEW:
+//             newState.reviews[action.review.id] = action.review;
+//             return newState;
+//         case CREATE_REVIEW:
+//             newState.reviews.push(action.review);
+//             return newState;
+//         case UPDATE_REVIEW:
+//             const indexToUpdate = newState.reviews.findIndex(
+//                 (review) => review.id === action.review.id
+//             );
+//             if (indexToUpdate !== -1) {
+//                 newState.reviews[indexToUpdate] = action.review;
+//             }
+//             return newState;
+//         case DELETE_REVIEW:
+//             newState.reviews = newState.reviews.filter(
+//                 (review) => review.id !== action.review.id
+//             );
+//             return newState;
+//         default:
+//             return state;
+//     }
+// };
+// export default reviewsReducer;

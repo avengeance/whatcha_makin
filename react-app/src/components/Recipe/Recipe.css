@@ -7,6 +7,7 @@ body {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    padding: 25px;
 }
 
 .recipe-tile {
@@ -16,6 +17,9 @@ body {
     flex-direction: column;
     flex-basis: calc(25%-10px);
     border-radius: 25px;
+    margin-bottom: 25px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 @media screen and (max-width: 1000px) {
@@ -34,6 +38,7 @@ body {
 
 .recipe-tile:hover {
     cursor: pointer;
+    box-shadow: 1px 3px 6px 7px #4D7E3E;
 }
 
 #recipe-tile-image img {
@@ -50,18 +55,6 @@ body {
 }
 
 
-#recipe-tile-price {
-    display: flex;
-    justify-content: flex-start;
-    font-size: 12px;
-    width: 250px;
-}
-
-#tile-price {
-    font-size: small;
-    font-weight: bold;
-    padding-right: 5px;
-}
 
 #recipe-tooltip {
     position: absolute;
@@ -84,4 +77,31 @@ body {
 
 #likes {
     padding-left: 5px;
+}
+
+.recipe-description{
+    border: 1px solid black;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-content: center;
+}
+
+.recipe-ingredients-seasoning-containter{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    border: 3px solid red;
+}
+.recipe-ingredients{
+    border: 1px solid red;
+}
+.recipe-seasoning{
+    border: 1px solid blue;
+}
+.recipe-time{
+    border: 1px solid orange
+}
+.recipe-description-owner-container{
+    border: 2px solid pink;
 }

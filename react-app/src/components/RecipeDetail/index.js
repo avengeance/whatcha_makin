@@ -65,6 +65,7 @@ const RecipeDetail = () => {
     }
 
     function handleUpdateReview(reviewId) {
+        console.log("this is review Id in update review:", reviewId)
         const modalContent = (
             <UpdateReviewModal
                 recipeId={recipeId}
@@ -141,7 +142,7 @@ const RecipeDetail = () => {
                                     <div className='recipe-owner-name'>
                                         <h2>Recipe Created by: {currentRecipes?.owner_name}</h2>
                                     </div>
-                                    <div className='recipe-description'>
+                                    <div className='recipe-description-text'>
                                         <p>{currentRecipes?.description}</p>
                                     </div>
                                 </div>

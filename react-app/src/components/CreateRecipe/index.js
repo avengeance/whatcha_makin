@@ -111,14 +111,6 @@ function CreateRecipe() {
             formData.append(`directions[${index}].step_info`, direction.stepInfo)
         })
 
-        // fetch('/api/recipes/new', {
-        //     method: "POST",
-        //     body: formData
-        // })
-        //     .then(response => response.json())
-        //     .then(data => console.log(data))
-        //     .catch(error => console.error(error))
-
         const payload = {
             name,
             description,

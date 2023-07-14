@@ -8,10 +8,12 @@ from .. import db
 review_routes = Blueprint('reviews', __name__)
 
 # Get a Review
-@review_routes.route('/<int:review_id>', methods=['GET'])
+@review_routes.route('/<int:review_id>/', methods=['GET'])
 def get_review(review_id):
-    review = Review.query.get(review_id)
-
+    print("Entered get_review function")
+    # review = Review.query.get(review_id)
+    review = Review.query.filter_by(id=review_id).first()
+    print("Review fetched from DB: ", review)
     if review is None:
         return jsonify({
             "error": "Review does not exist",
@@ -19,37 +21,17 @@ def get_review(review_id):
         }), 404
 
     review_dict = review.to_dict()
+    print("Review converted to dict: ", review_dict)
     return jsonify(review_dict), 200
-
-# Get a Review
-# @review_routes.route('/recipes/<int:recipe_id>/reviews/<int:review_id>', methods=['GET'])
-# def get_review(recipe_id, review_id):
-#     recipe = Recipe.query.get(recipe_id)
-
-#     if recipe is None:
-#         return jsonify({
-#             "error": "Recipe does not exist",
-#             "status_code": 404
-#         }), 404
-
-#     review = next((r for r in recipe.reviews if r.id == review_id), None)
-#     if review is None:
-#         return jsonify({
-#             "error": "Review does not exist",
-#             "status_code": 404
-#         }), 404
-
-#     review_dict = review.to_dict()
-#     return jsonify(review_dict), 200
-
-
+    # return print("hello")
 
 # Update a Review
-@review_routes.route('/<int:review_id>', methods=['PUT'])
+@review_routes.route('/<int:id>', methods=['PUT'])
 @login_required
-def update_review(review_id):
-    review = Review.query.get(review_id)
-    
+def update_review(id):
+    # review = Review.query.get(id)
+    review = Review.query.filter_by(id=id).first()
+    print(f"this is review", review)
     if review is None:
         return jsonify({
             "error": "Review does not exist",

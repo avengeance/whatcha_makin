@@ -15,17 +15,17 @@ class DirectionForm(FlaskForm):
     step_info = StringField('Step Info')
 
 class RecipeForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
+    name = StringField('Name')
+    description = TextAreaField('Description')
     
     ingredients = FieldList(FormField(IngredientForm))
     directions = FieldList(FormField(DirectionForm))
     
-    prep_time = IntegerField('Prep Time', validators=[DataRequired()])
-    cook_time = IntegerField('Cook Time', validators=[DataRequired()])
-    servings = IntegerField('Servings', validators=[DataRequired()])
+    prep_time = IntegerField('Prep Time')
+    cook_time = IntegerField('Cook Time')
+    servings = IntegerField('Servings')
     
-    preview_image = StringField('Preview Image', validators=[DataRequired()])
+    preview_image = StringField('Preview Image')
     recipe_image = StringField('Recipe Image')
     
     

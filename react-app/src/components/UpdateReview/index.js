@@ -12,6 +12,7 @@ import "./UpdateReview.css";
 const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
     const dispatch = useDispatch();
     const history = useHistory();
+    // const { recipeId, reviewId } = useParams()
 
     const [review, setReview] = useState("");
     const [stars, setStars] = useState(0);
@@ -44,24 +45,9 @@ const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
         return <div className="star-rating">{createStars()}</div>
     }
 
-    // useEffect(() => {
-    //     async function getReviewThunk() {
-    //         const res = await csrfFetch(`/api/recipes/${recipeId}/reviews/${reviewId}`);
-    //             if (res.ok) {
-    //                 console.log("this is res:",res)
-    //                 const reviewData = await res.json();
-    //                 setReview(reviewData.review);
-    //                 setStars(reviewData.stars);
-    //             }
-
-    //     }
-    //     getReviewThunk();
-    // }, [reviewId])
-
     useEffect(() => {
         async function getReviewData() {
             const reviewData = await dispatch(ReviewActions.getReviewThunk(recipeId, reviewId));
-            console.log("This is review data:", reviewData)
 
             if (reviewData.error) {
                 console.log('Error fetching review:', reviewData.error)
@@ -87,6 +73,7 @@ const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
         const updatedReview = await dispatch(
             ReviewActions.updateReviewThunk(recipeId, reviewId, payload)
         )
+        console.log("This is updated review:", updatedReview)
 
         if (updatedReview && !updatedReview.errors) {
             closeModal();
