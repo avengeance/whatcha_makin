@@ -65,15 +65,17 @@ const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
         e.preventDefault();
         setErrors({});
 
-        const payload = {
-            review,
-            stars,
-        }
+        // const payload = {
+        //     review: review,
+        //     stars: stars,
+        // }
+        // console.log("this is payload: LALA", payload)
 
         const updatedReview = await dispatch(
-            ReviewActions.updateReviewThunk(recipeId, reviewId, payload)
+            ReviewActions.updateReviewThunk(recipeId, reviewId, review, stars)
         )
-        console.log("This is updated review:", updatedReview)
+        console.log("this is review:", review)
+        console.log("this is stars:", stars)
 
         if (updatedReview && !updatedReview.errors) {
             closeModal();

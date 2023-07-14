@@ -61,18 +61,19 @@ export const createReviewThunk = (recipeId, review, stars) => async (dispatch) =
     return data;
 }
 
-export const updateReviewThunk = (reviewId, payload) => async (dispatch) => {
-    console.log("this is payload:",payload)
-    console.log("this is reviewId:", reviewId)
+export const updateReviewThunk = (reviewId, review, stars) => async (dispatch) => {
+    console.log("this is review:", review)
+    console.log("this is stars:", stars)
     const res = await csrfFetch(`/api/reviews/${reviewId}`, {
         method: "PUT",
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ review, stars }),
         headers: {
             "Content-Type": "application/json",
         }
     })
-    console.log("this is res:",res)
+    console.log("this is res:", res)
     const data = await res.json();
+    console.log("this is data:", data)
     dispatch(updateReview(data));
     return data
 }

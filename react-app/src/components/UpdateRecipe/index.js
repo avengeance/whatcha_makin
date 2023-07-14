@@ -149,10 +149,10 @@ function UpdateRecipe() {
         setDirections((prevDirections) => [
             ...prevDirections,
             {
-              step: `${prevDirections.length + 1}`,
-              stepInfo: "",
+                step: `${prevDirections.length + 1}`,
+                stepInfo: "",
             },
-          ])
+        ])
     }
     function handleRemoveDirection(i) {
 
@@ -160,10 +160,10 @@ function UpdateRecipe() {
             const updatedDirections = [...prevDirections];
             updatedDirections.splice(i, 1);
             return updatedDirections.map((direction, i) => ({
-              ...direction,
-              step: `${i + 1}`,
+                ...direction,
+                step: `${i + 1}`,
             }));
-          });
+        });
     }
 
     const handleOtherImages = (e) => {
@@ -257,8 +257,6 @@ function UpdateRecipe() {
             directions: directionData,
         };
 
-        console.log("This is recipeId:", recipeId)
-        console.log("Payload:", payload)
         const updatedRecipe = await dispatch(RecipeActions.updateRecipeThunk(recipeId, payload))
             .catch((error) => {
                 // Handle the error here

@@ -10,10 +10,8 @@ review_routes = Blueprint('reviews', __name__)
 # Get a Review
 @review_routes.route('/<int:review_id>/', methods=['GET'])
 def get_review(review_id):
-    print("Entered get_review function")
     # review = Review.query.get(review_id)
     review = Review.query.filter_by(id=review_id).first()
-    print("Review fetched from DB: ", review)
     if review is None:
         return jsonify({
             "error": "Review does not exist",
@@ -21,9 +19,8 @@ def get_review(review_id):
         }), 404
 
     review_dict = review.to_dict()
-    print("Review converted to dict: ", review_dict)
     return jsonify(review_dict), 200
-    # return print("hello")
+
 
 # Update a Review
 @review_routes.route('/<int:id>', methods=['PUT'])
