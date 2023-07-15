@@ -16,7 +16,8 @@ const UserRecipes = () => {
     const { closeModal } = useModal()
 
     const user = useSelector((state) => state.session.user);
-    const currentRecipe = useSelector((state) => state.recipes.recipes);
+    const currentRecipes = useSelector((state) => state.recipes.recipes);
+    const avgRating = currentRecipes?.avg_rating || 0
 
     const [recipes, setRecipes] = useState([]);
     const [refreshKey, setRefreshKey] = useState(0)
@@ -53,7 +54,7 @@ const UserRecipes = () => {
                             <div className='recipe-review-likes'>
                                 <div id='avgRating'>
                                     <i className='fas fa-star'></i>
-                                    {recipe.avg_rating ? recipe.avg_rating.toFixed(1) : 'New'}
+                                    {avgRating ? avgRating.toFixed(1) : 'New'}
                                 </div>
                                 <div id='likes'>
                                     {recipe.likes > 0

@@ -169,7 +169,7 @@ def get_recipe(id):
     }), 404
 
 # Create a New Recipe
-@recipe_routes.route('/new', methods=['POST'])
+@recipe_routes.route('/new/', methods=['POST'])
 @login_required
 def create_recipe():
     form = RecipeForm()
@@ -181,75 +181,80 @@ def create_recipe():
         try:
             new_recipe = Recipe(
                 owner_id = current_user.id,
-                name = request.form.get('name'),
-                description = request.form.get('description'),
-                prep_time = request.form.get('prep_time'),
-                cook_time = request.form.get('cook_time'),
-                servings = request.form.get('servings'),
+                # name = request.form.get('name'),
+                # description = request.form.get('description'),
+                # prep_time = request.form.get('prep_time'),
+                # cook_time = request.form.get('cook_time'),
+                # servings = request.form.get('servings'),
+                name = form.name.data,
+                description = form.description.data,
+                prep_time = form.prep_time.data,
+                cook_time = form.cook_time.data,
+                servings = form.servings.data
             )
 
-            preview_image = request.files.get('preview_image')
-            if preview_image:
-                preview_image_string = base64.b64encode(preview_image.read()).decode()
-            else:
-                print(form.errors)
+            # preview_image = request.files.get('preview_image')
+            # if preview_image:
+            #     preview_image_string = base64.b64encode(preview_image.read()).decode()
+            # else:
+            #     print(form.errors)
 
-            new_recipe_image = RecipeImage(
-                url = preview_image_string,
-                is_preview = True,
-                recipe = new_recipe
-            )
+            # new_recipe_image = RecipeImage(
+            #     url = preview_image_string,
+            #     is_preview = True,
+            #     recipe = new_recipe
+            # )
 
-            recipe_image = request.files.get('recipe_image')
-            if recipe_image:
-                recipe_image_string = base64.b64encode(recipe_image.read()).decode()
-            else:
-                print(form.errors)
+            # recipe_image = request.files.get('recipe_image')
+            # if recipe_image:
+            #     recipe_image_string = base64.b64encode(recipe_image.read()).decode()
+            # else:
+            #     print(form.errors)
 
-            new_recipe_image2 = RecipeImage(
-                url = recipe_image_string,
-                is_preview = False,
-                recipe = new_recipe
-            )
+            # new_recipe_image2 = RecipeImage(
+            #     url = recipe_image_string,
+            #     is_preview = False,
+            #     recipe = new_recipe
+            # )
 
-            db.session.add(new_recipe)
-            print(new_recipe)
-            db.session.add(new_recipe_image)
-            print(new_recipe_image)
-            db.session.add(new_recipe_image2)
-            print(new_recipe_image2)
-            db.session.commit()
+            # db.session.add(new_recipe)
+            # print(new_recipe)
+            # db.session.add(new_recipe_image)
+            # print(new_recipe_image)
+            # db.session.add(new_recipe_image2)
+            # print(new_recipe_image2)
+            # db.session.commit()
 
-            directions = json.loads(request.form.get('directions'))
-            for direction in directions:
-                new_direction = Direction(
-                    recipe_id = new_recipe.id,
-                    step = direction.get('step'),
-                    step_info = direction.get('step_info'),
-                )
-                db.session.add(new_direction)
-                print(new_direction)
+            # directions = json.loads(request.form.get('directions'))
+            # for direction in directions:
+            #     new_direction = Direction(
+            #         recipe_id = new_recipe.id,
+            #         step = direction.get('step'),
+            #         step_info = direction.get('step_info'),
+            #     )
+            #     db.session.add(new_direction)
+            #     print(new_direction)
 
-            ingredients = json.loads(request.form.get('ingredients'))
-            for ingredient_data in ingredients:
-                new_ingredient = Ingredient(
-                    name = ingredient_data.get('name'),
-                    is_seasoning = ingredient_data.get('is_seasoning')
-                )
+            # ingredients = json.loads(request.form.get('ingredients'))
+            # for ingredient_data in ingredients:
+            #     new_ingredient = Ingredient(
+            #         name = ingredient_data.get('name'),
+            #         is_seasoning = ingredient_data.get('is_seasoning')
+            #     )
 
-                db.session.add(new_ingredient)
-                print(new_ingredient)
-                db.session.commit()
+            #     db.session.add(new_ingredient)
+            #     print(new_ingredient)
+            #     db.session.commit()
 
-                new_recipe_ingredient = RecipeIngredient(
-                    recipe_id = new_recipe.id,
-                    ingredient_id = new_ingredient.id,
-                    quantity = ingredient_data.get('quantity'),
-                    measurement = ingredient_data.get('measurement')
-                )
+            #     new_recipe_ingredient = RecipeIngredient(
+            #         recipe_id = new_recipe.id,
+            #         ingredient_id = new_ingredient.id,
+            #         quantity = ingredient_data.get('quantity'),
+            #         measurement = ingredient_data.get('measurement')
+            #     )
 
-                db.session.add(new_recipe_ingredient)
-                print(new_recipe_ingredient)
+            #     db.session.add(new_recipe_ingredient)
+            #     print(new_recipe_ingredient)
             
             db.session.commit()
 

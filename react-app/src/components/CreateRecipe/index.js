@@ -22,13 +22,11 @@ const initialDirection = {
 }
 
 function CreateRecipe() {
-    console.log("Component rendered")
-
     const user = useSelector((state) => state.session.user);
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const { id } = useParams()
+    const { recipeId } = useParams()
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -69,13 +67,13 @@ function CreateRecipe() {
             const parts = value.split("; " + name + "=");
             if (parts.length === 2) return parts.pop().split(";").shift();
         }
-    
+
         let csrf_token = getCookie('csrf_token');
         setCsrfToken(csrf_token);
-    
+
         console.log('this is csrf_token variable:', csrf_token)
     }, []);
-    
+
 
     useEffect(() => {
         console.log('this is csrfToken state:', csrfToken)
@@ -125,11 +123,10 @@ function CreateRecipe() {
     // console.log("this is user", user)
     // console.log("this is userId:", user.id)
 
-    useEffect(() => {
-
-        const testRecipe = dispatch(RecipeActions.getAllRecipesThunk())
-        console.log("this is test recipe:", testRecipe)
-    }, [])
+    // useEffect(() => {
+    //     const testRecipe = dispatch(RecipeActions.getAllRecipesThunk())
+    //     console.log("this is test recipe:", testRecipe)
+    // }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -140,12 +137,12 @@ function CreateRecipe() {
         const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
 
         formData.append('csrf_token', csrfToken)
-        formData.append('owner_id', JSON.stringify(user.id))
-        formData.append("name", JSON.stringify(name))
-        formData.append("description", JSON.stringify(description))
+        formData.append('owner_id', user.id)
+        formData.append("name", name)
+        formData.append("description", description)
         formData.append("prep_time", totalPrepTime)
         formData.append("cook_time", totalCookTime)
-        formData.append("servings", JSON.stringify(servings))
+        formData.append("servings", servings)
         formData.append('preview_image', previewImage)
         // formData.append('recipe_image', recipeImage)
         otherImages.forEach((image, index) => {
@@ -154,36 +151,36 @@ function CreateRecipe() {
 
 
         ingredients.forEach((ingredient, index) => {
-            formData.append(`ingredients[${index}].name`, JSON.stringify(ingredient.name))
-            formData.append(`ingredients[${index}].quantity`, JSON.stringify(ingredient.quantity))
-            formData.append(`ingredients[${index}].measurement`, JSON.stringify(ingredient.measurement))
+            formData.append(`ingredients[${index}].name`, ingredient.name)
+            formData.append(`ingredients[${index}].quantity`, ingredient.quantity)
+            formData.append(`ingredients[${index}].measurement`, ingredient.measurement)
             formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
         })
 
         directions.forEach((direction, index) => {
             formData.append(`directions[${index}].step`, direction.step)
-            formData.append(`directions[${index}].step_info`, JSON.stringify(direction.stepInfo))
+            formData.append(`directions[${index}].step_info`, direction.stepInfo)
         })
 
         console.log("this is form data after append:", formData)
 
 
 
-        const payload = {
-            name,
-            description,
-            ingredients,
-            directions,
-            // prepHours,
-            // prepMinutes,
-            // cookHours,
-            // cookMinutes,
-            prep_time: totalPrepTime,
-            cook_time: totalCookTime,
-            servings,
-            preview_image: previewImage,
-            recipe_image: otherImages
-        }
+        // const payload = {
+        //     name,
+        //     description,
+        //     ingredients,
+        //     directions,
+        //     // prepHours,
+        //     // prepMinutes,
+        //     // cookHours,
+        //     // cookMinutes,
+        //     prep_time: totalPrepTime,
+        //     cook_time: totalCookTime,
+        //     servings,
+        //     preview_image: previewImage,
+        //     recipe_image: otherImages
+        // }
 
         // const ingredientForms = ingredients.map(ing => {
         //     return {
@@ -221,34 +218,66 @@ function CreateRecipe() {
         // const directionData = directionForms.map(form => form.props)
 
         // const payload = {
-        //     owner_id:user.id,
-        //     name,
-        //     description,
+        //     owner_id: user.id,
+        //     name: name,
+        //     description: description,
         //     // ingredients: ingredientForms,
         //     // directions: directionForms,
         //     ingredients: ingredientData,
         //     directions: directionData,
         //     prep_time: totalPrepTime,
         //     cook_time: totalCookTime,
-        //     servings,
+        //     servings: servings,
         //     previewImage,
         //     otherImages
         // }
-        console.log("This is payload:", payload)
 
 
 
-        console.log("this is form data before dispatch:", formData)
-        const newRecipe = await dispatch(RecipeActions.createRecipeThunk(formData));
         for (let pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
         }
-        console.log("this is form data after dispatch:", formData)
-        console.log("this is new recipe:", newRecipe)
+        console.log("this is form data before dispatch:", formData)
 
-        if (newRecipe) {
-            history.push(`/recipes/${newRecipe.id}`);
+        let newRecipe;
+
+        try {
+            const recipe = await dispatch(RecipeActions.createRecipeThunk(formData))
+            // console.log("This is payload:", payload)
+
+            console.log('this is recipe in try:', recipe)
+            const newRecipeId = recipe.id
+            console.log("This is new recipeID in try:", newRecipeId)
+            const url = `/recipes/${newRecipeId}`
+            console.log("this is url in try:", url)
+
+            if (recipe) {
+                newRecipe = recipe
+                setName('')
+                setDescription('')
+                setIngredients([initialIngredient])
+                setDirections([initialDirection])
+                setPrepHours('')
+                setPrepMinutes('')
+                setCookHours('')
+                setCookMinutes('')
+                setServings('')
+                setPreviewImage('')
+                setOtherImages([])
+                setErrors([])
+                history.push(url)
+            }
+        } catch (error) {
+            console.log("Error in catch block", error)
         }
+
+        // const newRecipe = await dispatch(RecipeActions.createRecipeThunk(formData));
+        // console.log("this is form data after dispatch:", formData)
+        // console.log("this is new recipe:", newRecipe)
+
+        // if (newRecipe) {
+        //     history.push(`/recipes/${newRecipe.id}`);
+        // }
     }
 
     return (

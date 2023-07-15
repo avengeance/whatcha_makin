@@ -29,7 +29,9 @@ const RecipeDetail = () => {
     const user = useSelector((state) => state.session.user);
     const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
 
-    const [currentRecipes, setCurrentRecipes] = useState(null);
+
+    const [currentRecipes, setCurrentRecipes] = useState({});
+
     const [reviews, setReviews] = useState([]);
     const [hasReviewed, setHasReviewed] = useState(false)
     const [reviewPosted, setReviewPosted] = useState(false)
@@ -43,6 +45,7 @@ const RecipeDetail = () => {
             .then(currentRecipes => {
                 if (currentRecipes?.Owner?.id) {
                     setCurrentRecipes(currentRecipes);
+                    const avgRating = currentRecipes?.avg_rating || 0
                 }
             })
             .catch(err => console.log(err))
@@ -51,9 +54,7 @@ const RecipeDetail = () => {
 
 
     function handlePostReview() {
-        // const modalContent = <CreateReviewModal recipeId={recipeId} onReviewSubmit={() => {
-        //     // handlePostReview()
-        // }} />;
+
         const modalContent = <CreateReviewModal recipeId={recipeId} onReviewSubmit={handleReviewSubmit} />;
         setReviewPosted(true)
         history.push(`/recipes/${recipeId}`);
@@ -105,7 +106,7 @@ const RecipeDetail = () => {
 
 
     return (
-        <div>
+        <>
             {currentRecipes && (
                 <div>
                     <div className="recipe-name-detail">
@@ -115,7 +116,9 @@ const RecipeDetail = () => {
                         <div className='recipe-review-likes-container'>
                             <div className='recipe-review'>
                                 <i className='fas fa-star'></i>
-                                {currentRecipes.avg_rating ? currentRecipes.avg_rating.toFixed(1) : 'New'}
+                                {/* {currentRecipes.avg_rating ? currentRecipes.avg_rating.toFixed(1) : 'New'} */}
+                                {/* {avgRating ? avgRating.toFixed(1) : 'New'} */}
+                                {currentRecipes ? <div>{currentRecipes.avg_rating}</div> : "Loading..."}
                             </div>
                             <div className='recipe-likes'>
                                 {currentRecipes?.likes > 0
@@ -190,7 +193,20 @@ const RecipeDetail = () => {
                         <div className='recipe-reviews-container'>
                             <div className='recipe-reviews'>
                                 <div className='recipe-review-header'>
-                                    <h3>{currentRecipes?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipes.reviews.length === 1 ? 'Review' : 'Reviews'}</h3>
+                                    {currentRecipes ? (
+                                        <>
+                                            <div className='recipe-review-header'>
+                                                <h3>{currentRecipes?.reviews?.length}...</h3>
+                                            </div>
+
+                                            {/* rest of reviews content */}
+
+                                        </>
+                                    ) : (
+                                        'Loading...'
+                                    )}
+                                    </div>
+                                    {/* <h3>{currentRecipes?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipes.reviews.length === 1 ? 'Review' : 'Reviews'}</h3>
                                 </div>
                                 <p>Number of Reviews: {currentRecipes?.reviews?.length}</p>
                                 <p> Rating: <i className='fas fa-star'></i> {currentRecipes.avg_rating.toFixed(1)}</p>
@@ -198,8 +214,8 @@ const RecipeDetail = () => {
                                     <button id='post-review' onClick={handlePostReview}>Post Your Review</button>
                                 ) :
                                     null
-                                }
-                                {currentReviews.map((review, i) => (
+                                } */}
+                                {/* {currentReviews.map((review, i) => (
                                     review && (
                                         <div key={i} className='recipe-review-container'>
                                             <div className='recipe-review-user'>
@@ -230,7 +246,7 @@ const RecipeDetail = () => {
 
                                         </div>
                                     )
-                                ))}
+                                ))} */}
                             </div>
                         </div>
                         {/* <div className='recipe-comments-container'>
@@ -254,8 +270,10 @@ const RecipeDetail = () => {
                     </div>
                 </div>
             )}
-        </div>
-    )
+
+        </>
+    );
 }
+
 
 export default RecipeDetail;

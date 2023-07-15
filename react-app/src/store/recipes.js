@@ -69,40 +69,42 @@ export const getRecipeThunk = (recipeId) => async (dispatch) => {
     return recipeDetails;
 }
 
-export const createRecipeThunk = (recipe) => async (dispatch) => {
-    const formData = new FormData();
-    Object.keys(recipe).forEach((key) => {
-        if (Array.isArray(recipe[key])) {
-            recipe[key].forEach((item, index) => {
-                Object.keys(item).forEach((subKey) => {
-                    formData.append(`${key}[${index}].${subKey}`, item[subKey])
-                })
-            })
-            console.log("This is formData in if in thunk:", formData)
-            console.log("This is recipe in thunk:", recipe)
-        } else {
-            formData.append(key, recipe[key])
-            console.log("This is formData else in thunk:", formData)
-        }
-    })
-    try {
-        const res = await csrfFetch("/api/recipes/new", {
+export const createRecipeThunk = (formData) => async (dispatch) => {
+    // const formData = new FormData();
+    // console.log("this is form data in thunk:", formData)
+    // Object.keys(recipe).forEach((key) => {
+    //     if (Array.isArray(recipe[key])) {
+    //         recipe[key].forEach((item, index) => {
+    //             Object.keys(item).forEach((subKey) => {
+    //                 formData.append(`${key}[${index}].${subKey}`, item[subKey])
+    //             })
+    //         })
+    //         console.log("This is formData in if in thunk:", formData)
+    //         console.log("This is recipe in thunk:", recipe)
+    //     } else {
+    //         formData.append(key, recipe[key])
+    //         console.log("This is formData else in thunk:", formData)
+    //     }
+    // })
+    // try {
+        const res = await fetch("/api/recipes/new/", {
             method: "POST",
             body: formData,
+            // body: JSON.stringify(recipe)
         });
-        console.log("This is the body in fetch:", formData)
-        console.log("This is res in thunk:", res)
-        if (res.ok) {
+        // console.log("This is the body in fetch:", formData)
+        // console.log("This is res in thunk:", res)
+        // if (res.ok) {
             const data = await res.json();
-            console.log("This is data:", data)
+            console.log("This is data in thunk:", data)
             dispatch(createRecipe(data));
             return data;
-        } else {
-            return console.log("this is res errors:", res.errors)
-        }
-    } catch (err) {
-        console.log("this is error in thunk:", err)
-    }
+        // } else {
+        //     return console.log("this is res errors:", res.errors)
+        // }
+    // } catch (err) {
+    //     console.log("this is error in thunk:", err)
+    // }
 }
 
 export const updateRecipeThunk = (recipe, payload) => async (dispatch) => {
@@ -168,8 +170,14 @@ const recipesReducer = (state = intialState, action) => {
             newState.recipes[action.recipe.id] = action.recipe
             return newState
         case CREATE_RECIPE:
-            newState.recipes[action.recipe.id] = action.recipes
-            return newState
+            newState.recipes[action.recipe.id] = action.recipe
+            return {
+                ...state,
+                [action.recipe.id]:{
+                    ...action.recipe,
+                    avg_rating:0
+                }
+            }
         case UPDATE_RECIPE:
             newState.recipes[action.recipe.id] = action.recipes
             return newState
