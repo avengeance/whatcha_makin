@@ -189,7 +189,10 @@ def create_recipe():
             )
 
             preview_image = request.files.get('preview_image')
-            preview_image_string = base64.b64encode(preview_image.read()).decode()
+            if preview_image:
+                preview_image_string = base64.b64encode(preview_image.read()).decode()
+            else:
+                print(form.errors)
 
             new_recipe_image = RecipeImage(
                 url = preview_image_string,
@@ -198,7 +201,10 @@ def create_recipe():
             )
 
             recipe_image = request.files.get('recipe_image')
-            recipe_image_string = base64.b64encode(recipe_image.read()).decode()
+            if recipe_image:
+                recipe_image_string = base64.b64encode(recipe_image.read()).decode()
+            else:
+                print(form.errors)
 
             new_recipe_image2 = RecipeImage(
                 url = recipe_image_string,

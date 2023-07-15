@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 
 import * as RecipeActions from "../../store/recipes";
+// import { createRecipeThunk } from "../../store/recipes";
 import IngredientForm from "../IngredientForm";
 import DirectionForm from "../DirectionForm";
 import { csrfFetch } from "../../store/csrf";
@@ -24,6 +25,8 @@ function CreateRecipe() {
     const user = useSelector((state) => state.session.user);
     const dispatch = useDispatch();
     const history = useHistory();
+
+    const { id } = useParams()
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -52,6 +55,9 @@ function CreateRecipe() {
             csrf_token = cookie.split('=')[1];
         }
         setCsrfToken(csrf_token);
+        console.log("This is setCsrfToken:", setCsrfToken)
+        console.log("This is csrfToken:", csrfToken)
+        console.log('this is csrf_token variable:', csrf_token)
     }, []);
 
     function handleIngredientChange(i, event) {
@@ -94,8 +100,14 @@ function CreateRecipe() {
         }
     }
 
-    console.log("this is user", user)
+    // console.log("this is user", user)
     // console.log("this is userId:", user.id)
+
+    useEffect(() => {
+
+        const testRecipe = dispatch(RecipeActions.getAllRecipesThunk())
+        console.log("this is test recipe:", testRecipe)
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -133,6 +145,8 @@ function CreateRecipe() {
 
         console.log("this is form data after append:", formData)
 
+
+
         const payload = {
             name,
             description,
@@ -145,8 +159,8 @@ function CreateRecipe() {
             prep_time: totalPrepTime,
             cook_time: totalCookTime,
             servings,
-            previewImage,
-            otherImages
+            preview_image: previewImage,
+            recipe_image: otherImages
         }
 
         // const ingredientForms = ingredients.map(ing => {
@@ -200,12 +214,14 @@ function CreateRecipe() {
         // }
         console.log("This is payload:", payload)
 
+
+
+        console.log("this is form data before dispatch:", formData)
+        const newRecipe = await dispatch(RecipeActions.createRecipeThunk(formData));
         for (let pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
         }
-
-        // console.log("this is form data:", formData)
-        const newRecipe = await dispatch(RecipeActions.createRecipeThunk(formData));
+        console.log("this is form data after dispatch:", formData)
         console.log("this is new recipe:", newRecipe)
 
         if (newRecipe) {

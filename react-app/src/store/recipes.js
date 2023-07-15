@@ -78,21 +78,30 @@ export const createRecipeThunk = (recipe) => async (dispatch) => {
                     formData.append(`${key}[${index}].${subKey}`, item[subKey])
                 })
             })
+            console.log("This is formData in if in thunk:", formData)
+            console.log("This is recipe in thunk:", recipe)
         } else {
             formData.append(key, recipe[key])
+            console.log("This is formData else in thunk:", formData)
         }
     })
-    const res = await csrfFetch("/api/recipes/new", {
-        method: "POST",
-        body: formData,
-    });
-    if (res.ok) {
-        const data = await res.json();
-        console.log("This is data:", data)
-        dispatch(createRecipe(data));
-        return data;
-    } else {
-        return console.log("this is res errors:", res.errors)
+    try {
+        const res = await csrfFetch("/api/recipes/new", {
+            method: "POST",
+            body: formData,
+        });
+        console.log("This is the body in fetch:", formData)
+        console.log("This is res in thunk:", res)
+        if (res.ok) {
+            const data = await res.json();
+            console.log("This is data:", data)
+            dispatch(createRecipe(data));
+            return data;
+        } else {
+            return console.log("this is res errors:", res.errors)
+        }
+    } catch (err) {
+        console.log("this is error in thunk:", err)
     }
 }
 
