@@ -20,6 +20,7 @@ from datetime import datetime
 from sqlalchemy.orm import joinedload
 
 import json
+import base64
 
 recipe_routes = Blueprint('recipes', __name__)
 
@@ -66,6 +67,7 @@ def get_all_recipes():
 def get_recipe(id):
     # recipe = Recipe.query.get(id)
     recipe = Recipe.query.options(joinedload('user')).get(id)
+    print(recipe)
     
     if (recipe):
         images = RecipeImage.query.filter_by(recipe_id=id).all()
@@ -170,88 +172,88 @@ def get_recipe(id):
 @recipe_routes.route('/new', methods=['POST'])
 @login_required
 def create_recipe():
-    data = request.get_json()
-    
     form = RecipeForm()
+    print(form)
     form['csrf_token'].data = request.cookies['csrf_token']
+    print(form)
+    print(form.errors)
     if form.validate_on_submit():
         try:
             new_recipe = Recipe(
-                    owner_id = current_user.id,
-                    name = form.name.data,
-                    description = form.description.data,
-                    prep_time = form.prep_time.data,
-                    cook_time = form.cook_time.data,
-                    servings = form.servings.data,
-                    )
-            
+                owner_id = current_user.id,
+                name = request.form.get('name'),
+                description = request.form.get('description'),
+                prep_time = request.form.get('prep_time'),
+                cook_time = request.form.get('cook_time'),
+                servings = request.form.get('servings'),
+            )
+
+            preview_image = request.files.get('preview_image')
+            preview_image_string = base64.b64encode(preview_image.read()).decode()
+
             new_recipe_image = RecipeImage(
-                url=form.preview_image.data,
-                is_preview=True,
-                recipe=new_recipe
+                url = preview_image_string,
+                is_preview = True,
+                recipe = new_recipe
             )
+
+            recipe_image = request.files.get('recipe_image')
+            recipe_image_string = base64.b64encode(recipe_image.read()).decode()
+
             new_recipe_image2 = RecipeImage(
-                url=form.recipe_image.data,
-                is_preview=False,
-                recipe=new_recipe
+                url = recipe_image_string,
+                is_preview = False,
+                recipe = new_recipe
             )
-            
+
             db.session.add(new_recipe)
+            print(new_recipe)
             db.session.add(new_recipe_image)
+            print(new_recipe_image)
             db.session.add(new_recipe_image2)
+            print(new_recipe_image2)
             db.session.commit()
-        
-            if 'directions' in data:
-                for direction in data['directions']:
-                    try:
-                        new_direction = Direction(
-                            recipe_id=new_recipe.id,
-                            step=direction.get('step'),
-                            step_info=direction.get('step_info'),
-                        )
-                        db.session.add(new_direction)
-                        db.session.commit()
-                        print(f"Successfully committed direction: {new_direction.step_number}")
-                    except Exception as e:
-                        print(f"Error committing direction: {e}")
-                        db.session.rollback()
+
+            directions = json.loads(request.form.get('directions'))
+            for direction in directions:
+                new_direction = Direction(
+                    recipe_id = new_recipe.id,
+                    step = direction.get('step'),
+                    step_info = direction.get('step_info'),
+                )
+                db.session.add(new_direction)
+                print(new_direction)
+
+            ingredients = json.loads(request.form.get('ingredients'))
+            for ingredient_data in ingredients:
+                new_ingredient = Ingredient(
+                    name = ingredient_data.get('name'),
+                    is_seasoning = ingredient_data.get('is_seasoning')
+                )
+
+                db.session.add(new_ingredient)
+                print(new_ingredient)
+                db.session.commit()
+
+                new_recipe_ingredient = RecipeIngredient(
+                    recipe_id = new_recipe.id,
+                    ingredient_id = new_ingredient.id,
+                    quantity = ingredient_data.get('quantity'),
+                    measurement = ingredient_data.get('measurement')
+                )
+
+                db.session.add(new_recipe_ingredient)
+                print(new_recipe_ingredient)
             
-            if 'ingredients' in data:
-                for ingredient_data in data['ingredients']:
-                    try:
-                        new_ingredient = Ingredient(
-                            name=ingredient_data.get('name'),
-                            is_seasoning=ingredient_data.get('is_seasoning')
-                        )
-
-                        db.session.add(new_ingredient)
-                        db.session.commit()
-                        print(f"Committed ingredient with ID: {new_ingredient.id}")
-                        print("All ingredients:", Ingredient.query.all())
-                    except Exception as e:
-                        print(f"Error committing ingredient: {e}")
-                        db.session.rollback()
-                        continue
-
-                    new_recipe_ingredient = RecipeIngredient(
-                        recipe_id=new_recipe.id,
-                        ingredient_id=new_ingredient.id,
-                        quantity=ingredient_data.get('quantity'),
-                        measurement=ingredient_data.get('measurement')
-                    )
-
-                    db.session.add(new_recipe_ingredient)
             db.session.commit()
 
         except Exception as e:
-            print(f"Exception occurred:: {str(e)}")
             db.session.rollback()
+            print(f"Exception occurred:: {str(e)}")
 
         return jsonify(new_recipe.to_dict()), 201
     else:
-        return(jsonify({
-            'errors': form.errors
-            })), 400
+        return jsonify({'errors': form.errors}), 400
 
         
 # Update a Recipe

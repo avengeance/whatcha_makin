@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 
 import * as RecipeActions from "../../store/recipes";
+import IngredientForm from "../IngredientForm";
+import DirectionForm from "../DirectionForm";
 import { csrfFetch } from "../../store/csrf";
 
 import "./CreateRecipe.css";
@@ -38,6 +40,19 @@ function CreateRecipe() {
     const [otherImages, setOtherImages] = useState([]);
 
     const [errors, setErrors] = useState({});
+    const [csrfToken, setCsrfToken] = useState("")
+
+    useEffect(() => {
+        let csrf_token;
+        const cookie = document.cookie
+            .split('; ')
+            .find(row => row.startsWith('csrf_token'));
+
+        if (cookie) {
+            csrf_token = cookie.split('=')[1];
+        }
+        setCsrfToken(csrf_token);
+    }, []);
 
     function handleIngredientChange(i, event) {
         const values = [...ingredients];
@@ -61,7 +76,7 @@ function CreateRecipe() {
         setDirections(values)
     }
     function handleAdddirection() {
-        const newStep = directions.length +1
+        const newStep = directions.length + 1
         setDirections([...directions, { step: newStep, stepInfo: "" }])
     }
     function handleRemoveDirection(i) {
@@ -79,6 +94,9 @@ function CreateRecipe() {
         }
     }
 
+    console.log("this is user", user)
+    // console.log("this is userId:", user.id)
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErrors({})
@@ -87,11 +105,13 @@ function CreateRecipe() {
         const totalPrepTime = (parseInt(prepHours) || 0) * 60 + (parseInt(prepMinutes) || 0);
         const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
 
-        formData.append("name", name)
-        formData.append("description", description)
+        formData.append('csrf_token', csrfToken)
+        formData.append('owner_id', JSON.stringify(user.id))
+        formData.append("name", JSON.stringify(name))
+        formData.append("description", JSON.stringify(description))
         formData.append("prep_time", totalPrepTime)
         formData.append("cook_time", totalCookTime)
-        formData.append("servings", servings)
+        formData.append("servings", JSON.stringify(servings))
         formData.append('preview_image', previewImage)
         // formData.append('recipe_image', recipeImage)
         otherImages.forEach((image, index) => {
@@ -100,29 +120,93 @@ function CreateRecipe() {
 
 
         ingredients.forEach((ingredient, index) => {
-            formData.append(`ingredients[${index}].name`, ingredient.name)
-            formData.append(`ingredients[${index}].quantity`, ingredient.quantity)
-            formData.append(`ingredients[${index}].measurement`, ingredient.measurement)
+            formData.append(`ingredients[${index}].name`, JSON.stringify(ingredient.name))
+            formData.append(`ingredients[${index}].quantity`, JSON.stringify(ingredient.quantity))
+            formData.append(`ingredients[${index}].measurement`, JSON.stringify(ingredient.measurement))
             formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
         })
 
         directions.forEach((direction, index) => {
             formData.append(`directions[${index}].step`, direction.step)
-            formData.append(`directions[${index}].step_info`, direction.stepInfo)
+            formData.append(`directions[${index}].step_info`, JSON.stringify(direction.stepInfo))
         })
+
+        console.log("this is form data after append:", formData)
 
         const payload = {
             name,
             description,
             ingredients,
             directions,
-            prepHours,
-            prepMinutes,
-            cookHours,
-            cookMinutes,
+            // prepHours,
+            // prepMinutes,
+            // cookHours,
+            // cookMinutes,
+            prep_time: totalPrepTime,
+            cook_time: totalCookTime,
             servings,
+            previewImage,
+            otherImages
         }
-        const newRecipe = await dispatch(RecipeActions.createRecipeThunk(payload));
+
+        // const ingredientForms = ingredients.map(ing => {
+        //     return {
+        //         name: ing.name,
+        //         quantity: ing.quantity,
+        //         measurement: ing.measurement,
+        //         is_seasoning: ing.isSeasoning
+        //     }
+        // })
+
+        // const directionForms = directions.map(dir => {
+        //     return {
+        //         step: dir.step,
+        //         step_info: dir.stepInfo
+        //     }
+        // })
+
+        // const ingredientForms = ingredients.map(ing => {
+        //     return <IngredientForm
+        //         name={ing.name}
+        //         quantity={ing.quantity}
+        //         measurement={ing.measurement}
+        //         is_seasoning={ing.isSeasoning}
+        //     />
+        // })
+
+        // const directionForms = directions.map(dir => {
+        //     return <DirectionForm
+        //         step={dir.step}
+        //         stepInfo={dir.stepInfo}
+        //     />
+        // })
+
+        // const ingredientData = ingredientForms.map(form => form.props)
+        // const directionData = directionForms.map(form => form.props)
+
+        // const payload = {
+        //     owner_id:user.id,
+        //     name,
+        //     description,
+        //     // ingredients: ingredientForms,
+        //     // directions: directionForms,
+        //     ingredients: ingredientData,
+        //     directions: directionData,
+        //     prep_time: totalPrepTime,
+        //     cook_time: totalCookTime,
+        //     servings,
+        //     previewImage,
+        //     otherImages
+        // }
+        console.log("This is payload:", payload)
+
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
+
+        // console.log("this is form data:", formData)
+        const newRecipe = await dispatch(RecipeActions.createRecipeThunk(formData));
+        console.log("this is new recipe:", newRecipe)
 
         if (newRecipe) {
             history.push(`/recipes/${newRecipe.id}`);

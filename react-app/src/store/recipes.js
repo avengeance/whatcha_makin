@@ -88,8 +88,11 @@ export const createRecipeThunk = (recipe) => async (dispatch) => {
     });
     if (res.ok) {
         const data = await res.json();
+        console.log("This is data:", data)
         dispatch(createRecipe(data));
         return data;
+    } else {
+        return console.log("this is res errors:", res.errors)
     }
 }
 
