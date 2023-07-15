@@ -259,6 +259,8 @@ def create_recipe():
 
         return jsonify(new_recipe.to_dict()), 201
     else:
+        print(form)
+        print(form.errors)
         return jsonify({'errors': form.errors}), 400
 
         

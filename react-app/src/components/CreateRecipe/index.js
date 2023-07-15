@@ -22,6 +22,8 @@ const initialDirection = {
 }
 
 function CreateRecipe() {
+    console.log("Component rendered")
+
     const user = useSelector((state) => state.session.user);
     const dispatch = useDispatch();
     const history = useHistory();
@@ -45,20 +47,40 @@ function CreateRecipe() {
     const [errors, setErrors] = useState({});
     const [csrfToken, setCsrfToken] = useState("")
 
-    useEffect(() => {
-        let csrf_token;
-        const cookie = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('csrf_token'));
+    // useEffect(() => {
+    //     let csrf_token;
+    //     const cookie = document.cookie
+    //         .split('; ')
+    //         .find(row => row.startsWith('csrf_token'));
 
-        if (cookie) {
-            csrf_token = cookie.split('=')[1];
+    //     if (cookie) {
+    //         csrf_token = cookie.split('=')[1];
+    //     }
+    //     setCsrfToken(csrf_token);
+    //     console.log("This is setCsrfToken:", setCsrfToken)
+    //     console.log("This is csrfToken:", csrfToken)
+    //     console.log('this is csrf_token variable:', csrf_token)
+    // }, []);
+
+    useEffect(() => {
+        const getCookie = (name) => {
+            const value = "; " + document.cookie;
+            console.log("This is document cookie:", value);
+            const parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
         }
+    
+        let csrf_token = getCookie('csrf_token');
         setCsrfToken(csrf_token);
-        console.log("This is setCsrfToken:", setCsrfToken)
-        console.log("This is csrfToken:", csrfToken)
+    
         console.log('this is csrf_token variable:', csrf_token)
     }, []);
+    
+
+    useEffect(() => {
+        console.log('this is csrfToken state:', csrfToken)
+    }, [csrfToken]);
+
 
     function handleIngredientChange(i, event) {
         const values = [...ingredients];
