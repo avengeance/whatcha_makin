@@ -26,6 +26,11 @@
     margin: 0 auto; /* centers the container */
 }
 
+.recipe-owner-name{
+    display: flex;
+    justify-content: center;
+    /* border: 1px solid red; */
+}
 
 #main-recipe-image {
     width: 100%;
@@ -80,18 +85,36 @@
     transform: scale(1.5);
 }
 
+
 .recipe-review-likes-container{
     display: flex;
     justify-content: center;
     justify-content: space-around;
     /* align-items: center; */
-    /* border: 1px solid blue; */
+    /* border: 1px solid red; */
+}
+
+.recipe-description-time-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    /* border: 4px solid green; */
 }
 
 .recipe-review{
     display: flex;
     padding-left: 250px;
     /* border: 1px solid black; */
+}
+
+
+.recipe-time{
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #C6E08D;
+    border-radius: 25px;
+    border: 3px solid black;
+    /* border: 1px solid red; */
 }
 
 .fas.fa-star{
@@ -112,9 +135,46 @@
 
 .recipe-description{
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     flex-direction: row;
+    padding-left: 10px;
     /* border: 1px solid blue; */
+}
+
+.recipe-description-text{
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #C6E08D;
+    border-radius: 25px;
+    height: 98%;
+    border: 3px solid black;
+}
+
+.recipe-ingredients{
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: #C6E08D;
+    border-radius: 25px;
+    border: 3px solid black;
+}
+.recipe-seasoning{
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: #C6E08D;
+    border-radius: 25px;
+    border: 3px solid black;
+}
+
+.recipe-directions-container{
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: #C6E08D;
+    border-radius: 25px;
+    border: 3px solid black;
+}
+#direction-text{
+    display: flex;
+    justify-content: center;
 }
 
 #review-created{
@@ -127,30 +187,12 @@
 }
 
 
-
-#hosted {
-    font-size: x-large;
-    padding-bottom: 10px;
-    width: 50%;
-}
-
 #description {
     width: 50%;
     font-size: large;
     margin-left: 10px;
 }
 
-#hosted-description {
-    display: flex;
-    width: 600px;
-    flex-direction: column;
-}
-
-#hosted-description-rating-box {
-    display: flex;
-    justify-content: space-between;
-    /* border: 1px solid green; */
-}
 
 #rat-rev-box {
     display: flex;
@@ -181,15 +223,6 @@
     /* border: 3px solid green; */
 }
 
-#price {
-    display: flex;
-    justify-content: flex-start;
-    font-size: x-large;
-    width: 50%;
-    height: fit-content;
-    padding-left: 20px;
-    /* border: 1px solid black; */
-}
 
 #stars-review {
     display: flex;
@@ -215,19 +248,6 @@
     box-shadow: 4px 4px 0px 0px #000000;
 }
 
-#reserve {
-    width: 75%;
-    height: 50px;
-    margin-top: 15px;
-    background-color: red;
-    color: white;
-    box-shadow: 4px 4px 0px 0px #000000;
-}
-
-.centered-dot {
-    font-weight: bold;
-    font-size: large;
-}
 
 #reviews-box {
     display: flex;

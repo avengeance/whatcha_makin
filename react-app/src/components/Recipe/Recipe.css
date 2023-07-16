@@ -80,28 +80,16 @@ body {
 }
 
 .recipe-description{
-    border: 1px solid black;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     flex-direction: row;
     align-content: center;
+    /* border: 1px solid black; */
 }
 
 .recipe-ingredients-seasoning-containter{
     display: flex;
     justify-content: center;
     flex-direction: row;
-    border: 3px solid red;
-}
-.recipe-ingredients{
-    border: 1px solid red;
-}
-.recipe-seasoning{
-    border: 1px solid blue;
-}
-.recipe-time{
-    border: 1px solid orange
-}
-.recipe-description-owner-container{
-    border: 2px solid pink;
+    /* border: 3px solid red; */
 }

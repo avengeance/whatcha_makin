@@ -125,6 +125,9 @@ import "./RecipeDetail.css";
                         <div id='recipe-name'>
                             <h2>{currentRecipe?.name}</h2>
                         </div>
+                        <div className='recipe-owner-name'>
+                            <h3>Recipe Created by: {currentRecipe?.owner_name}</h3>
+                            </div>
                         <div className='recipe-review-likes-container'>
                             <div className='recipe-review'>
                                 <i className='fas fa-star'></i>
@@ -154,10 +157,9 @@ import "./RecipeDetail.css";
                         <div className='recipe-description'>
                             <div className='recipe-description-time-container'>
                                 <div className='recipe-description-owner-container'>
-                                    <div className='recipe-owner-name'>
-                                        <h2>Recipe Created by: {currentRecipe?.owner_name}</h2>
-                                    </div>
+
                                     <div className='recipe-description-text'>
+                                        <h4>Recipe Description</h4>
                                         <p>{currentRecipe?.description}</p>
                                     </div>
                                 </div>
@@ -195,7 +197,9 @@ import "./RecipeDetail.css";
                         </div>
                         <div className='recipe-directions-container'>
                             <div className='recipe-directions'>
+                                <div id='direction-text'>
                                 <h3>Directions</h3>
+                                </div>
                                 {currentRecipe?.directions &&
                                     currentRecipe.directions.map((direction, i) => (
                                         <p key={i}>{direction.step}: {direction.step_info}</p>
