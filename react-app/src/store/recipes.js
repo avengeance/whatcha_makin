@@ -87,21 +87,18 @@ export const createRecipeThunk = (formData) => async (dispatch) => {
     //     }
     // })
     // try {
-        const res = await fetch("/api/recipes/new/", {
-            method: "POST",
-            body: formData,
-            // body: JSON.stringify(recipe)
-        });
-        // console.log("This is the body in fetch:", formData)
-        // console.log("This is res in thunk:", res)
-        // if (res.ok) {
-            const data = await res.json();
-            console.log("This is data in thunk:", data)
-            dispatch(createRecipe(data));
-            return data;
-        // } else {
-        //     return console.log("this is res errors:", res.errors)
-        // }
+    const res = await fetch("/api/recipes/new/", {
+        method: "POST",
+        body: formData,
+    });
+    // if (res.ok) {
+    const data = await res.json();
+    console.log("This is data in thunk:", data)
+    dispatch(createRecipe(data));
+    return data;
+    // } else {
+    //     return console.log("this is res errors:", res.errors)
+    // }
     // } catch (err) {
     //     console.log("this is error in thunk:", err)
     // }

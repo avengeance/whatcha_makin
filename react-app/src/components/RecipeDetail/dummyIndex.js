@@ -30,8 +30,8 @@ import "./RecipeDetail.css";
         const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
 
 
-        const [currentRecipe, setCurrentRecipe] = useState({});
-        const currentRecipes = useSelector((state) => state.recipes);
+        // const [currentRecipes, setCurrentRecipes] = useState({});
+        const currentRecipes = useSelector((state) => Object.values(state.recipes));
 
         const avgRating = currentRecipes?.avg_rating || 0
 
@@ -46,12 +46,12 @@ import "./RecipeDetail.css";
             if(recipeId){
 
                 dispatch(RecipeActions.getRecipeThunk(recipeId))
-                    .then(currentRecipes => setCurrentRecipe(currentRecipes))
-                    .then(currentRecipe => {
-                        if (currentRecipes?.Owner?.id) {
-                            setCurrentRecipe(currentRecipes);
-                            const avgRating = currentRecipe?.avg_rating || 0
-                        }
+                    // .then(currentRecipes => setCurrentRecipes(currentRecipes))
+                    .then(currentRecipes => {
+                        // if (currentRecipes?.Owner?.id) {
+                            // setCurrentRecipes(currentRecipes);
+                            const avgRating = currentRecipes?.avg_rating || 0
+                        // }
                     })
                     .catch(err => console.log(err))
             }
@@ -113,38 +113,38 @@ import "./RecipeDetail.css";
             //     .catch(err => console.log(err))
         }, [dispatch, recipeId, refreshKey])
 
-        console.log("this is current recipe:", currentRecipe)
+        console.log("this is current recipe:", currentRecipes)
 
     return (
         <>
-            {currentRecipe && (
+            {currentRecipes && (
                 <div>
                     <div className="recipe-name-detail">
                         <div id='recipe-name'>
-                            <h2>{currentRecipe?.name}</h2>
+                            <h2>{currentRecipes?.name}</h2>
                         </div>
                         <div className='recipe-review-likes-container'>
                             <div className='recipe-review'>
                                 <i className='fas fa-star'></i>
-                                {/* {currentRecipe.avg_rating ? currentRecipe.avg_rating.toFixed(1) : 'New'} */}
+                                {/* {currentRecipes.avg_rating ? currentRecipes.avg_rating.toFixed(1) : 'New'} */}
                                 {/* {avgRating ? avgRating.toFixed(1) : 'New'} */}
-                                {currentRecipe ? <div>{currentRecipe.avg_rating}</div> : "Loading..."}
+                                {currentRecipes ? <div>{currentRecipes.avg_rating}</div> : "Loading..."}
                             </div>
                             <div className='recipe-likes'>
-                                {currentRecipe?.likes > 0
-                                    ? <><i className="fa-solid fa-heart"></i>  {currentRecipe?.likes} </>
+                                {currentRecipes?.likes > 0
+                                    ? <><i className="fa-solid fa-heart"></i>  {currentRecipes?.likes} </>
                                     : <><i className="far fa-heart"></i> New</>}
                             </div>
                         </div>
                         <div id='recipe-detail-info'>
                             <div className='recipe-image'>
                                 <div id='main-recipe-image'>
-                                    <img src={currentRecipe?.images && currentRecipe.images.length > 0
-                                        ? currentRecipe.images[0].url : null} alt='Main Image' />
+                                    <img src={currentRecipes?.images && currentRecipes.images.length > 0
+                                        ? currentRecipes.images[0].url : null} alt='Main Image' />
                                 </div>
                                 <div className='recipe-image-overlay'>
-                                    {currentRecipe?.images?.filter(image => image.is_preview !== true).map((images, i) => (
-                                        <img key={i} className="recipe-images" src={images.url} alt={currentRecipe.name} />
+                                    {currentRecipes?.images?.filter(image => image.is_preview !== true).map((images, i) => (
+                                        <img key={i} className="recipe-images" src={images.url} alt={currentRecipes.name} />
                                     ))}
                                 </div>
                             </div>
@@ -153,24 +153,24 @@ import "./RecipeDetail.css";
                             <div className='recipe-description-time-container'>
                                 <div className='recipe-description-owner-container'>
                                     <div className='recipe-owner-name'>
-                                        <h2>Recipe Created by: {currentRecipe?.owner_name}</h2>
+                                        <h2>Recipe Created by: {currentRecipes?.owner_name}</h2>
                                     </div>
                                     <div className='recipe-description-text'>
-                                        <p>{currentRecipe?.description}</p>
+                                        <p>{currentRecipes?.description}</p>
                                     </div>
                                 </div>
                                 <div className='recipe-time'>
-                                    <h3>Total Time to Cook - {currentRecipe?.total_time} min</h3>
-                                    <h4>Prep Time - {currentRecipe?.prep_time} min</h4>
-                                    <h4>Cook Time - {currentRecipe?.cook_time} min</h4>
-                                    <h3>Servings - {currentRecipe?.servings}</h3>
+                                    <h3>Total Time to Cook - {currentRecipes?.total_time} min</h3>
+                                    <h4>Prep Time - {currentRecipes?.prep_time} min</h4>
+                                    <h4>Cook Time - {currentRecipes?.cook_time} min</h4>
+                                    <h3>Servings - {currentRecipes?.servings}</h3>
                                 </div>
                             </div>
                             <div className='recipe-ingredients-seasoning-containter'>
                                 <div className='recipe-ingredients'>
                                     <h3>Ingredients</h3>
-                                    {currentRecipe?.ingredients &&
-                                        currentRecipe.ingredients
+                                    {currentRecipes?.ingredients &&
+                                        currentRecipes.ingredients
                                             .filter(ingredient => !ingredient.is_seasoning)
                                             .map((ingredient, i) => (
                                                 <p key={i}>
@@ -180,8 +180,8 @@ import "./RecipeDetail.css";
                                 </div>
                                 <div className='recipe-seasoning'>
                                     <h3>Seasoning</h3>
-                                    {currentRecipe?.ingredients &&
-                                        currentRecipe.ingredients
+                                    {currentRecipes?.ingredients &&
+                                        currentRecipes.ingredients
                                             .filter(ingredient => ingredient.is_seasoning)
                                             .map((ingredient, i) => (
                                                 <p key={i}>
@@ -194,8 +194,8 @@ import "./RecipeDetail.css";
                         <div className='recipe-directions-container'>
                             <div className='recipe-directions'>
                                 <h3>Directions</h3>
-                                {currentRecipe?.directions &&
-                                    currentRecipe.directions.map((direction, i) => (
+                                {currentRecipes?.directions &&
+                                    currentRecipes.directions.map((direction, i) => (
                                         <p key={i}>{direction.step}: {direction.step_info}</p>
                                     ))}
                             </div>
@@ -203,19 +203,19 @@ import "./RecipeDetail.css";
                         <div className='recipe-reviews-container'>
                             <div className='recipe-reviews'>
                                 <div className='recipe-review-header'>
-                                    {currentRecipe ? (
+                                    {currentRecipes ? (
                                         <>
                                             <div className='recipe-review-header'>
-                                                <h3>{currentRecipe?.reviews?.length}...</h3>
-                                            {/* <h3>{currentRecipe?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipe.reviews.length === 1 ? 'Review' : 'Reviews'}</h3> */}
+                                                <h3>{currentRecipes?.reviews?.length}...</h3>
+                                            {/* <h3>{currentRecipes?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipes.reviews.length === 1 ? 'Review' : 'Reviews'}</h3> */}
                                             </div>
 
                                             {/* rest of reviews content */}
 
                                         {/* </div> */}
-                                        <p>Number of Reviews: {currentRecipe?.reviews?.length}</p>
-                                        {/* <p> Rating: <i className='fas fa-star'></i> {currentRecipe?.avg_rating.toFixed(1)}</p> */}
-                                        {user && user.id !== currentRecipe?.owner_id && !hasReviewed ? (
+                                        <p>Number of Reviews: {currentRecipes?.reviews?.length}</p>
+                                        <p> Rating: <i className='fas fa-star'></i> {currentRecipes?.avg_rating.toFixed(1)}</p>
+                                        {user && user.id !== currentRecipes?.owner_id && !hasReviewed ? (
                                         <button id='post-review' onClick={handlePostReview}>Post Your Review</button>
                                     ) :
                                         null
@@ -262,9 +262,9 @@ import "./RecipeDetail.css";
                     {/* <div className='recipe-comments-container'>
                             <div className='recipe-comments'>
                                 <div className='recipe-comment-header'>
-                                    <h3>{currentRecipe?.comments?.length === 0 ? 'No Comments Yet' : currentRecipe.comments.length === 1 ? 'Comment' : 'Comments'}</h3>
+                                    <h3>{currentRecipes?.comments?.length === 0 ? 'No Comments Yet' : currentRecipes.comments.length === 1 ? 'Comment' : 'Comments'}</h3>
                                 </div>
-                                {currentRecipe.comments.map((comment, i) => (
+                                {currentRecipes.comments.map((comment, i) => (
                                     <div key={i} className='recipe-comment-container'>
                                         <div className='recipe-comment-user'>
                                             <div className='recipe-comment-user-name'>

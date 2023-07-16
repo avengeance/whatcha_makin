@@ -45,25 +45,9 @@ function CreateRecipe() {
     const [errors, setErrors] = useState({});
     const [csrfToken, setCsrfToken] = useState("")
 
-    // useEffect(() => {
-    //     let csrf_token;
-    //     const cookie = document.cookie
-    //         .split('; ')
-    //         .find(row => row.startsWith('csrf_token'));
-
-    //     if (cookie) {
-    //         csrf_token = cookie.split('=')[1];
-    //     }
-    //     setCsrfToken(csrf_token);
-    //     console.log("This is setCsrfToken:", setCsrfToken)
-    //     console.log("This is csrfToken:", csrfToken)
-    //     console.log('this is csrf_token variable:', csrf_token)
-    // }, []);
-
     useEffect(() => {
         const getCookie = (name) => {
             const value = "; " + document.cookie;
-            console.log("This is document cookie:", value);
             const parts = value.split("; " + name + "=");
             if (parts.length === 2) return parts.pop().split(";").shift();
         }
@@ -71,13 +55,8 @@ function CreateRecipe() {
         let csrf_token = getCookie('csrf_token');
         setCsrfToken(csrf_token);
 
-        console.log('this is csrf_token variable:', csrf_token)
     }, []);
 
-
-    useEffect(() => {
-        console.log('this is csrfToken state:', csrfToken)
-    }, [csrfToken]);
 
 
     function handleIngredientChange(i, event) {
@@ -120,13 +99,6 @@ function CreateRecipe() {
         }
     }
 
-    // console.log("this is user", user)
-    // console.log("this is userId:", user.id)
-
-    // useEffect(() => {
-    //     const testRecipe = dispatch(RecipeActions.getAllRecipesThunk())
-    //     console.log("this is test recipe:", testRecipe)
-    // }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -157,106 +129,46 @@ function CreateRecipe() {
             formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
         })
 
-        directions.forEach((direction, index) => {
-            formData.append(`directions[${index}].step`, direction.step)
-            formData.append(`directions[${index}].step_info`, direction.stepInfo)
-        })
-
-        console.log("this is form data after append:", formData)
-
-
-
-        // const payload = {
-        //     name,
-        //     description,
-        //     ingredients,
-        //     directions,
-        //     // prepHours,
-        //     // prepMinutes,
-        //     // cookHours,
-        //     // cookMinutes,
-        //     prep_time: totalPrepTime,
-        //     cook_time: totalCookTime,
-        //     servings,
-        //     preview_image: previewImage,
-        //     recipe_image: otherImages
-        // }
-
-        // const ingredientForms = ingredients.map(ing => {
-        //     return {
-        //         name: ing.name,
-        //         quantity: ing.quantity,
-        //         measurement: ing.measurement,
-        //         is_seasoning: ing.isSeasoning
-        //     }
+        // directions.forEach((direction, index) => {
+        //     formData.append(`directions[${index}].step`, direction.step)
+        //     formData.append(`directions[${index}].step_info`, direction.stepInfo)
         // })
 
-        // const directionForms = directions.map(dir => {
-        //     return {
-        //         step: dir.step,
-        //         step_info: dir.stepInfo
-        //     }
-        // })
+        formData.append('directions', JSON.stringify(directions))
 
-        // const ingredientForms = ingredients.map(ing => {
-        //     return <IngredientForm
-        //         name={ing.name}
-        //         quantity={ing.quantity}
-        //         measurement={ing.measurement}
-        //         is_seasoning={ing.isSeasoning}
-        //     />
-        // })
+        console.log("Form Data before direction form entries:", formData)
+        console.log("Form Data entries:", formData.entries())
 
-        // const directionForms = directions.map(dir => {
-        //     return <DirectionForm
-        //         step={dir.step}
-        //         stepInfo={dir.stepInfo}
-        //     />
-        // })
-
-        // const ingredientData = ingredientForms.map(form => form.props)
-        // const directionData = directionForms.map(form => form.props)
-
-        // const payload = {
-        //     owner_id: user.id,
-        //     name: name,
-        //     description: description,
-        //     // ingredients: ingredientForms,
-        //     // directions: directionForms,
-        //     ingredients: ingredientData,
-        //     directions: directionData,
-        //     prep_time: totalPrepTime,
-        //     cook_time: totalCookTime,
-        //     servings: servings,
-        //     previewImage,
-        //     otherImages
-        // }
-
-
+        console.log("FormData:", formData)
+        const directionEntries = [];
+        for (const pair of formData.entries()) {
+            const [key, value] = pair;
+            if (key.startsWith('directions[')) {
+                const [dirIndex] = key.match(/\d+/);
+                const step = formData.get(`directions[${dirIndex}].step`);
+                const stepInfo = formData.get(`directions[${dirIndex}].step_info`);
+                directionEntries.push({ step, stepInfo });
+            }
+        }
+        console.log('Direction Entries:', directionEntries);
 
         for (let pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
+            // console.log("this is pair:", pair)
         }
-        console.log("this is form data before dispatch:", formData)
 
         let newRecipe;
 
         try {
             const recipe = await dispatch(RecipeActions.createRecipeThunk(formData))
-            // console.log("This is payload:", payload)
-
-            console.log('this is recipe in try:', recipe)
             const newRecipeId = recipe.id
-            console.log("This is new recipeID in try:", newRecipeId)
             const url = `/recipes/${newRecipeId}`
-            console.log("this is url in try:", url)
-
             if (recipe) {
                 newRecipe = recipe
                 setName('')
                 setDescription('')
                 setIngredients([initialIngredient])
-                setDirections([initialDirection])
+                setDirections(prevDirections => [...prevDirections, initialDirection])
                 setPrepHours('')
                 setPrepMinutes('')
                 setCookHours('')
@@ -271,13 +183,6 @@ function CreateRecipe() {
             console.log("Error in catch block", error)
         }
 
-        // const newRecipe = await dispatch(RecipeActions.createRecipeThunk(formData));
-        // console.log("this is form data after dispatch:", formData)
-        // console.log("this is new recipe:", newRecipe)
-
-        // if (newRecipe) {
-        //     history.push(`/recipes/${newRecipe.id}`);
-        // }
     }
 
     return (
