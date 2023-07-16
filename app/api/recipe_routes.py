@@ -171,10 +171,6 @@ def get_recipe(id):
 @recipe_routes.route('/new/', methods=['POST'])
 @login_required
 def create_recipe():
-    # form = RecipeForm()
-    # form['csrf_token'].data = request.cookies['csrf_token']
-    # if form.validate_on_submit():
-    # try:
         for key in request.form:
             print(f"{key}: {request.form[key]}")
             for key in request.form:
@@ -223,7 +219,7 @@ def create_recipe():
             new_direction = Direction(
                 recipe_id = new_recipe.id,
                 step = direction['step'],
-                step_info = direction['stepInfo'],
+                step_info = direction['step_info'],
                 )
             db.session.add(new_direction)
             db.session.commit()
@@ -233,7 +229,7 @@ def create_recipe():
         for ingredient in ingredients:
             new_ingredient = Ingredient(
                 name = ingredient['name'],
-                is_seasoning = ingredient['isSeasoning']
+                is_seasoning = ingredient['is_seasoning']
                 )
 
             db.session.add(new_ingredient)
@@ -266,16 +262,16 @@ def update_recipe(id):
             }), 404
 
         data = request.get_json()
+        
+        prep_time = int(data['prep_time']) 
+        cook_time = int(data['cook_time'])
 
         recipe.name = data.get('name', recipe.name)
         recipe.description = data.get('description', recipe.description)
-        recipe.prep_time = int(data.get('prep_time', recipe.prep_time))
-        recipe.cook_time = int(data.get('cook_time', recipe.cook_time))
+        recipe.prep_time = prep_time
+        recipe.cook_time = cook_time
         recipe.servings = data.get('servings', recipe.servings)
 
-        print("                           prep time                          ", recipe.prep_time)
-        print("                           cook time                          ", recipe.cook_time)
-        
         db.session.add(recipe)
         db.session.commit()
         
@@ -304,27 +300,33 @@ def update_recipe(id):
             
         current_recipe_ingredients = RecipeIngredient.query.filter_by(recipe_id=recipe.id).all()
         current_recipe_ingredients_ids = {ri.ingredient_id: ri for ri in current_recipe_ingredients}
+        ingredient_ids =[]
         for ingredient in ingredients:
-            existing_ingredient = Ingredient.query.filter_by(id=ingredient.id).first()
-            if existing_ingredient:
-                existing_ingredient.is_seasoning = ingredient['is_seasoning']
-                if existing_ingredient.id in current_recipe_ingredients_ids:
-                    existing_recipe_ingredient = current_recipe_ingredients_ids[existing_ingredient.id]
-                    existing_ingredient.name = ingredient['name']
-                    existing_recipe_ingredient.quantity = ingredient['quantity']
-                    existing_recipe_ingredient.measurement = ingredient['measurement']
-                else:
-                    new_recipe_ingredient = RecipeIngredient(
-                        recipe_id=recipe.id, 
-                        ingredient_id=existing_ingredient.id, 
-                        quantity=ingredient['quantity'],
-                        measurement =ingredient['measurement']
-                        )
-                    db.session.add(new_recipe_ingredient)
+            if 'id' in ingredient:
+                existing_ingredient = Ingredient.query.filter_by(id=ingredient['id']).first()
+                ingredient_ids.append(ingredient['id'])
+                if existing_ingredient:
+                    existing_ingredient.is_seasoning = ingredient['is_seasoning']
+                    if existing_ingredient.id in current_recipe_ingredients_ids:
+                        existing_recipe_ingredient = current_recipe_ingredients_ids[existing_ingredient.id]
+                        existing_ingredient.name = ingredient['name']
+                        existing_recipe_ingredient.quantity = ingredient['quantity']
+                        existing_recipe_ingredient.measurement = ingredient['measurement']
+                    else:
+                        new_recipe_ingredient = RecipeIngredient(
+                            recipe_id=recipe.id, 
+                            ingredient_id=existing_ingredient.id, 
+                            quantity=ingredient['quantity'],
+                            measurement =ingredient['measurement']
+                            )
+                        db.session.add(new_recipe_ingredient)
             else:
-                new_ingredient = Ingredient(name=ingredient['name'], is_seasoning=ingredient['is_seasoning'])
+                new_ingredient = Ingredient(
+                    name=ingredient['name'], 
+                    is_seasoning=ingredient['is_seasoning']
+                    )
                 db.session.add(new_ingredient)
-                db.session.commit()
+                db.session.flush()
                 new_recipe_ingredient = RecipeIngredient(
                     recipe_id=recipe.id, 
                     ingredient_id=new_ingredient.id, 
@@ -333,7 +335,7 @@ def update_recipe(id):
                     )
                 db.session.add(new_recipe_ingredient)
         for recipe_ingredient in current_recipe_ingredients:
-            if recipe_ingredient.ingredient_id not in [i['id'] for i in ingredients]:
+            if recipe_ingredient.ingredient_id not in ingredient_ids:
                 db.session.delete(recipe_ingredient)
         db.session.commit()
         return jsonify(recipe.to_dict()), 200

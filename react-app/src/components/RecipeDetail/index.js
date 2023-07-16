@@ -79,7 +79,9 @@ import "./RecipeDetail.css";
                     reviewId={reviewId}
                     onReviewSubmit={handlePostReview}
                 />
+                
             )
+            console.log("This is recipe ID in parent component:", recipeId)
             history.push(`/recipes/${recipeId}`)
             setModalContent(modalContent)
         }
@@ -210,22 +212,21 @@ import "./RecipeDetail.css";
                                             {/* <h3>{currentRecipe?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipe.reviews.length === 1 ? 'Review' : 'Reviews'}</h3> */}
                                             </div>
 
-                                            {/* rest of reviews content */}
 
                                         {/* </div> */}
                                         <p>Number of Reviews: {currentRecipe?.reviews?.length}</p>
                                         {/* <p> Rating: <i className='fas fa-star'></i> {currentRecipe?.avg_rating.toFixed(1)}</p> */}
                                         {user && user.id !== currentRecipe?.owner_id && !hasReviewed ? (
-                                        <button id='post-review' onClick={handlePostReview}>Post Your Review</button>
-                                    ) :
-                                        null
+                                            <button id='post-review' onClick={handlePostReview}>Post Your Review</button>
+                                            ) :
+                                            null
                                     }
                                 </>
                                 ) : (
                                 'Loading...'
                                     )}
                             </div>
-                            {/* {currentReviews.map((review, i) => (
+                            {currentReviews.map((review, i) => (
                                     review && (
                                         <div key={i} className='recipe-review-container'>
                                             <div className='recipe-review-user'>
@@ -256,7 +257,7 @@ import "./RecipeDetail.css";
 
                                         </div>
                                     )
-                                ))} */}
+                                ))}
                         </div>
                     </div>
                     {/* <div className='recipe-comments-container'>

@@ -1,10 +1,10 @@
 import React from "react";
-function IngredientForm({name, quantity, measurement, isSeasoning}) {
+function IngredientForm({name, quantity, measurement, is_seasoning}) {
     return {
       name,
       quantity, 
       measurement,
-      isSeasoning 
+      is_seasoning 
     };
   }
   

@@ -20,9 +20,9 @@ const createReview = (review) => ({
     type: CREATE_REVIEW,
     review,
 })
-const updateReview = (reviews) => ({
+const updateReview = (review) => ({
     type: UPDATE_REVIEW,
-    reviews,
+    review,
 })
 const deleteReview = (reviews) => ({
     type: DELETE_REVIEW,
@@ -61,12 +61,15 @@ export const createReviewThunk = (recipeId, review, stars) => async (dispatch) =
     return data;
 }
 
-export const updateReviewThunk = (reviewId, review, stars) => async (dispatch) => {
+export const updateReviewThunk = (reviewId, stars, review) => async (dispatch) => {
     console.log("this is review:", review)
     console.log("this is stars:", stars)
-    const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+    const res = await csrfFetch(`/api/reviews/${reviewId}/`, {
         method: "PUT",
-        body: JSON.stringify({ review, stars }),
+        body: JSON.stringify({ 
+            review:review, 
+            stars 
+        }),
         headers: {
             "Content-Type": "application/json",
         }
@@ -109,16 +112,12 @@ const reviewsReducer = (state = initialState, action) => {
             newState.reviews[action.review.id] = action.review;
             return newState
         case CREATE_REVIEW:
-            // newState.reviews.push(action.reviews)
-            // return newState;
             newState.reviews = action.payload
             return { ...state, reviews: [...state.reviews, action.review] }
         case UPDATE_REVIEW:
-            const indexToUpdate = newState.reviews.findIndex((review) => review.id === action.reviews.id);
-            if (indexToUpdate !== -1) {
-                newState.reviews[indexToUpdate] = action.review;
-            }
-            return newState
+            const { id } = action.review;
+            newState.reviews[id] = action.review;
+            return newState;
         case DELETE_REVIEW:
             delete newState.reviews[action.reviews.id]
             // return newState
@@ -129,38 +128,3 @@ const reviewsReducer = (state = initialState, action) => {
 }
 
 export default reviewsReducer;
-// const initialState = {
-//     reviews: []
-// };
-// const reviewsReducer = (state = initialState, action) => {
-//     let newState = { ...state };
-//     switch (action.type) {
-//         case GET_ALL_REVIEWS:
-//             action.reviews.forEach((review) => {
-//                 newState.reviews[review.id] = review;
-//             });
-//             return newState;
-//         case GET_REVIEW:
-//             newState.reviews[action.review.id] = action.review;
-//             return newState;
-//         case CREATE_REVIEW:
-//             newState.reviews.push(action.review);
-//             return newState;
-//         case UPDATE_REVIEW:
-//             const indexToUpdate = newState.reviews.findIndex(
-//                 (review) => review.id === action.review.id
-//             );
-//             if (indexToUpdate !== -1) {
-//                 newState.reviews[indexToUpdate] = action.review;
-//             }
-//             return newState;
-//         case DELETE_REVIEW:
-//             newState.reviews = newState.reviews.filter(
-//                 (review) => review.id !== action.review.id
-//             );
-//             return newState;
-//         default:
-//             return state;
-//     }
-// };
-// export default reviewsReducer;

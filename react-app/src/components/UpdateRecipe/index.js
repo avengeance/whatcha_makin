@@ -11,12 +11,12 @@ const initialIngredient = {
     name: "",
     quantity: 0,
     measurement: "",
-    isSeasoning: false,
+    is_seasoning: false,
 }
 
 const initialDirection = {
     step: 0,
-    stepInfo: "",
+    step_info: "",
 }
 
 function UpdateRecipe() {
@@ -143,7 +143,7 @@ function UpdateRecipe() {
             ...prevDirections,
             {
                 step: `${prevDirections.length + 1}`,
-                stepInfo: "",
+                step_info: "",
             },
         ])
     }
@@ -176,12 +176,12 @@ function UpdateRecipe() {
         setErrors({})
 
         const formData = new FormData()
-        const totalPrepTime = (parseInt(prepHours) || 0) * 60 + (parseInt(prepMinutes) || 0);
-        const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
-
-        console.log("this is total prep time:", totalPrepTime)
-        console.log("this is total cook time", totalCookTime)
-
+        // const totalPrepTime = (parseInt(prepHours) || 0) * 60 + (parseInt(prepMinutes) || 0);
+        // const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
+        const totalPrepTime = (prepHours || 0) * 60 + (parseInt(prepMinutes) || 0);
+        const totalCookTime = (cookHours || 0) * 60 + (parseInt(cookMinutes) || 0); 
+        // const totalPrepTime = ((prepHours || 0) * 60 + (prepMinutes || 0));
+        // const totalCookTime = ((cookHours || 0) * 60 + (cookMinutes || 0)); 
 
         formData.append("name", name)
         formData.append("description", description)
@@ -196,12 +196,12 @@ function UpdateRecipe() {
         formData.append('ingredients', JSON.stringify(ingredients))
         formData.append('directions', JSON.stringify(directions))
 
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ', ' + pair[1]);
+        // }
         
         let updatedRecipe;
-
+        try{
             const recipe = await dispatch(RecipeActions.updateRecipeThunk(recipeId, formData))
             if (recipe){
                 updatedRecipe = recipe
@@ -209,17 +209,22 @@ function UpdateRecipe() {
                 setDescription('')
                 setIngredients([initialIngredient])
                 setDirections([initialDirection])
+                // setPrepTime(totalPrepTime)
+                // setCookTime(totalCookTime)
                 setPrepHours('')
                 setPrepMinutes('')
                 setCookHours('')
                 setCookMinutes('')
-                setServings('')
+                // setServings('')
                 // setPreviewImage('')
                 // setOtherImages([])
                 setErrors([])
                 history.push(`/recipes/${recipe.id}`)
             }
 
+        } catch (error){
+            console.error("There was an error updating the recipe", error)
+        }
         if(updatedRecipe){
             console.log("Updated recipe", updatedRecipe)
         }
@@ -321,7 +326,7 @@ function UpdateRecipe() {
                             />
                             <input
                                 type='text'
-                                name='stepInfo'
+                                name='step_info'
                                 value={direction.step_info}
                                 onChange={(e) => handleDirectionChange(index, e)}
                                 placeholder='Step Info'
@@ -343,7 +348,9 @@ function UpdateRecipe() {
                     <h4>Prep time:</h4>
                     <select
                         name='hours'
-                        value={prepHours !== null ? prepHours.toString() : ''}
+                        type='number'
+                        value={prepHours}
+                        // value={prepHours !== null ? prepHours.toString() : ''}
                         onChange={(e) => setPrepHours(e.target.value !== "" ? parseInt(e.target.value) : null)}
                     >
                         {[...Array(169).keys()].map((i) =>
@@ -352,8 +359,10 @@ function UpdateRecipe() {
                     </select>
                     <select
                         name='minutes'
-                        value={prepTime !== null ? prepTime.toString() : ''}
-                        onChange={(e) => setPrepTime(e.target.value !== "" ? parseInt(e.target.value) : null)}
+                        type='number'
+                        value={prepMinutes}
+                        // value={prepTime !== null ? prepTime.toString() : ''}
+                        onChange={(e) => setPrepMinutes(e.target.value !== "" ? parseInt(e.target.value) : null)}
                         required
                     >
                         {Array.from({ length: 60 }, (_, i) => i + 1).map((i) =>
@@ -364,7 +373,9 @@ function UpdateRecipe() {
                     <h4>Cook time:</h4>
                     <select
                         name='hours'
-                        value={cookHours !== null ? cookHours.toString() : ''}
+                        type='number'
+                        value={cookHours}
+                        // value={cookHours !== null ? cookHours.toString() : ''}
                         onChange={(e) => setCookHours(e.target.value !== "" ? parseInt(e.target.value) : null)}
                     >
                         {[...Array(169).keys()].map((i) =>
@@ -373,8 +384,10 @@ function UpdateRecipe() {
                     </select>
                     <select
                         name='minutes'
-                        value={cookTime !== null ? cookTime.toString() : ''}
-                        onChange={(e) => setCookTime(e.target.value !== "" ? parseInt(e.target.value) : null)}
+                        type='number'
+                        value={cookMinutes}
+                        // value={cookTime !== null ? cookTime.toString() : ''}
+                        onChange={(e) => setCookMinutes(e.target.value !== "" ? parseInt(e.target.value) : null)}
                         required
                     >
                         {Array.from({ length: 60 }, (_, i) => i + 1).map((i) =>

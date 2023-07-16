@@ -47,6 +47,7 @@ const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
 
     useEffect(() => {
         async function getReviewData() {
+            console.log("this is recipe id in useEffect:", recipeId)
             const reviewData = await dispatch(ReviewActions.getReviewThunk(recipeId, reviewId));
 
             if (reviewData.error) {
@@ -72,10 +73,12 @@ const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
         // console.log("this is payload: LALA", payload)
 
         const updatedReview = await dispatch(
-            ReviewActions.updateReviewThunk(recipeId, reviewId, review, stars)
+            ReviewActions.updateReviewThunk(reviewId, stars, review)
         )
         console.log("this is review:", review)
+        console.log("this is reviewID:", reviewId)
         console.log("this is stars:", stars)
+        console.log("this is recipe id:",recipeId)
 
         if (updatedReview && !updatedReview.errors) {
             closeModal();

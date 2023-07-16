@@ -23,10 +23,11 @@ def get_review(review_id):
 
 
 # Update a Review
-@review_routes.route('/<int:id>', methods=['PUT'])
+@review_routes.route('/<int:id>/', methods=['PUT'])
 @login_required
 def update_review(id):
     # review = Review.query.get(id)
+    print('                                                           this is id                             ',id)
     review = Review.query.filter_by(id=id).first()
     print(f"this is review", review)
     if review is None:
@@ -42,10 +43,17 @@ def update_review(id):
         if request.json:
             form.review.data = request.json.get('review', None)
             form.stars.data = request.json.get('stars', None)
+            
+            print("                    request review data            ", request.json.get('review'))
+            print('                    form review data                  ',form.review.data)
+            print('                          request star data                      ',request.json.get('stars'))
+            print('                        form stars data                              ',form.stars.data)
         
         if form.validate_on_submit():
             review.review = form.review.data
             review.stars = form.stars.data
+            print('                                review                                         ',review.review)
+            print('                                stars                                         ',review.stars)
             db.session.commit()
             
             review_dict = review.to_dict()
