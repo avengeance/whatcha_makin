@@ -141,7 +141,7 @@ import "./RecipeDetail.css";
                         <div id='recipe-detail-info'>
                             <div className='recipe-image'>
                                 <div id='main-recipe-image'>
-                                    <img src={currentRecipe?.images && currentRecipe.images.length > 0
+                                    <img className='main-image' src={currentRecipe?.images && currentRecipe.images.length > 0
                                         ? currentRecipe.images[0].url : null} alt='Main Image' />
                                 </div>
                                 <div className='recipe-image-overlay'>
