@@ -49,13 +49,6 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      {user && (
-        <button onClick={toggleCreateButton} id="create-recipe-button" style={{ backgroundColor: 'transparent' }}>
-          <NavLink exact to="/recipes/new" id='recipe-button-link'>
-            Create a New Recipe!
-          </NavLink>
-        </button>
-      )}
       <button onClick={openMenu} id="profile-button" style={{ backgroundColor: '#8ABE53' }}>
         {/* <i className='fas fa-bars' style={{
           fontSize: '14px',
@@ -66,6 +59,13 @@ function ProfileButton({ user }) {
           fontSize: '30px',
         }} />
       </button>
+      {user && (
+        <button onClick={toggleCreateButton} id="create-recipe-button" style={{ backgroundColor: 'transparent' }}>
+          <NavLink exact to="/recipes/new" id='recipe-button-link'>
+            Create a New Recipe!
+          </NavLink>
+        </button>
+      )}
       <ul className={ulClassName} ref={ulRef} id="profile-dropdown">
         {user ? (
           <>

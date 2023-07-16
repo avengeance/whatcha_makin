@@ -7,6 +7,7 @@ import "./SignupForm.css";
 function SignupFormModal() {
 	const dispatch = useDispatch();
 	const [email, setEmail] = useState("");
+	const [emailValid, setEmailValid] = useState(true)
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [password, setPassword] = useState("");
@@ -25,19 +26,29 @@ function SignupFormModal() {
 	const validEmail = email.length >= MIN_EMAIL_LENGTH;
 	const validPassword = password.length >= MIN_PASSWORD_LENGTH;
 	const validConfirmPassword = confirmPassword.length >= MIN_CONFIRM_PASSWORD_LENGTH;
+	const isValidEmail = validateEmail(email);
+	function validateEmail(email) {
+		const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		return re.test(email);
+	  }
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		if (password === confirmPassword) {
-			setErrors([])
-			return dispatch(signUp(firstName, lastName, email, password))
-				.then(closeModal)
-				.catch(async (res) => {
-					const data = await res.json();
-					if (data && data.errors) setErrors(data.errors);
-				})
-		} else {
-			setErrors(['Confirm Password field must be the same as the Password field']);
+		setEmailValid(isValidEmail);
+		if(isValidEmail){
+			if (password === confirmPassword) {
+				setErrors([])
+				return dispatch(signUp(firstName, lastName, email, password))
+					.then(closeModal)
+					.catch(async (res) => {
+						const data = await res.json();
+						if (data && data.errors) setErrors(data.errors);
+					})
+			} else {
+				setErrors(['Confirm Password field must be the same as the Password field']);
+			}
+		} else{
+			setErrors(['Must be a valid email'])
 		}
 	};
 
@@ -107,7 +118,7 @@ function SignupFormModal() {
 							border: "2px solid #4D7E3E",
 							boxShadow: "5px 9px 17px 4px #8ABE53"
 						}}
-						disabled={!validFirstName || !validLastName || !validEmail || !validPassword || !validConfirmPassword}
+						disabled={!validFirstName || !validLastName || !validEmail || !validPassword || !validConfirmPassword }
 					><p id="sign-up-text" style={{ color: "white" }}>Sign Up</p></button>
 				</div>
 			</form>

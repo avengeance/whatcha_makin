@@ -36,7 +36,7 @@ li {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  width: 30%;
+  width: 60%;
   padding: 10px;
   margin-bottom: 50px;
   /* border-bottom: 2px solid lightgray; */
@@ -48,8 +48,10 @@ li {
   position: relative;
   display: flex;
   justify-content: flex-end;
+  flex-direction: column;
   padding-right: 25px;
   width: 40%;
+  height: 50%;
   /* border: 1px solid green; */
 }
 
@@ -168,6 +170,7 @@ li {
   width: 170px;
   color: blue;
   text-decoration: none !important;
+  /* border: 1px solid red; */
 }
 
 #recipe-button-link {

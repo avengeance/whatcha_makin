@@ -77,10 +77,6 @@ function LoginFormModal() {
         <div id="div-login-submit">
           <button type="submit"
             disabled={!validEmail || !validPassword}
-            style={{
-              backgroundColor:buttonColor,
-              borderColor: buttonColor
-            }}
             id="login-submit-modal"
           >Log In</button>
         </div>
