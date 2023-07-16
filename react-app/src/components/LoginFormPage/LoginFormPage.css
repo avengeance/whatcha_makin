@@ -1,0 +1,14 @@
+form{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#email{
+    display: flex;
+    border: 1px solid black;
+}
+#password{
+    display: flex;
+    border: 1px solid red;
+}

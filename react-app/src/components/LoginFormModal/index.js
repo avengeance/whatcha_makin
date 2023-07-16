@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { login } from "../../store/session";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import "./LoginForm.css";
+import "./LoginFormModal.css";
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -10,6 +10,7 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
   const { closeModal } = useModal();
+  const [buttonColor, setButtonColor] = useState("grey");
 
   const MIN_EMAIL_LENGTH = 3;
   const MIN_PASSWORD_LENGTH = 6;
@@ -25,7 +26,11 @@ function LoginFormModal() {
     } else {
       setErrors(["The provided credentials are invalid"])
     }
-    closeModal();
+    if(data.ok){
+      closeModal();
+    }
+
+    setButtonColor(!validEmail || !validPassword ? "red" : "grey")
   };
 
   const handleDemoLogin = (e) => {
@@ -43,31 +48,43 @@ function LoginFormModal() {
             <li key={idx}>{error}</li>
           ))}
         </ul>
-        <label id="email" className="input-label">
+        <div className="label-container">
+        <label id="email-modal" className="input-label">
           <input
             type="text"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              setErrors([])
+            }}
             required
             placeholder="Email"
           />
         </label>
-        <label id="password" className="input-label">
+        <label id="password-modal" className="input-label">
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value)
+              setErrors([])
+            }}
             required
             placeholder="Password"
           />
         </label>
+        </div>
         <div id="div-login-submit">
           <button type="submit"
             disabled={!validEmail || !validPassword}
-            id="login-submit"
+            style={{
+              backgroundColor:buttonColor,
+              borderColor: buttonColor
+            }}
+            id="login-submit-modal"
           >Log In</button>
         </div>
-        <div className="demo-login">
+        <div className="demo-login-modal">
           <a href="javascript:void(0)"
             onClick={handleDemoLogin}
           >Demo Login</a>

@@ -57,11 +57,11 @@ function ProfileButton({ user }) {
         </button>
       )}
       <button onClick={openMenu} id="profile-button" style={{ backgroundColor: '#8ABE53' }}>
-        <i className='fas fa-bars' style={{
+        {/* <i className='fas fa-bars' style={{
           fontSize: '14px',
           paddingRight: '12px',
           paddingLeft: '5px',
-        }} />
+        }} /> */}
         <i className="fas fa-user-circle" style={{
           fontSize: '30px',
         }} />
@@ -84,6 +84,7 @@ function ProfileButton({ user }) {
           <>
             <div className="login-button">
               <OpenModalButton
+                className='modal-button'
                 buttonText="Log In"
                 onItemClick={closeMenu}
                 modalComponent={<LoginFormModal />}
