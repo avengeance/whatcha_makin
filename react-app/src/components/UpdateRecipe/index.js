@@ -183,10 +183,6 @@ function UpdateRecipe() {
         // const totalPrepTime = ((prepHours || 0) * 60 + (prepMinutes || 0));
         // const totalCookTime = ((cookHours || 0) * 60 + (cookMinutes || 0)); 
 
-        console.log("this is total prep time:", totalPrepTime)
-        console.log("this is total cook time", totalCookTime)
-
-
         formData.append("name", name)
         formData.append("description", description)
         formData.append("prep_time", totalPrepTime)

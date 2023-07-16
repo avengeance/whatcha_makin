@@ -171,10 +171,6 @@ def get_recipe(id):
 @recipe_routes.route('/new/', methods=['POST'])
 @login_required
 def create_recipe():
-    # form = RecipeForm()
-    # form['csrf_token'].data = request.cookies['csrf_token']
-    # if form.validate_on_submit():
-    # try:
         for key in request.form:
             print(f"{key}: {request.form[key]}")
             for key in request.form:
@@ -272,15 +268,10 @@ def update_recipe(id):
 
         recipe.name = data.get('name', recipe.name)
         recipe.description = data.get('description', recipe.description)
-        # recipe.prep_time = int(data.get('prep_time', recipe.prep_time))
-        # recipe.cook_time = int(data.get('cook_time', recipe.cook_time))
         recipe.prep_time = prep_time
         recipe.cook_time = cook_time
         recipe.servings = data.get('servings', recipe.servings)
 
-        print("                           prep time                          ", recipe.prep_time)
-        print("                           cook time                          ", recipe.cook_time)
-        
         db.session.add(recipe)
         db.session.commit()
         
@@ -335,7 +326,6 @@ def update_recipe(id):
                     is_seasoning=ingredient['is_seasoning']
                     )
                 db.session.add(new_ingredient)
-                # db.session.commit()
                 db.session.flush()
                 new_recipe_ingredient = RecipeIngredient(
                     recipe_id=recipe.id, 
@@ -345,7 +335,6 @@ def update_recipe(id):
                     )
                 db.session.add(new_recipe_ingredient)
         for recipe_ingredient in current_recipe_ingredients:
-            # if recipe_ingredient.ingredient_id not in [i['id'] for i in ingredients]:
             if recipe_ingredient.ingredient_id not in ingredient_ids:
                 db.session.delete(recipe_ingredient)
         db.session.commit()
