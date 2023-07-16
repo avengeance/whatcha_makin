@@ -173,10 +173,8 @@ def get_recipe(id):
 def create_recipe():
     # form = RecipeForm()
     # form['csrf_token'].data = request.cookies['csrf_token']
-    # print("1*********************************************************************************************************")
     # if form.validate_on_submit():
     # try:
-        print("5*********************************************************************************************************")
         for key in request.form:
             print(f"{key}: {request.form[key]}")
             for key in request.form:
@@ -189,7 +187,6 @@ def create_recipe():
             cook_time = request.form.get('cook_time'),
             servings = request.form.get('servings')
             )
-            # print("3*********************************************************************************************************")
             # preview_image = request.files.get('preview_image')
             # if preview_image:
             #     preview_image_string = base64.b64encode(preview_image.read()).decode()
@@ -220,12 +217,8 @@ def create_recipe():
             # print(new_recipe_image)
             # db.session.add(new_recipe_image2)
             # print(new_recipe_image2)
-        print("********************************************************************************************************")
         db.session.commit()
-        # directions = request.form['directions']
-        # directions = [direction for direction in request.form['directions']]
         directions = json.loads(request.form.get('directions'))
-        print("This is directions in backend", directions)
         for direction in directions:
             new_direction = Direction(
                 recipe_id = new_recipe.id,
@@ -235,38 +228,30 @@ def create_recipe():
             db.session.add(new_direction)
             db.session.commit()
 
-            # ingredients = json.loads(request.form.get('ingredients'))
-            # for ingredient_data in ingredients:
-            #     new_ingredient = Ingredient(
-            #         name = ingredient_data.get('name'),
-            #         is_seasoning = ingredient_data.get('is_seasoning')
-            #     )
+        ingredients = json.loads(request.form.get('ingredients'))
+        print("This is ingredients:", ingredients)
+        for ingredient in ingredients:
+            new_ingredient = Ingredient(
+                name = ingredient['name'],
+                is_seasoning = ingredient['isSeasoning']
+                )
 
-            #     db.session.add(new_ingredient)
-            #     print(new_ingredient)
-            #     db.session.commit()
+            db.session.add(new_ingredient)
+            db.session.commit()
 
-            #     new_recipe_ingredient = RecipeIngredient(
-            #         recipe_id = new_recipe.id,
-            #         ingredient_id = new_ingredient.id,
-            #         quantity = ingredient_data.get('quantity'),
-            #         measurement = ingredient_data.get('measurement')
-            #     )
+            new_recipe_ingredient = RecipeIngredient(
+                recipe_id = new_recipe.id,
+                ingredient_id = new_ingredient.id,
+                quantity = ingredient['quantity'],
+                measurement = ingredient['measurement']
+                )
 
-            #     db.session.add(new_recipe_ingredient)
-            #     print(new_recipe_ingredient)
+            db.session.add(new_recipe_ingredient)
+            db.session.commit()
+
             
         db.session.commit()
-
-    # except Exception as e:
-    #         db.session.rollback()
-    #         print(f"Exception occurred:: {str(e)}")
-
         return jsonify(new_recipe.to_dict()), 201
-    # else:
-
-    #     return jsonify({'errors': form.errors}), 400
-
         
 # Update a Recipe
 @recipe_routes.route('/<int:id>/edit', methods=['PUT'])

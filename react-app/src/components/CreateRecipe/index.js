@@ -60,9 +60,16 @@ function CreateRecipe() {
 
 
     function handleIngredientChange(i, event) {
+        // const values = [...ingredients];
+        // values[i][event.target.name] = event.target.value
+        // setIngredients(values)
         const values = [...ingredients];
-        values[i][event.target.name] = event.target.value
-        setIngredients(values)
+        if (event.target.name === 'isSeasoning') {
+            values[i][event.target.name] = event.target.checked;
+        } else {
+            values[i][event.target.name] = event.target.value;
+        }
+        setIngredients(values);
     }
 
     function handleAddIngredient() {
@@ -115,47 +122,47 @@ function CreateRecipe() {
         formData.append("prep_time", totalPrepTime)
         formData.append("cook_time", totalCookTime)
         formData.append("servings", servings)
-        formData.append('preview_image', previewImage)
-        // formData.append('recipe_image', recipeImage)
-        otherImages.forEach((image, index) => {
-            formData.append(`other_images[${index}]`, image)
-        })
+        // formData.append('preview_image', previewImage)
+        // // formData.append('recipe_image', recipeImage)
+        // otherImages.forEach((image, index) => {
+        //     formData.append(`other_images[${index}]`, image)
+        // })
 
 
-        ingredients.forEach((ingredient, index) => {
-            formData.append(`ingredients[${index}].name`, ingredient.name)
-            formData.append(`ingredients[${index}].quantity`, ingredient.quantity)
-            formData.append(`ingredients[${index}].measurement`, ingredient.measurement)
-            formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
-        })
+        // ingredients.forEach((ingredient, index) => {
+        //     formData.append(`ingredients[${index}].name`, ingredient.name)
+        //     formData.append(`ingredients[${index}].quantity`, ingredient.quantity)
+        //     formData.append(`ingredients[${index}].measurement`, ingredient.measurement)
+        //     formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
+        // })
 
         // directions.forEach((direction, index) => {
         //     formData.append(`directions[${index}].step`, direction.step)
         //     formData.append(`directions[${index}].step_info`, direction.stepInfo)
         // })
-
+        formData.append('ingredients', JSON.stringify(ingredients))
         formData.append('directions', JSON.stringify(directions))
 
-        console.log("Form Data before direction form entries:", formData)
-        console.log("Form Data entries:", formData.entries())
+        // console.log("Form Data before direction form entries:", formData)
+        // console.log("Form Data entries:", formData.entries())
 
-        console.log("FormData:", formData)
-        const directionEntries = [];
-        for (const pair of formData.entries()) {
-            const [key, value] = pair;
-            if (key.startsWith('directions[')) {
-                const [dirIndex] = key.match(/\d+/);
-                const step = formData.get(`directions[${dirIndex}].step`);
-                const stepInfo = formData.get(`directions[${dirIndex}].step_info`);
-                directionEntries.push({ step, stepInfo });
-            }
-        }
-        console.log('Direction Entries:', directionEntries);
+        // console.log("FormData:", formData)
+        // const directionEntries = [];
+        // for (const pair of formData.entries()) {
+        //     const [key, value] = pair;
+        //     if (key.startsWith('directions[')) {
+        //         const [dirIndex] = key.match(/\d+/);
+        //         const step = formData.get(`directions[${dirIndex}].step`);
+        //         const stepInfo = formData.get(`directions[${dirIndex}].step_info`);
+        //         directionEntries.push({ step, stepInfo });
+        //     }
+        // }
+        // console.log('Direction Entries:', directionEntries);
 
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-            // console.log("this is pair:", pair)
-        }
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ', ' + pair[1]);
+        //     // console.log("this is pair:", pair)
+        // }
 
         let newRecipe;
 
@@ -168,7 +175,7 @@ function CreateRecipe() {
                 setName('')
                 setDescription('')
                 setIngredients([initialIngredient])
-                setDirections(prevDirections => [...prevDirections, initialDirection])
+                setDirections([initialDirection])
                 setPrepHours('')
                 setPrepMinutes('')
                 setCookHours('')
@@ -356,7 +363,7 @@ function CreateRecipe() {
                     rows="4"
                     placeholder='Description'>
                 </textarea>
-                <h2>Images</h2>
+                {/* <h2>Images</h2>
                 <h3>What will this recipe look like?</h3>
                 <h4>Main Image</h4>
                 <input
@@ -371,7 +378,7 @@ function CreateRecipe() {
                     multiple
                     onChange={handleOtherImages}
                 >
-                </input>
+                </input> */}
                 <div id="form-submit-button">
                     <button
                         type="submit"
