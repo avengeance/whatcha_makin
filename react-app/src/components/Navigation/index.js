@@ -9,6 +9,7 @@ function Navigation({ isLoaded }) {
 	const sessionUser = useSelector(state => state.session.user);
 
 	return (
+		<div className='navigation-container'>
 		<div className='navigation-header'>
 			<div className='header'>
 				<ul>
@@ -35,6 +36,7 @@ function Navigation({ isLoaded }) {
 				</ul>
 			</div>
 		</div >
+		</div>
 	);
 }
 

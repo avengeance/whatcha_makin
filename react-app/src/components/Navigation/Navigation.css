@@ -19,14 +19,6 @@ li {
   justify-content: space-evenly;
 }
 
-/* .header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid red;
-} */
-
 .home-button {
   position: relative;
   display: flex;
@@ -35,14 +27,19 @@ li {
   right: 40px;
 }
 
+.navigation-container{
+  display: flex;
+  justify-content: center;
+}
+
 .navigation-header {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
+  justify-content: space-evenly;
+  width: 30%;
   padding: 10px;
   margin-bottom: 50px;
-  border-bottom: 2px solid lightgray;
+  /* border-bottom: 2px solid lightgray; */
   /* border: 1px solid black; */
 
 }
@@ -92,7 +89,7 @@ li {
   top: 50px;
   width: 200px;
   text-align: start;
-  background-color: white;
+  background-color: #C6E08D;
 }
 
 #profile-dropdown.hidden {
@@ -102,22 +99,23 @@ li {
 .logo-link {
   order: 1;
   display: inline-block;
-  width: 80px;
-  height: 80px;
+  width: 125px;
+  height: 125px;
   background-size: cover;
   background-position: center;
-  /* border: 1px solid green; */
+  /* border: 1px solid red; */
 }
 
 .logo-image {
   order: 2;
   position: absolute;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80px;
-  height: 80px;
-  /* border: 1px solid red; */
+  /* align-items: center; */
+  /* align-self: center; */
+  align-content: center;
+  width: 125px;
+  height: 135px;
+  /* border: 1px solid white; */
 }
 
 .header-text {
@@ -127,6 +125,7 @@ li {
 
 .login-button {
   display: flex;
+  align-self: center;
   padding-top: 10px;
   padding-bottom: 10px;
   width: 100%;
