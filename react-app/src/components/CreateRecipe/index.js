@@ -32,15 +32,16 @@ function CreateRecipe() {
     const [description, setDescription] = useState("");
     const [ingredients, setIngredients] = useState([initialIngredient]);
     const [directions, setDirections] = useState([initialDirection]);
+    
     const [prepHours, setPrepHours] = useState(null);
     const [prepMinutes, setPrepMinutes] = useState(null);
     const [cookHours, setCookHours] = useState(null);
     const [cookMinutes, setCookMinutes] = useState(null);
 
     const [servings, setServings] = useState(1);
-    const [previewImage, setPreviewImage] = useState(null);
+    // const [previewImage, setPreviewImage] = useState(null);
     // const [recipeImage, setRecipeImage] = useState(null);
-    const [otherImages, setOtherImages] = useState([]);
+    // const [otherImages, setOtherImages] = useState([]);
 
     const [errors, setErrors] = useState({});
     const [csrfToken, setCsrfToken] = useState("")
@@ -60,9 +61,6 @@ function CreateRecipe() {
 
 
     function handleIngredientChange(i, event) {
-        // const values = [...ingredients];
-        // values[i][event.target.name] = event.target.value
-        // setIngredients(values)
         const values = [...ingredients];
         if (event.target.name === 'isSeasoning') {
             values[i][event.target.name] = event.target.checked;
@@ -97,14 +95,14 @@ function CreateRecipe() {
         setDirections(values)
     }
 
-    const handleOtherImages = (e) => {
-        if (e.target.files.length > 3) {
-            alert("You can only upload a maximum of 3 files");
-            e.target.value = "";
-        } else {
-            setOtherImages([...e.target.files]);
-        }
-    }
+    // const handleOtherImages = (e) => {
+    //     if (e.target.files.length > 3) {
+    //         alert("You can only upload a maximum of 3 files");
+    //         e.target.value = "";
+    //     } else {
+    //         setOtherImages([...e.target.files]);
+    //     }
+    // }
 
 
     const handleSubmit = async (e) => {
@@ -181,8 +179,8 @@ function CreateRecipe() {
                 setCookHours('')
                 setCookMinutes('')
                 setServings('')
-                setPreviewImage('')
-                setOtherImages([])
+                // setPreviewImage('')
+                // setOtherImages([])
                 setErrors([])
                 history.push(url)
             }

@@ -41,14 +41,16 @@ function UpdateRecipe() {
     const [cookMinutes, setCookMinutes] = useState(null);
 
     const [servings, setServings] = useState("");
-    const [previewImage, setPreviewImage] = useState(null);
-    const [recipeImage, setRecipeImage] = useState(null);
-    const [otherImages, setOtherImages] = useState([]);
+    // const [previewImage, setPreviewImage] = useState(null);
+    // const [recipeImage, setRecipeImage] = useState(null);
+    // const [otherImages, setOtherImages] = useState([]);
 
     const [loading, setLoading] = useState(true)
     const [stepCounter, setStepCounter] = useState(1)
 
     const [errors, setErrors] = useState({});
+
+    console.log("this is current recipe:", currentRecipe)
 
     useEffect(() => {
         async function getRecipeThunk() {
@@ -58,7 +60,6 @@ function UpdateRecipe() {
             }
 
             const res = await csrfFetch(`/api/recipes/${recipeId}`);
-            console.log("This is res:", res)
             if (res.ok) {
                 const recipe = await res.json()
 
@@ -72,32 +73,32 @@ function UpdateRecipe() {
                 setCookTime(recipe.cook_time)
 
                 setServings(recipe.servings || 1)
-                setPreviewImage(recipe.image || "")
-                setRecipeImage(recipe.image || [])
+                // setPreviewImage(recipe.image || "")
+                // setRecipeImage(recipe.image || [])
 
                 setLoading(false)
 
-                console.log("this is recipe:", recipe)
+                // console.log("this is recipe:", recipe)
             }
         }
         getRecipeThunk();
     }, [recipeId])
 
-    useEffect(() => {
-        console.log("Prep Hours changed: ", prepHours);
-    }, [prepHours]);
+    // useEffect(() => {
+    //     console.log("Prep Hours changed: ", prepHours);
+    // }, [prepHours]);
 
-    useEffect(() => {
-        console.log("Prep Minutes changed: ", prepMinutes);
-    }, [prepMinutes]);
+    // useEffect(() => {
+    //     console.log("Prep Minutes changed: ", prepMinutes);
+    // }, [prepMinutes]);
 
-    useEffect(() => {
-        console.log("Cook Hours changed: ", cookHours);
-    }, [cookHours]);
+    // useEffect(() => {
+    //     console.log("Cook Hours changed: ", cookHours);
+    // }, [cookHours]);
 
-    useEffect(() => {
-        console.log("Cook Minutes changed: ", cookMinutes);
-    }, [cookMinutes]);
+    // useEffect(() => {
+    //     console.log("Cook Minutes changed: ", cookMinutes);
+    // }, [cookMinutes]);
 
     function handleIngredientChange(i, event) {
         const { name, value, type, checked } = event.target
@@ -166,14 +167,14 @@ function UpdateRecipe() {
         });
     }
 
-    const handleOtherImages = (e) => {
-        if (e.target.files.length > 3) {
-            alert("You can only upload a maximum of 3 files");
-            e.target.value = "";
-        } else {
-            setOtherImages([...e.target.files]);
-        }
-    }
+    // const handleOtherImages = (e) => {
+    //     if (e.target.files.length > 3) {
+    //         alert("You can only upload a maximum of 3 files");
+    //         e.target.value = "";
+    //     } else {
+    //         setOtherImages([...e.target.files]);
+    //     }
+    // }
 
 
     const handleSubmit = async (e) => {
@@ -191,81 +192,106 @@ function UpdateRecipe() {
         formData.append("prep_time", totalPrepTime)
         formData.append("cook_time", totalCookTime)
         formData.append("servings", servings)
-        formData.append('preview_image', previewImage)
-        // formData.append('recipe_image', recipeImage)
-        otherImages.forEach((image, index) => {
-            formData.append(`other_images[${index}]`, image)
-        })
+        // formData.append('preview_image', previewImage)
+        // // formData.append('recipe_image', recipeImage)
+        // otherImages.forEach((image, index) => {
+        //     formData.append(`other_images[${index}]`, image)
+        // })
 
-        ingredients.forEach((ingredient, index) => {
-            formData.append(`ingredients[${index}].name`, ingredient.name)
-            formData.append(`ingredients[${index}].quantity`, ingredient.quantity)
-            formData.append(`ingredients[${index}].measurement`, ingredient.measurement)
-            formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
-        })
+        formData.append('ingredients', JSON.stringify(ingredients))
+        formData.append('directions', JSON.stringify(directions))
 
-        directions.forEach((direction, index) => {
-            formData.append(`directions[${index}].step`, direction.step)
-            formData.append(`directions[${index}].step_info`, direction.stepInfo)
-        })
+        // console.log("this is directions:", directions)
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ', ' + pair[1]);
+            // console.log("this is pair:", pair)
+        // }
 
+
+        const data = await dispatch(RecipeActions.updateRecipeThunk(recipeId,formData))
+        if(data){
+            history.push(`/recipes/${recipeId}`)
+        }
+
+        // ingredients.forEach((ingredient, index) => {
+        //     formData.append(`ingredients[${index}].name`, ingredient.name)
+        //     formData.append(`ingredients[${index}].quantity`, ingredient.quantity)
+        //     formData.append(`ingredients[${index}].measurement`, ingredient.measurement)
+        //     formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
+        // })
+
+        // directions.forEach((direction, index) => {
+        //     formData.append(`directions[${index}].step`, direction.step)
+        //     formData.append(`directions[${index}].step_info`, direction.stepInfo)
+        // })
+
+
+        // const ingredientData = [];
+        // ingredients.forEach((ingredient) => {
+        //     const ingredientObj = {
+        //         name: ingredient.name,
+        //         quantity: ingredient.quantity,
+        //         measurement: ingredient.measurement,
+        //         is_seasoning: ingredient.isSeasoning,
+        //     };
+        //     ingredientData.push(ingredientObj);
+        // });
+        // const directionData = [];
+        // directions.forEach((direction) => {
+        //     const directionObj = {
+        //         step: direction.step,
+        //         step_info: direction.stepInfo,
+        //     };
+        //     directionData.push(directionObj);
+        // });
         // const payload = {
         //     name: name,
         //     description: description,
-        //     ingredients: ingredients,
-        //     directions: directions,
-        //     // totalPrepTime: prepTime,
-        //     // totalCookTime: cookTime,
-        //     // prepHours: prepHours,
-        //     // prepMinutes: prepMinutes,
-        //     // cookHours: cookHours,
-        //     // cookMinutes: cookMinutes,
         //     prep_time: totalPrepTime,
         //     cook_time: totalCookTime,
         //     servings: servings,
         //     preview_image: previewImage,
-        //     recipe_image: recipeImage
+        //     recipe_image: recipeImage,
+        //     ingredients: ingredientData,
+        //     directions: directionData,
+        // };
+
+        // let updatedRecipe;
+
+        // try {
+        //     const recipe = await dispatch(RecipeActions.updateRecipeThunk(recipeId, formData))
+        //     const updatedRecipeId = recipe.id
+        //     const url = `/recipes/${updatedRecipeId}`
+            
+        //     if(recipe){
+        //         updatedRecipe = recipe
+        //         setName('')
+        //         setDescription('')
+        //         setIngredients([initialIngredient])
+        //         setDirections([initialDirection])
+        //         setPrepHours('')
+        //         setPrepMinutes('')
+        //         setCookHours('')
+        //         setCookMinutes('')
+        //         setServings('')
+        //         setErrors([])
+        //         history.push(url)
+        //     }
+            
+        // } catch (error) {
+            
         // }
 
-        const ingredientData = [];
-        ingredients.forEach((ingredient) => {
-            const ingredientObj = {
-                name: ingredient.name,
-                quantity: ingredient.quantity,
-                measurement: ingredient.measurement,
-                is_seasoning: ingredient.isSeasoning,
-            };
-            ingredientData.push(ingredientObj);
-        });
-        const directionData = [];
-        directions.forEach((direction) => {
-            const directionObj = {
-                step: direction.step,
-                step_info: direction.stepInfo,
-            };
-            directionData.push(directionObj);
-        });
-        const payload = {
-            name: name,
-            description: description,
-            prep_time: totalPrepTime,
-            cook_time: totalCookTime,
-            servings: servings,
-            preview_image: previewImage,
-            recipe_image: recipeImage,
-            ingredients: ingredientData,
-            directions: directionData,
-        };
 
-        const updatedRecipe = await dispatch(RecipeActions.updateRecipeThunk(recipeId, payload))
-            .catch((error) => {
-                // Handle the error here
-                console.error("Error:", error)
-            });
 
-        if (updatedRecipe) {
-            history.push(`/recipes/${updatedRecipe.id}`);
-        }
+        //     .catch((error) => {
+        //         // Handle the error here
+        //         console.error("Error:", error)
+        //     });
+
+        // if (updatedRecipe) {
+        //     history.push(`/recipes/${updatedRecipe.id}`);
+        // }
     }
 
     return (
@@ -443,7 +469,7 @@ function UpdateRecipe() {
                         rows="4"
                         placeholder='Description'>
                     </textarea>
-                    <h2>Images</h2>
+                    {/* <h2>Images</h2>
                     <h3>What will this recipe look like?</h3>
                     <h4>Main Image</h4>
                     <input
@@ -457,7 +483,7 @@ function UpdateRecipe() {
                         multiple
                         onChange={handleOtherImages}
                     >
-                    </input>
+                    </input> */}
                     <div id="form-submit-button">
                         <button
                             type="submit"
