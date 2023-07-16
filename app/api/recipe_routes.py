@@ -254,259 +254,147 @@ def create_recipe():
         return jsonify(new_recipe.to_dict()), 201
         
 # Update a Recipe
-@recipe_routes.route('/<int:id>/edit', methods=['PUT'])
+@recipe_routes.route('/<int:id>/edit/', methods=['PUT'])
 @login_required
 def update_recipe(id):
-    # try:
-        # db.session.begin(subtransactions=True)
-        
-        # form = EditRecipeForm(data=request.json)
-        # form['csrf_token'].data = request.cookies['csrf_token']
-        
-        # form.name.data = request.json.get('name')
-        # form.description.data = request.json.get('description')
-        # form.prep_time.data = request.json.get('prep_time')
-        # form.cook_time.data = request.json.get('cook_time')
-        # form.servings.data = request.json.get('servings')
-        # form.preview_image.data = request.json.get('preview_image')
-        # form.recipe_image.data = request.json.get('recipe_image')
-        
-        # if form.validate_on_submit():
-        # print("******************************************************************************")
-        recipe = Recipe.query.get(id)
-        # print("This is recipe:", recipe.to_dict())
-        print("****************Recipe ingredients:************", recipe.recipe_ingredients)
-        print("----------------Recipe directions--------------", recipe.directions)
-        print("----------------request form---------------------", request.form)        
-        # print("This is recipe.name", recipe.name)
-        # print("this is request form name:", request.form['name'],)
-        # print("This is recipe:", recipe.directions)
-        recipe.name = request.form.get('name', recipe.name)
-        recipe.description = request.form.get('description', recipe.description)
-        recipe.prep_time = request.form.get('prep_time', recipe.prep_time)
-        recipe.cook_time = request.form.get('cook_time', recipe.cook_time)
-        recipe.servings = request.form.get('servings', recipe.servings)
+    recipe = Recipe.query.get(id)
+    
+    recipe.name = request.form.get('name', recipe.name)
+    recipe.description = request.form.get('description', recipe.description)
+    recipe.prep_time = request.form.get('prep_time', recipe.prep_time)
+    recipe.cook_time = request.form.get('cook_time', recipe.cook_time)
+    recipe.servings = request.form.get('servings', recipe.servings)
 
-        db.session.add(recipe)
-        db.session.commit()
-        
-        directions = json.loads(request.form.get('directions'))
-        # directions = recipe.directions
-        # directions = json.loads(request.data['directions'])
-        Direction.query.filter_by(recipe_id=id).delete()
-        for direction in directions:
+    db.session.add(recipe)
+
+    directions = json.loads(request.form.get('directions', '{}'))
+    old_directions = {d.id: d for d in Direction.query.filter_by(recipe_id=id).all()}
+
+    for direction_id, direction_data in directions.items():
+        if direction_id in old_directions:
+            # Modify existing direction
+            old_directions[direction_id].step = direction_data.step
+            old_directions[direction_id].step_info = direction_data.step_info
+            del old_directions[direction_id]
+        else:
+            # Add new direction
             new_direction = Direction(
-                # recipe_id=recipe.id,
-                # step=direction['step'],
-                # step_info=direction['stepInfo']
                 recipe_id=recipe.id,
-                step=direction.step,
-                step_info=direction.step_info
+                step=direction_data.step,
+                step_info=direction_data.step_info
             )
             db.session.add(new_direction)
-            db.session.commit()
-            
-        ingredients = json.loads(request.form.get('ingredients'))
-        # ingredients = json.loads(request.data['ingredients'])
-        # print("Received ingredients", request.form.get('ingredients'))
-        # ingredients = recipe.recipe_ingredients
-        # print("this is ingredients:", ingredients)
-        # Loop through the RecipeIngredients
-        # print("Loaded ingredients", ingredients)
-        for recipe_ingredient in ingredients:
-            # Get the related Ingredient using the foreign key
-            ingredient = recipe_ingredient.ingredients
-            # print("Updating ingredient", ingredient)
-  
-            existing = Ingredient.query.filter_by(name=ingredient.name).first()
-            if existing:
-                new_ingredient = existing
-            else:
-                # Create a new Ingredient object with properties from the related Ingredient
-                new_ingredient = Ingredient(
-                    name = ingredient.name,  
-                    is_seasoning = ingredient.is_seasoning
-                )
 
-                db.session.add(new_ingredient)
-                db.session.commit()
+    # Delete old directions that were not included in the form data
+    for old_direction in old_directions.values():
+        db.session.delete(old_direction)
 
-                # Create a new RecipeIngredient linking the new Ingredient 
-                new_recipe_ingredient = RecipeIngredient(
-                    recipe_id = recipe.id,
-                    ingredient_id = new_ingredient.id,  
-                    quantity = recipe_ingredient.quantity,
-                    measurement = recipe_ingredient.measurement
-                )
+    ingredients = json.loads(request.form.get('ingredients', '{}'))
+    old_ingredients = {i.id: i for i in Ingredient.query.join(RecipeIngredient).filter_by(recipe_id=id).all()}
 
-                db.session.add(new_recipe_ingredient)
-                db.session.commit()
+    for ingredient_id, ingredient_data in ingredients.items():
+        if ingredient_id in old_ingredients:
+            # Modify existing ingredient
+            old_ingredients[ingredient_id].name = ingredient_data.name
+            old_ingredients[ingredient_id].is_seasoning = ingredient_data.is_seasoning
+            del old_ingredients[ingredient_id]
+        else:
+            # Add new ingredient
+            new_ingredient = Ingredient(
+                name = ingredient_data.name,
+                is_seasoning = ingredient_data.is_seasoning
+            )
+            db.session.add(new_ingredient)
+            # Create new RecipeIngredient linking the new Ingredient to the current Recipe
+            new_recipe_ingredient = RecipeIngredient(
+                recipe_id = recipe.id,
+                ingredient_id = new_ingredient.id,
+                quantity = ingredient_data.quantity,
+                measurement = ingredient_data.measurement
+            )
+            db.session.add(new_recipe_ingredient)
+
+    # Delete old ingredients that were not included in the form data
+    for old_ingredient in old_ingredients.values():
+        db.session.delete(old_ingredient)
+
+    db.session.commit()
+
+    if recipe is None:
+        return jsonify({
+            "message": "Could not find a recipe with that ID",
+            "status_code": 404
+        }), 404
+
+    return jsonify(recipe.to_dict()), 200
+        # recipe = Recipe.query.get(id)
+        # # print("This is recipe:", recipe.to_dict())
+        # # print("****************Recipe ingredients:************", recipe.recipe_ingredients)
+        # print("----------------Recipe directions--------------", recipe.directions)
+        # # print("----------------request form---------------------", request.form)
+        # # try:
+        # #     data = request.get_json()
+        # # except Exception as e:
+        # #     print(e)
+        # #     return jsonify({"error":"Invalid JSON"}),400
+                
+        # recipe.name = request.form.get('name', recipe.name)
+        # recipe.description = request.form.get('description', recipe.description)
+        # recipe.prep_time = request.form.get('prep_time', recipe.prep_time)
+        # recipe.cook_time = request.form.get('cook_time', recipe.cook_time)
+        # recipe.servings = request.form.get('servings', recipe.servings)
+
+        # db.session.add(recipe)
+        # db.session.commit()
         
-        # Ingredient.query.filter_by(recipe_id=id).delete()
-        # for ingredient in ingredients:
-        #     new_ingredient = Ingredient(
-        #         # name = ingredient['name'],
-        #         # is_seasoning = ingredient['isSeasoning']
-        #         name = ingredient.name,
-        #         is_seasoning = ingredient.is_seasoning
+        # directions = json.loads(request.form.get('directions', '{}'))
+        # # directions = recipe.directions
+        # # directions = json.loads(request.data['directions'])
+        # # directions = data['directions']
+        # # Direction.query.filter_by(recipe_id=id).delete()
+        # for direction in directions:
+        #     new_direction = Direction(
+        #         recipe_id=recipe.id,
+        #         step=direction.step,
+        #         step_info=direction.step_info
+        #     )
+        #     db.session.add(new_direction)
+        #     db.session.commit()
+            
+        # ingredients = json.loads(request.form.get('ingredients', '[]'))
+        # # ingredients = data['ingredients']
+        # for recipe_ingredient in ingredients:
+        #     ingredient = recipe_ingredient.ingredients
+        #     existing = Ingredient.query.filter_by(name=ingredient.name).first()
+        #     if existing:
+        #         new_ingredient = existing
+        #     else:
+        #         new_ingredient = Ingredient(
+        #             name = ingredient.name,  
+        #             is_seasoning = ingredient.is_seasoning
+        #         )
+        #         db.session.add(new_ingredient)
+        #         db.session.commit()
+                
+        #         new_recipe_ingredient = RecipeIngredient(
+        #             recipe_id = recipe.id,
+        #             ingredient_id = new_ingredient.id,  
+        #             quantity = recipe_ingredient.quantity,
+        #             measurement = recipe_ingredient.measurement
         #         )
 
-        #     db.session.add(new_ingredient)
-        #     db.session.commit()
+        #         db.session.add(new_recipe_ingredient)
+        #         db.session.commit()
+                
+        # if recipe is None:
+        #     return jsonify({
+        #         "message": "Could not find a recipe with that ID",
+        #         "status_code": 404
+        #     }), 404
 
-        #     new_recipe_ingredient = RecipeIngredient(
-        #         # recipe_id = recipe.id,
-        #         ingredient_id = new_ingredient.id,
-        #         # quantity = ingredient['quantity'],
-        #         # measurement = ingredient['measurement']
-        #         quantity = ingredient.quantity,
-        #         measurement = ingredient.measurement
-        #         )
-
-        #     db.session.add(new_recipe_ingredient)
-        #     db.session.commit()
+        # db.session.commit()
+        # return jsonify(recipe.to_dict()), 200
         
-        
-        if recipe is None:
-            return jsonify({
-                "message": "Could not find a recipe with that ID",
-                "status_code": 404
-            }), 404
-
-         
-            # if form.name.data is not None:
-            #     recipe.name = form.name.data
-            # if form.description.data is not None:
-            #     recipe.description = form.description.data
-            # if form.prep_time.data is not None:
-            #     recipe.prep_time = form.prep_time.data
-            # if form.cook_time.data is not None:
-            #     recipe.cook_time = form.cook_time.data
-            # if form.servings.data is not None:
-            #     recipe.servings = form.servings.data
-                
-            # if 'preview_image' in request.json:
-            #     recipe.preview_image = request.json['preview_image']
-                
-            # if 'recipe_image' in request.json:
-            #     recipe.recipe_image = request.json['recipe_image']
-        
-            # handle directions
-            # direction_ids = []
-            # for direction_data in request.json.get('directions', []):
-            #     direction_id = direction_data.get('id')
-            #     if direction_id is None: # new direction
-            #         if recipe is None:
-            #             return jsonify({
-            #                 "message": "Could not find a recipe with that ID",
-            #                 "status_code": 404
-            #             }), 404
-                        
-            #         new_direction = Direction(
-            #             recipe_id=recipe.id,
-            #             step=direction_data.get('step'),
-            #             step_info=direction_data.get('step_info'),
-            #             )
-            #         db.session.add(new_direction)
-            #     else: # exisiting direction
-            #         direction = Direction.query.get(direction_id)
-            #         if direction:
-            #             direction.recipe_id = recipe.id
-            #             direction.step = direction_data.get('step',direction.step)
-            #             direction.step_info = direction_data.get('step_info',direction.step_info)
-            #         else:
-            #             return jsonify({
-            #                 "message": f"Could not find a direction with ID {direction_id}",
-            #                 "status_code": 400
-            #                 }), 400
-            #         direction_ids.append(direction.id)
-            #     # delete directions not included in the PUT request
-            # for direction in recipe.directions:
-            #     if direction.id not in direction_ids:
-            #         db.session.delete(direction)
-            # db.session.commit()         
-            
-            # handle ingredient and recipe ingredients
-        # ingredient_ids = []
-        # for ingredient_data in request.json.get('ingredients', []):
-        #         ingredient_id = ingredient_data.get('id')
-        #         if ingredient_id is None: # new ingredient
-        #             if recipe is None:
-        #                 return jsonify({
-        #                     "message": "Could not find a recipe with that ID",
-        #                     "status_code": 404
-        #                 }), 404
-                        
-        #             ingredient = Ingredient(
-        #                 name = ingredient_data.get('name'),
-        #                 is_seasoning = ingredient_data.get('is_seasoning')
-        #                 )
-        #             db.session.add(ingredient)
-        #             db.session.commit()
-        #             ingredient_ids.append(ingredient.id)
-        #         else: # exisiting ingredient
-        #             ingredient = Ingredient.query.get(ingredient_id)
-        #             if ingredient:
-        #                 ingredient.name = ingredient_data.get('name',ingredient.name)
-        #                 ingredient.is_seasoning = ingredient_data.get('is_seasoning',ingredient.is_seasoning)
-        #                 ingredient_ids.append(ingredient.id)
-        #             else:
-        #                 return jsonify({
-        #                     "message": f"Could not find an ingredient with ID {ingredient_id}",
-        #                     "status_code": 400 
-        #                     }), 400
-                    
-                # handle RecipeIngredient
-                # recipe_ingredient = RecipeIngredient.query.filter_by(recipe_id=recipe.id, ingredient_id=ingredient.id).first()
-                # if recipe_ingredient is None: # new recipe ingredient
-                #     if recipe is None:
-                #         return jsonify({
-                #             "message": "Could not find a recipe with that ID",
-                #             "status_code": 404
-                #         }), 404
-                        
-                #     recipe_ingredient = RecipeIngredient(
-                #         recipe_id=recipe.id,
-                #         ingredient_id=ingredient.id,
-                #         quantity=ingredient_data.get('quantity'),
-                #         measurement=ingredient_data.get('measurement')
-                #         )
-                #     db.session.add(recipe_ingredient)
-                # else: # exisiting recipe ingredient
-                #     recipe_ingredient.quantity = ingredient_data.get('quantity',recipe_ingredient.quantity)
-                #     recipe_ingredient.measurement = ingredient_data.get('measurement',recipe_ingredient.measurement)
-                        
-            # delete ingredients and recipe ingredients not included in the PUT
-        # for recipe_ingredient in RecipeIngredient.query.filter_by(recipe_id=recipe.id):
-        #         if recipe_ingredient.ingredient_id not in ingredient_ids:
-        #             db.session.delete(recipe_ingredient)
-        #             db.session.commit()
-        #             # also delete the ingredient itself if it's not used by other recipes
-        #             ingredient = Ingredient.query.get(recipe_ingredient.ingredient_id)
-        #             if ingredient and not ingredient.recipe_ingredients:
-        #                 db.session.delete(ingredient)
-                
-            # try:
-            #     with db.session.no_autoflush:
-            #         db.session.commit()
-            #     return jsonify(recipe.to_dict()), 200
-            # except Exception as e:
-            #     db.session.rollback()
-            #     print(f"Error while updating the recipe: {str(e)}")
-            #     return jsonify({
-            #         "message": f"Error while updating the recipe: {str(e)}",
-            #         "status_code": 500 
-            #         }), 500
-                
-        db.session.commit()
-        return jsonify(recipe.to_dict()), 200
-    # except Exception as e:
-    #     db.session.rollback()
-    #     print(f"Error while updating the recipe: {str(e)}")
-    #     return jsonify({
-    #         "message": f"Error while updating the recipe: {str(e)}",
-    #         "status_code": 500
-    #     }), 500
 
 # Delete a Recipe
 @recipe_routes.route('/<int:id>', methods=['DELETE'])

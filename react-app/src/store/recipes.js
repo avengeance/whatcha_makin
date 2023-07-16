@@ -76,27 +76,31 @@ export const createRecipeThunk = (formData) => async (dispatch) => {
 }
 
 export const updateRecipeThunk = (recipeId, formData) => async (dispatch) => {
-    // console.log("This is thunk Recipe:", recipe)
-    // const formData = new FormData();
-    // Object.keys(recipe).forEach((key) => {
-    //     if (Array.isArray(recipe[key])) {
-    //         recipe[key].forEach((item, index) => {
-    //             Object.keys(item).forEach((subKey) => {
-    //                 formData.append(`${key}[${index}].${subKey}`, item[subKey])
-    //             })
-    //         })
-    //     } else {
-    //         formData.append(key, recipe[key])
-    //     }
-    // })
-    const res = await csrfFetch(`/api/recipes/${recipeId}/edit`, {
+    const res = await csrfFetch(`/api/recipes/${recipeId}/edit/`, {
         method: "PUT",
         body: formData,
     });
-    // if (res.ok) {
+    console.log("This is thunk formData:", formData)
     const data = await res.json();
+    console.log("This is thunk data:",data)
     dispatch(updateRecipe(data));
     return data;
+    // let jsonObject = {};
+    // for (const [key, value]  of formData.entries()) {
+    //     jsonObject[key] = value;
+    // }
+
+    // const res = await csrfFetch(`/api/recipes/${recipeId}/edit/`, {
+    //     method: "PUT",
+    //     body: JSON.stringify(jsonObject),
+    //     headers: {
+    //         "Content-Type": "application/json"
+    //     },
+    // });
+
+    // const data = await res.json();
+    // dispatch(updateRecipe(data));
+    // return data;
     
 }
 

@@ -84,22 +84,6 @@ function UpdateRecipe() {
         getRecipeThunk();
     }, [recipeId])
 
-    // useEffect(() => {
-    //     console.log("Prep Hours changed: ", prepHours);
-    // }, [prepHours]);
-
-    // useEffect(() => {
-    //     console.log("Prep Minutes changed: ", prepMinutes);
-    // }, [prepMinutes]);
-
-    // useEffect(() => {
-    //     console.log("Cook Hours changed: ", cookHours);
-    // }, [cookHours]);
-
-    // useEffect(() => {
-    //     console.log("Cook Minutes changed: ", cookMinutes);
-    // }, [cookMinutes]);
-
     function handleIngredientChange(i, event) {
         const { name, value, type, checked } = event.target
 
@@ -208,14 +192,14 @@ function UpdateRecipe() {
 
         for (let pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
-            // console.log("this is pair:", pair)
         }
-
-        console.log(formData.get('name')); 
-        console.log(formData.get('ingredients'));
+        
         let updatedRecipe;
-        try{
+        // try{
+            console.log("In Try formData:", formData)
+            console.log("this is recipeId:", recipeId)
             const recipe = await dispatch(RecipeActions.updateRecipeThunk(recipeId, formData))
+            console.log("In Try recipe:", recipe)
             if (recipe){
                 updatedRecipe = recipe
                 setName('')
@@ -232,9 +216,9 @@ function UpdateRecipe() {
                 setErrors([])
                 history.push(`/recipes/${recipe.id}`)
             }
-        } catch (error){
-            console.log("Error updating recipe", error)
-        }
+        // } catch (error){
+        //     console.log("Error updating recipe", error)
+        // }
 
         if(updatedRecipe){
             console.log("Updated recipe", updatedRecipe)

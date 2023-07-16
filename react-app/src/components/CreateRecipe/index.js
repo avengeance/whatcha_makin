@@ -32,7 +32,7 @@ function CreateRecipe() {
     const [description, setDescription] = useState("");
     const [ingredients, setIngredients] = useState([initialIngredient]);
     const [directions, setDirections] = useState([initialDirection]);
-    
+
     const [prepHours, setPrepHours] = useState(null);
     const [prepMinutes, setPrepMinutes] = useState(null);
     const [cookHours, setCookHours] = useState(null);
@@ -140,27 +140,6 @@ function CreateRecipe() {
         // })
         formData.append('ingredients', JSON.stringify(ingredients))
         formData.append('directions', JSON.stringify(directions))
-
-        // console.log("Form Data before direction form entries:", formData)
-        // console.log("Form Data entries:", formData.entries())
-
-        // console.log("FormData:", formData)
-        // const directionEntries = [];
-        // for (const pair of formData.entries()) {
-        //     const [key, value] = pair;
-        //     if (key.startsWith('directions[')) {
-        //         const [dirIndex] = key.match(/\d+/);
-        //         const step = formData.get(`directions[${dirIndex}].step`);
-        //         const stepInfo = formData.get(`directions[${dirIndex}].step_info`);
-        //         directionEntries.push({ step, stepInfo });
-        //     }
-        // }
-        // console.log('Direction Entries:', directionEntries);
-
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0] + ', ' + pair[1]);
-        //     // console.log("this is pair:", pair)
-        // }
 
         let newRecipe;
 
