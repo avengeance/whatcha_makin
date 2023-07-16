@@ -10,6 +10,8 @@ function Recipe() {
     const tooltipRef = useRef();
     const recipe = useSelector((state) => Object.values(state.recipes));
 
+    const avgRating = recipe.avg_rating || 0
+
     const [recipes, setRecipes] = useState([]);
 
     useEffect(() => {
@@ -57,7 +59,8 @@ function Recipe() {
                             <div className='recipe-review-likes'>
                                 <div id='avgRating'>
                                     <i className='fas fa-star'></i>
-                                    {recipe.avg_rating ? recipe.avg_rating.toFixed(1) : 'New'}
+                                    {/* {recipe.avg_rating ? recipe.avg_rating.toFixed(1) : 'New'} */}
+                                    {avgRating ? avgRating.toFixed(1) : "New"}
                                 </div>
                                 <div id='likes'>
                                     {recipe.likes > 0

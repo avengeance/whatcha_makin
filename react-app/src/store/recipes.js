@@ -46,11 +46,6 @@ export const getAllRecipesThunk = () => async (dispatch) => {
         method: "GET",
     });
     const data = await res.json()
-    // let recipes = {}
-    // data.recipes.forEach(recipe => {
-    //     recipes[recipe.id] = recipe
-    // })
-    // dispatch(getAllRecipes(recipes))
     if (res.ok) {
         dispatch(getAllRecipes(data.recipes))
     }
@@ -69,56 +64,25 @@ export const getRecipeThunk = (recipeId) => async (dispatch) => {
     return recipeDetails;
 }
 
-export const createRecipeThunk = (recipe) => async (dispatch) => {
-    const formData = new FormData();
-    Object.keys(recipe).forEach((key) => {
-        if (Array.isArray(recipe[key])) {
-            recipe[key].forEach((item, index) => {
-                Object.keys(item).forEach((subKey) => {
-                    formData.append(`${key}[${index}].${subKey}`, item[subKey])
-                })
-            })
-        } else {
-            formData.append(key, recipe[key])
-        }
-    })
-    const res = await csrfFetch("/api/recipes/new", {
+export const createRecipeThunk = (formData) => async (dispatch) => {
+    const res = await fetch("/api/recipes/new/", {
         method: "POST",
         body: formData,
     });
-    if (res.ok) {
-        const data = await res.json();
-        console.log("This is data:", data)
-        dispatch(createRecipe(data));
-        return data;
-    } else {
-        return console.log("this is res errors:", res.errors)
-    }
+    const data = await res.json();
+    // console.log("This is data in thunk:", data)
+    dispatch(createRecipe(data));
+    return data;
 }
 
-export const updateRecipeThunk = (recipe, payload) => async (dispatch) => {
-    console.log("This is thunk Recipe:", recipe)
-    const formData = new FormData();
-    Object.keys(recipe).forEach((key) => {
-        if (Array.isArray(recipe[key])) {
-            recipe[key].forEach((item, index) => {
-                Object.keys(item).forEach((subKey) => {
-                    formData.append(`${key}[${index}].${subKey}`, item[subKey])
-                })
-            })
-        } else {
-            formData.append(key, recipe[key])
-        }
-    })
-    const res = await csrfFetch(`/api/recipes/${recipe}/edit`, {
+export const updateRecipeThunk = (recipeId, formData) => async (dispatch) => {
+    const res = await csrfFetch(`/api/recipes/${recipeId}/edit/`, {
         method: "PUT",
-        body: formData,
+        body: JSON.stringify(Object.fromEntries(formData)),
     });
-    if (res.ok) {
-        const data = await res.json();
-        dispatch(updateRecipe(data));
-        return data;
-    }
+    const data = await res.json();
+    dispatch(updateRecipe(data));
+    return data;
 }
 
 export const deleteRecipeThunk = (recipeId) => async (dispatch) => {
@@ -148,9 +112,7 @@ const recipesReducer = (state = intialState, action) => {
     let newState = { ...state };
     switch (action.type) {
         case GET_ALL_RECIPES:
-            // action.recipes.Recipes.forEach((recipe) => {
-            //     newState.recipes[recipe.id] = recipe
-            // })
+
             Object.values(action.recipes).forEach((recipe) => {
                 newState.recipes[recipe.id] = recipe
             })
@@ -159,10 +121,16 @@ const recipesReducer = (state = intialState, action) => {
             newState.recipes[action.recipe.id] = action.recipe
             return newState
         case CREATE_RECIPE:
-            newState.recipes[action.recipe.id] = action.recipes
-            return newState
+            newState.recipes[action.recipe.id] = action.recipe
+            return {
+                ...state,
+                [action.recipe.id]:{
+                    ...action.recipe,
+                    avg_rating:0
+                }
+            }
         case UPDATE_RECIPE:
-            newState.recipes[action.recipe.id] = action.recipes
+            newState.recipes[action.recipe.id] = action.recipe
             return newState
         case DELETE_RECIPE:
             const { [action.recipe.id]: deletedRecipe, ...updatedRecipes } = newState.recipes;

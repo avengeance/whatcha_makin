@@ -18,120 +18,133 @@ import * as CommentActions from '../../store/comments';
 
 import "./RecipeDetail.css";
 
-const RecipeDetail = () => {
-    const { recipeId } = useParams();
-    const { closeModal, setModalContent } = useModal();
-    const dispatch = useDispatch();
-    const history = useHistory();
+    const RecipeDetail = () => {
+        const { recipeId } = useParams();
+        const { closeModal, setModalContent } = useModal();
+        const dispatch = useDispatch();
+        const history = useHistory();
 
-    const currentReviews = useSelector((state) => state.reviews.reviews);
-    const currentComments = useSelector((state) => state.comments.comments);
-    const user = useSelector((state) => state.session.user);
-    const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
-
-    const [currentRecipes, setCurrentRecipes] = useState(null);
-    const [reviews, setReviews] = useState([]);
-    const [hasReviewed, setHasReviewed] = useState(false)
-    const [reviewPosted, setReviewPosted] = useState(false)
-    const [comments, setComments] = useState([]);
-    const [liked, setLiked] = useState(false);
-    const [refreshKey, setRefreshKey] = useState(0);
-
-    useEffect(() => {
-        dispatch(RecipeActions.getRecipeThunk(recipeId))
-            .then(currentRecipes => setCurrentRecipes(currentRecipes))
-            .then(currentRecipes => {
-                if (currentRecipes?.Owner?.id) {
-                    setCurrentRecipes(currentRecipes);
-                }
-            })
-            .catch(err => console.log(err))
-    }, [dispatch, recipeId]);
+        const currentReviews = useSelector((state) => state.reviews.reviews);
+        const currentComments = useSelector((state) => state.comments.comments);
+        const user = useSelector((state) => state.session.user);
+        const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
 
 
+        const [currentRecipe, setCurrentRecipe] = useState({});
+        const currentRecipes = useSelector((state) => state.recipes);
 
-    function handlePostReview() {
-        // const modalContent = <CreateReviewModal recipeId={recipeId} onReviewSubmit={() => {
-        //     // handlePostReview()
-        // }} />;
-        const modalContent = <CreateReviewModal recipeId={recipeId} onReviewSubmit={handleReviewSubmit} />;
-        setReviewPosted(true)
-        history.push(`/recipes/${recipeId}`);
-        setModalContent(modalContent);
-    }
+        const avgRating = currentRecipes?.avg_rating || 0
 
-    function handleReviewSubmit() {
-        setReviewPosted(true)
-    }
+        const [reviews, setReviews] = useState([]);
+        const [hasReviewed, setHasReviewed] = useState(false)
+        const [reviewPosted, setReviewPosted] = useState(false)
+        const [comments, setComments] = useState([]);
+        const [liked, setLiked] = useState(false);
+        const [refreshKey, setRefreshKey] = useState(0);
 
-    function handleUpdateReview(reviewId) {
-        console.log("this is review Id in update review:", reviewId)
-        const modalContent = (
-            <UpdateReviewModal
-                recipeId={recipeId}
-                reviewId={reviewId}
-                onReviewSubmit={handlePostReview}
-            />
-        )
-        history.push(`/recipes/${recipeId}`)
-        setModalContent(modalContent)
-    }
+        useEffect(() => {
+            if(recipeId){
 
-    useEffect(() => {
-        dispatch(ReviewActions.getAllReviewsThunk(recipeId))
-            .then(reviews => {
-                setReviews(reviews.Reviews)
-                setHasReviewed(currentReviews?.some(review => review?.owner_id === user?.id))
-                setReviewPosted(false)
-            })
-            .catch(err => console.log(err))
-    }, [dispatch, recipeId, refreshKey, user, reviewPosted])
+                dispatch(RecipeActions.getRecipeThunk(recipeId))
+                    .then(currentRecipes => setCurrentRecipe(currentRecipes))
+                    .then(currentRecipe => {
+                        if (currentRecipes?.Owner?.id) {
+                            setCurrentRecipe(currentRecipes);
+                            const avgRating = currentRecipe?.avg_rating || 0
+                        }
+                    })
+                    .catch(err => console.log(err))
+            }
+        }, [dispatch, recipeId]);
 
-    useEffect(() => {
-        if (!recipeId) {
-            console.error('No recipeId');
-            return
+
+
+        function handlePostReview() {
+
+            const modalContent = <CreateReviewModal recipeId={recipeId} onReviewSubmit={handleReviewSubmit} />;
+            setReviewPosted(true)
+            history.push(`/recipes/${recipeId}`);
+            setModalContent(modalContent);
         }
-        dispatch(ReviewActions.getAllReviewsThunk(recipeId))
-            .then(reviews => setReviews(reviews.Reviews))
-            .catch(err => console.log(err))
-        dispatch(CommentActions.getAllCommentsThunk(recipeId))
-            .then(comments => setComments(comments.Comments))
-            .catch(err => console.log(err))
-        dispatch(LikeActions.getLikesByRecipeThunk(recipeId))
-            .then(likes => setLiked(likes.likes))
-            .catch(err => console.log(err))
-    }, [dispatch, recipeId, refreshKey])
 
+        function handleReviewSubmit() {
+            setReviewPosted(true)
+        }
+
+        function handleUpdateReview(reviewId) {
+            console.log("this is review Id in update review:", reviewId)
+            const modalContent = (
+                <UpdateReviewModal
+                    recipeId={recipeId}
+                    reviewId={reviewId}
+                    onReviewSubmit={handlePostReview}
+                />
+            )
+            history.push(`/recipes/${recipeId}`)
+            setModalContent(modalContent)
+        }
+
+        useEffect(() => {
+            if(recipeId){
+
+                dispatch(ReviewActions.getAllReviewsThunk(recipeId))
+                    .then(reviews => {
+                        setReviews(reviews.Reviews)
+                        setHasReviewed(currentReviews?.some(review => review?.owner_id === user?.id))
+                        setReviewPosted(false)
+                    })
+                    .catch(err => console.log(err))
+            }
+        }, [dispatch, recipeId, refreshKey, user, reviewPosted])
+
+        useEffect(() => {
+            if (!recipeId) {
+                console.error('No recipeId');
+                return
+            }
+            dispatch(ReviewActions.getAllReviewsThunk(recipeId))
+                .then(reviews => setReviews(reviews.Reviews))
+                .catch(err => console.log(err))
+            // dispatch(CommentActions.getAllCommentsThunk(recipeId))
+            //     .then(comments => setComments(comments.Comments))
+            //     .catch(err => console.log(err))
+            // dispatch(LikeActions.getLikesByRecipeThunk(recipeId))
+            //     .then(likes => setLiked(likes.likes))
+            //     .catch(err => console.log(err))
+        }, [dispatch, recipeId, refreshKey])
+
+        console.log("this is current recipe:", currentRecipe)
 
     return (
-        <div>
-            {currentRecipes && (
+        <>
+            {currentRecipe && (
                 <div>
                     <div className="recipe-name-detail">
                         <div id='recipe-name'>
-                            <h2>{currentRecipes?.name}</h2>
+                            <h2>{currentRecipe?.name}</h2>
                         </div>
                         <div className='recipe-review-likes-container'>
                             <div className='recipe-review'>
                                 <i className='fas fa-star'></i>
-                                {currentRecipes.avg_rating ? currentRecipes.avg_rating.toFixed(1) : 'New'}
+                                {/* {currentRecipe.avg_rating ? currentRecipe.avg_rating.toFixed(1) : 'New'} */}
+                                {/* {avgRating ? avgRating.toFixed(1) : 'New'} */}
+                                {currentRecipe ? <div>{currentRecipe.avg_rating}</div> : "Loading..."}
                             </div>
                             <div className='recipe-likes'>
-                                {currentRecipes?.likes > 0
-                                    ? <><i className="fa-solid fa-heart"></i>  {currentRecipes?.likes} </>
+                                {currentRecipe?.likes > 0
+                                    ? <><i className="fa-solid fa-heart"></i>  {currentRecipe?.likes} </>
                                     : <><i className="far fa-heart"></i> New</>}
                             </div>
                         </div>
                         <div id='recipe-detail-info'>
                             <div className='recipe-image'>
                                 <div id='main-recipe-image'>
-                                    <img src={currentRecipes?.images && currentRecipes.images.length > 0
-                                        ? currentRecipes.images[0].url : null} alt='Main Image' />
+                                    <img src={currentRecipe?.images && currentRecipe.images.length > 0
+                                        ? currentRecipe.images[0].url : null} alt='Main Image' />
                                 </div>
                                 <div className='recipe-image-overlay'>
-                                    {currentRecipes?.images?.filter(image => image.is_preview !== true).map((images, i) => (
-                                        <img key={i} className="recipe-images" src={images.url} alt={currentRecipes.name} />
+                                    {currentRecipe?.images?.filter(image => image.is_preview !== true).map((images, i) => (
+                                        <img key={i} className="recipe-images" src={images.url} alt={currentRecipe.name} />
                                     ))}
                                 </div>
                             </div>
@@ -140,24 +153,24 @@ const RecipeDetail = () => {
                             <div className='recipe-description-time-container'>
                                 <div className='recipe-description-owner-container'>
                                     <div className='recipe-owner-name'>
-                                        <h2>Recipe Created by: {currentRecipes?.owner_name}</h2>
+                                        <h2>Recipe Created by: {currentRecipe?.owner_name}</h2>
                                     </div>
                                     <div className='recipe-description-text'>
-                                        <p>{currentRecipes?.description}</p>
+                                        <p>{currentRecipe?.description}</p>
                                     </div>
                                 </div>
                                 <div className='recipe-time'>
-                                    <h3>Total Time to Cook - {currentRecipes?.total_time} min</h3>
-                                    <h4>Prep Time - {currentRecipes?.prep_time} min</h4>
-                                    <h4>Cook Time - {currentRecipes?.cook_time} min</h4>
-                                    <h3>Servings - {currentRecipes?.servings}</h3>
+                                    <h3>Total Time to Cook - {currentRecipe?.total_time} min</h3>
+                                    <h4>Prep Time - {currentRecipe?.prep_time} min</h4>
+                                    <h4>Cook Time - {currentRecipe?.cook_time} min</h4>
+                                    <h3>Servings - {currentRecipe?.servings}</h3>
                                 </div>
                             </div>
                             <div className='recipe-ingredients-seasoning-containter'>
                                 <div className='recipe-ingredients'>
                                     <h3>Ingredients</h3>
-                                    {currentRecipes?.ingredients &&
-                                        currentRecipes.ingredients
+                                    {currentRecipe?.ingredients &&
+                                        currentRecipe.ingredients
                                             .filter(ingredient => !ingredient.is_seasoning)
                                             .map((ingredient, i) => (
                                                 <p key={i}>
@@ -167,8 +180,8 @@ const RecipeDetail = () => {
                                 </div>
                                 <div className='recipe-seasoning'>
                                     <h3>Seasoning</h3>
-                                    {currentRecipes?.ingredients &&
-                                        currentRecipes.ingredients
+                                    {currentRecipe?.ingredients &&
+                                        currentRecipe.ingredients
                                             .filter(ingredient => ingredient.is_seasoning)
                                             .map((ingredient, i) => (
                                                 <p key={i}>
@@ -181,8 +194,8 @@ const RecipeDetail = () => {
                         <div className='recipe-directions-container'>
                             <div className='recipe-directions'>
                                 <h3>Directions</h3>
-                                {currentRecipes?.directions &&
-                                    currentRecipes.directions.map((direction, i) => (
+                                {currentRecipe?.directions &&
+                                    currentRecipe.directions.map((direction, i) => (
                                         <p key={i}>{direction.step}: {direction.step_info}</p>
                                     ))}
                             </div>
@@ -190,16 +203,29 @@ const RecipeDetail = () => {
                         <div className='recipe-reviews-container'>
                             <div className='recipe-reviews'>
                                 <div className='recipe-review-header'>
-                                    <h3>{currentRecipes?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipes.reviews.length === 1 ? 'Review' : 'Reviews'}</h3>
-                                </div>
-                                <p>Number of Reviews: {currentRecipes?.reviews?.length}</p>
-                                <p> Rating: <i className='fas fa-star'></i> {currentRecipes.avg_rating.toFixed(1)}</p>
-                                {user && user.id !== currentRecipes?.owner_id && !hasReviewed ? (
-                                    <button id='post-review' onClick={handlePostReview}>Post Your Review</button>
-                                ) :
-                                    null
-                                }
-                                {currentReviews.map((review, i) => (
+                                    {currentRecipe ? (
+                                        <>
+                                            <div className='recipe-review-header'>
+                                                <h3>{currentRecipe?.reviews?.length}...</h3>
+                                            {/* <h3>{currentRecipe?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipe.reviews.length === 1 ? 'Review' : 'Reviews'}</h3> */}
+                                            </div>
+
+                                            {/* rest of reviews content */}
+
+                                        {/* </div> */}
+                                        <p>Number of Reviews: {currentRecipe?.reviews?.length}</p>
+                                        {/* <p> Rating: <i className='fas fa-star'></i> {currentRecipe?.avg_rating.toFixed(1)}</p> */}
+                                        {user && user.id !== currentRecipe?.owner_id && !hasReviewed ? (
+                                        <button id='post-review' onClick={handlePostReview}>Post Your Review</button>
+                                    ) :
+                                        null
+                                    }
+                                </>
+                                ) : (
+                                'Loading...'
+                                    )}
+                            </div>
+                            {/* {currentReviews.map((review, i) => (
                                     review && (
                                         <div key={i} className='recipe-review-container'>
                                             <div className='recipe-review-user'>
@@ -230,15 +256,15 @@ const RecipeDetail = () => {
 
                                         </div>
                                     )
-                                ))}
-                            </div>
+                                ))} */}
                         </div>
-                        {/* <div className='recipe-comments-container'>
+                    </div>
+                    {/* <div className='recipe-comments-container'>
                             <div className='recipe-comments'>
                                 <div className='recipe-comment-header'>
-                                    <h3>{currentRecipes?.comments?.length === 0 ? 'No Comments Yet' : currentRecipes.comments.length === 1 ? 'Comment' : 'Comments'}</h3>
+                                    <h3>{currentRecipe?.comments?.length === 0 ? 'No Comments Yet' : currentRecipe.comments.length === 1 ? 'Comment' : 'Comments'}</h3>
                                 </div>
-                                {currentRecipes.comments.map((comment, i) => (
+                                {currentRecipe.comments.map((comment, i) => (
                                     <div key={i} className='recipe-comment-container'>
                                         <div className='recipe-comment-user'>
                                             <div className='recipe-comment-user-name'>
@@ -251,11 +277,14 @@ const RecipeDetail = () => {
                                 ))}
                             </div>
                         </div> */}
-                    </div>
                 </div>
-            )}
-        </div>
+                </div>
     )
 }
+
+        </>
+    );
+}
+
 
 export default RecipeDetail;

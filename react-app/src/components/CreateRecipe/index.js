@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 
 import * as RecipeActions from "../../store/recipes";
+// import { createRecipeThunk } from "../../store/recipes";
 import IngredientForm from "../IngredientForm";
 import DirectionForm from "../DirectionForm";
 import { csrfFetch } from "../../store/csrf";
@@ -25,39 +26,48 @@ function CreateRecipe() {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const { recipeId } = useParams()
+
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [ingredients, setIngredients] = useState([initialIngredient]);
     const [directions, setDirections] = useState([initialDirection]);
+
     const [prepHours, setPrepHours] = useState(null);
     const [prepMinutes, setPrepMinutes] = useState(null);
     const [cookHours, setCookHours] = useState(null);
     const [cookMinutes, setCookMinutes] = useState(null);
 
     const [servings, setServings] = useState(1);
-    const [previewImage, setPreviewImage] = useState(null);
+    // const [previewImage, setPreviewImage] = useState(null);
     // const [recipeImage, setRecipeImage] = useState(null);
-    const [otherImages, setOtherImages] = useState([]);
+    // const [otherImages, setOtherImages] = useState([]);
 
     const [errors, setErrors] = useState({});
     const [csrfToken, setCsrfToken] = useState("")
 
     useEffect(() => {
-        let csrf_token;
-        const cookie = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('csrf_token'));
-
-        if (cookie) {
-            csrf_token = cookie.split('=')[1];
+        const getCookie = (name) => {
+            const value = "; " + document.cookie;
+            const parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
         }
+
+        let csrf_token = getCookie('csrf_token');
         setCsrfToken(csrf_token);
+
     }, []);
+
+
 
     function handleIngredientChange(i, event) {
         const values = [...ingredients];
-        values[i][event.target.name] = event.target.value
-        setIngredients(values)
+        if (event.target.name === 'isSeasoning') {
+            values[i][event.target.name] = event.target.checked;
+        } else {
+            values[i][event.target.name] = event.target.value;
+        }
+        setIngredients(values);
     }
 
     function handleAddIngredient() {
@@ -85,17 +95,15 @@ function CreateRecipe() {
         setDirections(values)
     }
 
-    const handleOtherImages = (e) => {
-        if (e.target.files.length > 3) {
-            alert("You can only upload a maximum of 3 files");
-            e.target.value = "";
-        } else {
-            setOtherImages([...e.target.files]);
-        }
-    }
+    // const handleOtherImages = (e) => {
+    //     if (e.target.files.length > 3) {
+    //         alert("You can only upload a maximum of 3 files");
+    //         e.target.value = "";
+    //     } else {
+    //         setOtherImages([...e.target.files]);
+    //     }
+    // }
 
-    console.log("this is user", user)
-    // console.log("this is userId:", user.id)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -106,111 +114,59 @@ function CreateRecipe() {
         const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
 
         formData.append('csrf_token', csrfToken)
-        formData.append('owner_id', JSON.stringify(user.id))
-        formData.append("name", JSON.stringify(name))
-        formData.append("description", JSON.stringify(description))
+        formData.append('owner_id', user.id)
+        formData.append("name", name)
+        formData.append("description", description)
         formData.append("prep_time", totalPrepTime)
         formData.append("cook_time", totalCookTime)
-        formData.append("servings", JSON.stringify(servings))
-        formData.append('preview_image', previewImage)
-        // formData.append('recipe_image', recipeImage)
-        otherImages.forEach((image, index) => {
-            formData.append(`other_images[${index}]`, image)
-        })
+        formData.append("servings", servings)
+        // formData.append('preview_image', previewImage)
+        // // formData.append('recipe_image', recipeImage)
+        // otherImages.forEach((image, index) => {
+        //     formData.append(`other_images[${index}]`, image)
+        // })
 
 
-        ingredients.forEach((ingredient, index) => {
-            formData.append(`ingredients[${index}].name`, JSON.stringify(ingredient.name))
-            formData.append(`ingredients[${index}].quantity`, JSON.stringify(ingredient.quantity))
-            formData.append(`ingredients[${index}].measurement`, JSON.stringify(ingredient.measurement))
-            formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
-        })
+        // ingredients.forEach((ingredient, index) => {
+        //     formData.append(`ingredients[${index}].name`, ingredient.name)
+        //     formData.append(`ingredients[${index}].quantity`, ingredient.quantity)
+        //     formData.append(`ingredients[${index}].measurement`, ingredient.measurement)
+        //     formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
+        // })
 
-        directions.forEach((direction, index) => {
-            formData.append(`directions[${index}].step`, direction.step)
-            formData.append(`directions[${index}].step_info`, JSON.stringify(direction.stepInfo))
-        })
+        // directions.forEach((direction, index) => {
+        //     formData.append(`directions[${index}].step`, direction.step)
+        //     formData.append(`directions[${index}].step_info`, direction.stepInfo)
+        // })
+        formData.append('ingredients', JSON.stringify(ingredients))
+        formData.append('directions', JSON.stringify(directions))
 
-        console.log("this is form data after append:", formData)
+        let newRecipe;
 
-        const payload = {
-            name,
-            description,
-            ingredients,
-            directions,
-            // prepHours,
-            // prepMinutes,
-            // cookHours,
-            // cookMinutes,
-            prep_time: totalPrepTime,
-            cook_time: totalCookTime,
-            servings,
-            previewImage,
-            otherImages
+        try {
+            const recipe = await dispatch(RecipeActions.createRecipeThunk(formData))
+            const newRecipeId = recipe.id
+            const url = `/recipes/${newRecipeId}`
+            if (recipe) {
+                newRecipe = recipe
+                setName('')
+                setDescription('')
+                setIngredients([initialIngredient])
+                setDirections([initialDirection])
+                setPrepHours('')
+                setPrepMinutes('')
+                setCookHours('')
+                setCookMinutes('')
+                setServings('')
+                // setPreviewImage('')
+                // setOtherImages([])
+                setErrors([])
+                history.push(url)
+            }
+        } catch (error) {
+            console.log("Error in catch block", error)
         }
 
-        // const ingredientForms = ingredients.map(ing => {
-        //     return {
-        //         name: ing.name,
-        //         quantity: ing.quantity,
-        //         measurement: ing.measurement,
-        //         is_seasoning: ing.isSeasoning
-        //     }
-        // })
-
-        // const directionForms = directions.map(dir => {
-        //     return {
-        //         step: dir.step,
-        //         step_info: dir.stepInfo
-        //     }
-        // })
-
-        // const ingredientForms = ingredients.map(ing => {
-        //     return <IngredientForm
-        //         name={ing.name}
-        //         quantity={ing.quantity}
-        //         measurement={ing.measurement}
-        //         is_seasoning={ing.isSeasoning}
-        //     />
-        // })
-
-        // const directionForms = directions.map(dir => {
-        //     return <DirectionForm
-        //         step={dir.step}
-        //         stepInfo={dir.stepInfo}
-        //     />
-        // })
-
-        // const ingredientData = ingredientForms.map(form => form.props)
-        // const directionData = directionForms.map(form => form.props)
-
-        // const payload = {
-        //     owner_id:user.id,
-        //     name,
-        //     description,
-        //     // ingredients: ingredientForms,
-        //     // directions: directionForms,
-        //     ingredients: ingredientData,
-        //     directions: directionData,
-        //     prep_time: totalPrepTime,
-        //     cook_time: totalCookTime,
-        //     servings,
-        //     previewImage,
-        //     otherImages
-        // }
-        console.log("This is payload:", payload)
-
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
-
-        // console.log("this is form data:", formData)
-        const newRecipe = await dispatch(RecipeActions.createRecipeThunk(formData));
-        console.log("this is new recipe:", newRecipe)
-
-        if (newRecipe) {
-            history.push(`/recipes/${newRecipe.id}`);
-        }
     }
 
     return (
@@ -384,7 +340,7 @@ function CreateRecipe() {
                     rows="4"
                     placeholder='Description'>
                 </textarea>
-                <h2>Images</h2>
+                {/* <h2>Images</h2>
                 <h3>What will this recipe look like?</h3>
                 <h4>Main Image</h4>
                 <input
@@ -399,7 +355,7 @@ function CreateRecipe() {
                     multiple
                     onChange={handleOtherImages}
                 >
-                </input>
+                </input> */}
                 <div id="form-submit-button">
                     <button
                         type="submit"

@@ -41,14 +41,16 @@ function UpdateRecipe() {
     const [cookMinutes, setCookMinutes] = useState(null);
 
     const [servings, setServings] = useState("");
-    const [previewImage, setPreviewImage] = useState(null);
-    const [recipeImage, setRecipeImage] = useState(null);
-    const [otherImages, setOtherImages] = useState([]);
+    // const [previewImage, setPreviewImage] = useState(null);
+    // const [recipeImage, setRecipeImage] = useState(null);
+    // const [otherImages, setOtherImages] = useState([]);
 
     const [loading, setLoading] = useState(true)
     const [stepCounter, setStepCounter] = useState(1)
 
     const [errors, setErrors] = useState({});
+
+    // console.log("this is current recipe:", currentRecipe)
 
     useEffect(() => {
         async function getRecipeThunk() {
@@ -57,8 +59,7 @@ function UpdateRecipe() {
                 return
             }
 
-            const res = await csrfFetch(`/api/recipes/${recipeId}`);
-            console.log("This is res:", res)
+            const res = await fetch(`/api/recipes/${recipeId}`);
             if (res.ok) {
                 const recipe = await res.json()
 
@@ -72,58 +73,50 @@ function UpdateRecipe() {
                 setCookTime(recipe.cook_time)
 
                 setServings(recipe.servings || 1)
-                setPreviewImage(recipe.image || "")
-                setRecipeImage(recipe.image || [])
+                // setPreviewImage(recipe.image || "")
+                // setRecipeImage(recipe.image || [])
 
                 setLoading(false)
 
-                console.log("this is recipe:", recipe)
+                // console.log("this is recipe:", recipe)
             }
         }
         getRecipeThunk();
     }, [recipeId])
 
-    useEffect(() => {
-        console.log("Prep Hours changed: ", prepHours);
-    }, [prepHours]);
-
-    useEffect(() => {
-        console.log("Prep Minutes changed: ", prepMinutes);
-    }, [prepMinutes]);
-
-    useEffect(() => {
-        console.log("Cook Hours changed: ", cookHours);
-    }, [cookHours]);
-
-    useEffect(() => {
-        console.log("Cook Minutes changed: ", cookMinutes);
-    }, [cookMinutes]);
-
-    function handleIngredientChange(i, event) {
-        const { name, value, type, checked } = event.target
-
+    function handleIngredientChange(i, field, value) {
         const values = [...ingredients];
-        if (type === 'checkbox') {
-            values[i] = {
-                ...values[i],
-                [name]: checked,
-            }
-        }
-        else {
-            values[i] = {
-                ...values[i],
-                [name]: value
-            }
+        values[i] = {
+            ...values[i],
+            [field]: value
         }
         setIngredients(values)
+        // const { name, value, type, checked } = event.target
+
+        // const values = [...ingredients];
+        // if (type === 'checkbox') {
+        //     values[i] = {
+        //         ...values[i],
+        //         [name]: checked,
+        //     }
+        // }
+        // else {
+        //     values[i] = {
+        //         ...values[i],
+        //         [name]: value
+        //     }
+        // }
+        // setIngredients(values)
     }
     function handleAddIngredient() {
         setIngredients([...ingredients, { ...initialIngredient }])
+        // console.log("Updated ingredients", ingredients);
     }
     function handleRemoveIngredient(i) {
         const values = [...ingredients];
         values.splice(i, 1);
         setIngredients(values)
+        // console.log("Updated ingredients", ingredients);
     }
 
     function handleDirectionChange(i, event) {
@@ -166,15 +159,16 @@ function UpdateRecipe() {
         });
     }
 
-    const handleOtherImages = (e) => {
-        if (e.target.files.length > 3) {
-            alert("You can only upload a maximum of 3 files");
-            e.target.value = "";
-        } else {
-            setOtherImages([...e.target.files]);
-        }
-    }
+    // const handleOtherImages = (e) => {
+    //     if (e.target.files.length > 3) {
+    //         alert("You can only upload a maximum of 3 files");
+    //         e.target.value = "";
+    //     } else {
+    //         setOtherImages([...e.target.files]);
+    //     }
+    // }
 
+    // console.log("Ingredients before submit", ingredients);
 
     const handleSubmit = async (e) => {
 
@@ -185,87 +179,51 @@ function UpdateRecipe() {
         const totalPrepTime = (parseInt(prepHours) || 0) * 60 + (parseInt(prepMinutes) || 0);
         const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
 
+        console.log("this is total prep time:", totalPrepTime)
+        console.log("this is total cook time", totalCookTime)
+
 
         formData.append("name", name)
         formData.append("description", description)
         formData.append("prep_time", totalPrepTime)
         formData.append("cook_time", totalCookTime)
         formData.append("servings", servings)
-        formData.append('preview_image', previewImage)
-        // formData.append('recipe_image', recipeImage)
-        otherImages.forEach((image, index) => {
-            formData.append(`other_images[${index}]`, image)
-        })
+        // formData.append('preview_image', previewImage)
+        // // formData.append('recipe_image', recipeImage)
+        // otherImages.forEach((image, index) => {
+        //     formData.append(`other_images[${index}]`, image)
+        // })
+        formData.append('ingredients', JSON.stringify(ingredients))
+        formData.append('directions', JSON.stringify(directions))
 
-        ingredients.forEach((ingredient, index) => {
-            formData.append(`ingredients[${index}].name`, ingredient.name)
-            formData.append(`ingredients[${index}].quantity`, ingredient.quantity)
-            formData.append(`ingredients[${index}].measurement`, ingredient.measurement)
-            formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
-        })
-
-        directions.forEach((direction, index) => {
-            formData.append(`directions[${index}].step`, direction.step)
-            formData.append(`directions[${index}].step_info`, direction.stepInfo)
-        })
-
-        // const payload = {
-        //     name: name,
-        //     description: description,
-        //     ingredients: ingredients,
-        //     directions: directions,
-        //     // totalPrepTime: prepTime,
-        //     // totalCookTime: cookTime,
-        //     // prepHours: prepHours,
-        //     // prepMinutes: prepMinutes,
-        //     // cookHours: cookHours,
-        //     // cookMinutes: cookMinutes,
-        //     prep_time: totalPrepTime,
-        //     cook_time: totalCookTime,
-        //     servings: servings,
-        //     preview_image: previewImage,
-        //     recipe_image: recipeImage
-        // }
-
-        const ingredientData = [];
-        ingredients.forEach((ingredient) => {
-            const ingredientObj = {
-                name: ingredient.name,
-                quantity: ingredient.quantity,
-                measurement: ingredient.measurement,
-                is_seasoning: ingredient.isSeasoning,
-            };
-            ingredientData.push(ingredientObj);
-        });
-        const directionData = [];
-        directions.forEach((direction) => {
-            const directionObj = {
-                step: direction.step,
-                step_info: direction.stepInfo,
-            };
-            directionData.push(directionObj);
-        });
-        const payload = {
-            name: name,
-            description: description,
-            prep_time: totalPrepTime,
-            cook_time: totalCookTime,
-            servings: servings,
-            preview_image: previewImage,
-            recipe_image: recipeImage,
-            ingredients: ingredientData,
-            directions: directionData,
-        };
-
-        const updatedRecipe = await dispatch(RecipeActions.updateRecipeThunk(recipeId, payload))
-            .catch((error) => {
-                // Handle the error here
-                console.error("Error:", error)
-            });
-
-        if (updatedRecipe) {
-            history.push(`/recipes/${updatedRecipe.id}`);
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
         }
+        
+        let updatedRecipe;
+
+            const recipe = await dispatch(RecipeActions.updateRecipeThunk(recipeId, formData))
+            if (recipe){
+                updatedRecipe = recipe
+                setName('')
+                setDescription('')
+                setIngredients([initialIngredient])
+                setDirections([initialDirection])
+                setPrepHours('')
+                setPrepMinutes('')
+                setCookHours('')
+                setCookMinutes('')
+                setServings('')
+                // setPreviewImage('')
+                // setOtherImages([])
+                setErrors([])
+                history.push(`/recipes/${recipe.id}`)
+            }
+
+        if(updatedRecipe){
+            console.log("Updated recipe", updatedRecipe)
+        }
+
     }
 
     return (
@@ -299,7 +257,7 @@ function UpdateRecipe() {
                                 type='text'
                                 name='name'
                                 value={ingredient.name}
-                                onChange={(e) => handleIngredientChange(index, e)}
+                                onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
                                 placeholder='Ingredient Name'
                                 required={index === 0}
                             />
@@ -307,7 +265,7 @@ function UpdateRecipe() {
                                 type='number'
                                 name='quantity'
                                 value={ingredient.quantity}
-                                onChange={(e) => handleIngredientChange(index, e)}
+                                onChange={(e) => handleIngredientChange(index, 'quantity', e.target.value)}
                                 placeholder='Quantity'
                                 required={index === 0}
                                 min='0'
@@ -317,7 +275,7 @@ function UpdateRecipe() {
                                 name='measurement'
                                 value={ingredient.measurement}
                                 required={index === 0}
-                                onChange={(e) => handleIngredientChange(index, e)}
+                                onChange={(e) => handleIngredientChange(index, 'measurement', e.target.value)}
                             >
                                 <option value='cup'>Cup</option>
                                 <option value='oz'>Oz</option>
@@ -334,9 +292,9 @@ function UpdateRecipe() {
                             <label>
                                 <input
                                     type='checkbox'
-                                    name='iSeasoning'
+                                    name='is_seasoning'
                                     checked={ingredient.is_seasoning}
-                                    onChange={(e) => handleIngredientChange(index, e)}
+                                    onChange={(e) => handleIngredientChange(index, 'is_seasoning', e.target.checked)}
                                 />
                                 Seasoning
                             </label>
@@ -443,7 +401,7 @@ function UpdateRecipe() {
                         rows="4"
                         placeholder='Description'>
                     </textarea>
-                    <h2>Images</h2>
+                    {/* <h2>Images</h2>
                     <h3>What will this recipe look like?</h3>
                     <h4>Main Image</h4>
                     <input
@@ -457,7 +415,7 @@ function UpdateRecipe() {
                         multiple
                         onChange={handleOtherImages}
                     >
-                    </input>
+                    </input> */}
                     <div id="form-submit-button">
                         <button
                             type="submit"
