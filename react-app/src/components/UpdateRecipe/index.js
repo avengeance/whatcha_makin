@@ -11,12 +11,12 @@ const initialIngredient = {
     name: "",
     quantity: 0,
     measurement: "",
-    isSeasoning: false,
+    is_seasoning: false,
 }
 
 const initialDirection = {
     step: 0,
-    stepInfo: "",
+    step_info: "",
 }
 
 function UpdateRecipe() {
@@ -143,7 +143,7 @@ function UpdateRecipe() {
             ...prevDirections,
             {
                 step: `${prevDirections.length + 1}`,
-                stepInfo: "",
+                step_info: "",
             },
         ])
     }
@@ -201,7 +201,7 @@ function UpdateRecipe() {
         }
         
         let updatedRecipe;
-
+        try{
             const recipe = await dispatch(RecipeActions.updateRecipeThunk(recipeId, formData))
             if (recipe){
                 updatedRecipe = recipe
@@ -220,6 +220,9 @@ function UpdateRecipe() {
                 history.push(`/recipes/${recipe.id}`)
             }
 
+        } catch (error){
+            console.error("There was an error updating the recipe", error)
+        }
         if(updatedRecipe){
             console.log("Updated recipe", updatedRecipe)
         }
@@ -321,7 +324,7 @@ function UpdateRecipe() {
                             />
                             <input
                                 type='text'
-                                name='stepInfo'
+                                name='step_info'
                                 value={direction.step_info}
                                 onChange={(e) => handleDirectionChange(index, e)}
                                 placeholder='Step Info'

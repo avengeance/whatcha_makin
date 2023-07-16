@@ -1,8 +1,8 @@
 import React from 'react'
-function DirectionForm({step, stepInfo}) {
+function DirectionForm({step, step_info}) {
     return {
       step,
-      stepInfo
+      step_info
     }; 
   }
   

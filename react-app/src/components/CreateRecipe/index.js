@@ -14,11 +14,11 @@ const initialIngredient = {
     name: "",
     quantity: 0,
     measurement: "",
-    isSeasoning: false,
+    is_seasoning: false,
 }
 const initialDirection = {
     step: 1,
-    stepInfo: "",
+    step_info: "",
 }
 
 function CreateRecipe() {
@@ -62,7 +62,7 @@ function CreateRecipe() {
 
     function handleIngredientChange(i, event) {
         const values = [...ingredients];
-        if (event.target.name === 'isSeasoning') {
+        if (event.target.name === 'is_seasoning') {
             values[i][event.target.name] = event.target.checked;
         } else {
             values[i][event.target.name] = event.target.value;
@@ -71,7 +71,7 @@ function CreateRecipe() {
     }
 
     function handleAddIngredient() {
-        setIngredients([...ingredients, { name: '', quantity: 0, measurement: '', isSeasoning: false }])
+        setIngredients([...ingredients, { name: '', quantity: 0, measurement: '', is_seasoning: false }])
     }
 
     function handleRemoveIngredient(i) {
@@ -87,7 +87,7 @@ function CreateRecipe() {
     }
     function handleAdddirection() {
         const newStep = directions.length + 1
-        setDirections([...directions, { step: newStep, stepInfo: "" }])
+        setDirections([...directions, { step: newStep, step_info: "" }])
     }
     function handleRemoveDirection(i) {
         const values = [...directions];
@@ -131,12 +131,12 @@ function CreateRecipe() {
         //     formData.append(`ingredients[${index}].name`, ingredient.name)
         //     formData.append(`ingredients[${index}].quantity`, ingredient.quantity)
         //     formData.append(`ingredients[${index}].measurement`, ingredient.measurement)
-        //     formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
+        //     formData.append(`ingredients[${index}].is_seasoning`, ingredient.is_seasoning)
         // })
 
         // directions.forEach((direction, index) => {
         //     formData.append(`directions[${index}].step`, direction.step)
-        //     formData.append(`directions[${index}].step_info`, direction.stepInfo)
+        //     formData.append(`directions[${index}].step_info`, direction.step_info)
         // })
         formData.append('ingredients', JSON.stringify(ingredients))
         formData.append('directions', JSON.stringify(directions))
@@ -231,8 +231,8 @@ function CreateRecipe() {
                         <label>
                             <input
                                 type='checkbox'
-                                name='isSeasoning'
-                                checked={ingredient.isSeasoning}
+                                name='is_seasoning'
+                                checked={ingredient.is_seasoning}
                                 onChange={(e) => handleIngredientChange(index, e)}
                             />
                             Seasoning
@@ -260,8 +260,8 @@ function CreateRecipe() {
                         />
                         <input
                             type='text'
-                            name='stepInfo'
-                            value={direction.stepInfo}
+                            name='step_info'
+                            value={direction.step_info}
                             onChange={(e) => handleDirectionChange(index, e)}
                             required
                             placeholder='Step Info'
