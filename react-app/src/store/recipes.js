@@ -78,30 +78,13 @@ export const createRecipeThunk = (formData) => async (dispatch) => {
 export const updateRecipeThunk = (recipeId, formData) => async (dispatch) => {
     const res = await csrfFetch(`/api/recipes/${recipeId}/edit/`, {
         method: "PUT",
-        body: formData,
+        body: JSON.stringify(Object.fromEntries(formData)),
     });
     console.log("This is thunk formData:", formData)
     const data = await res.json();
     console.log("This is thunk data:",data)
     dispatch(updateRecipe(data));
     return data;
-    // let jsonObject = {};
-    // for (const [key, value]  of formData.entries()) {
-    //     jsonObject[key] = value;
-    // }
-
-    // const res = await csrfFetch(`/api/recipes/${recipeId}/edit/`, {
-    //     method: "PUT",
-    //     body: JSON.stringify(jsonObject),
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    // });
-
-    // const data = await res.json();
-    // dispatch(updateRecipe(data));
-    // return data;
-    
 }
 
 export const deleteRecipeThunk = (recipeId) => async (dispatch) => {
