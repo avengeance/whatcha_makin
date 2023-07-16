@@ -394,19 +394,33 @@ def update_recipe(id):
             directions = json.loads(directions_data)
         else:
             directions = directions_data
+            
+            
         print("                           directions                 ", directions)
+        
+        
+        
+        current_directions = Direction.query.filter_by(recipe_id=recipe.id).all()
+        current_directions_steps = {direction.step: direction for direction in current_directions}
         for direction in directions:
-            existing_direction = Direction.query.filter_by(recipe_id=recipe.id, step=direction['step']).first()
-            if existing_direction:
-                existing_direction.step_info = direction['step_info']
+            if direction['step'] in current_directions_steps:
+                current_directions_steps[direction['step']].step_info = direction['step_info']
             else:
-                new_direction = Direction(
-                    recipe_id=recipe.id,
-                    step=direction['step'],
-                    step_info=direction['step_info']
-                )
+                new_direction = Direction(recipe_id=recipe.id, step=direction['step'], step_info=direction['step_info'])
+            # existing_direction = Direction.query.filter_by(recipe_id=recipe.id, step=direction['step']).first()
+            # if existing_direction:
+            #     existing_direction.step_info = direction['step_info']
+            # else:
+            #     new_direction = Direction(
+            #         recipe_id=recipe.id,
+            #         step=direction['step'],
+            #         step_info=direction['step_info']
+            #     )
                 db.session.add(new_direction)
-        db.session.commit()
+        for direction in current_directions:
+            if direction.step not in [d['step'] for d in directions]:
+                db.session.delete(direction)
+        # db.session.commit()
         # ingredients = json.loads(request.form.get('ingredients', '[]'))
         # ingredients = data['ingredients']
         # ingredients = data.get('ingredients',{})
@@ -415,30 +429,65 @@ def update_recipe(id):
             ingredients = json.loads(ingredients_data)
         else:
             ingredients = ingredients_data
+            
+            
         print("                             ingredients               ", ingredients)
-        for recipe_ingredient in ingredients:
-            ingredient = recipe_ingredient
+        
+        current_recipe_ingredients = RecipeIngredient.query.filter_by(recipe_id=recipe.id).all()
+        current_recipe_ingredients_ids = {ri.ingredient_id: ri for ri in current_recipe_ingredients}
+        for ingredient in ingredients:
             existing_ingredient = Ingredient.query.filter_by(id=ingredient['id']).first()
-            print("                                            existing                                   ",existing_ingredient)
             if existing_ingredient:
-                new_ingredient = existing_ingredient
+                existing_ingredient.is_seasoning = ingredient['is_seasoning']
+                if existing_ingredient.id in current_recipe_ingredients_ids:
+                    existing_recipe_ingredient = current_recipe_ingredients_ids[existing_ingredient.id]
+                    existing_recipe_ingredient.quantity = ingredient['quantity']
+                    existing_recipe_ingredient.measurement = ingredient['measurement']
+                else:
+                    new_recipe_ingredient = RecipeIngredient(
+                        recipe_id=recipe.id, 
+                        ingredient_id=existing_ingredient.id, 
+                        quantity=ingredient['quantity'],
+                        measurement =ingredient['measurement']
+                        )
+                    db.session.add(new_recipe_ingredient)
             else:
-                new_ingredient = Ingredient(
-                    name = ingredient['name'],                
-                    is_seasoning = ingredient['is_seasoning']
-                )
+                new_ingredient = Ingredient(name=ingredient['name'], is_seasoning=ingredient['is_seasoning'])
                 db.session.add(new_ingredient)
                 db.session.commit()
-                
                 new_recipe_ingredient = RecipeIngredient(
-                    recipe_id = recipe.id,
-                    ingredient_id = new_ingredient.id,  
-                    quantity = recipe_ingredient['quantity'],
-                    measurement = recipe_ingredient['measurement']
-                )
-
+                    recipe_id=recipe.id, 
+                    ingredient_id=new_ingredient.id, 
+                    quantity=ingredient['quantity'], 
+                    measurement=ingredient['measurement']
+                    )
                 db.session.add(new_recipe_ingredient)
-                db.session.commit()
+        for recipe_ingredient in current_recipe_ingredients:
+            if recipe_ingredient.ingredient_id not in [i['id'] for i in ingredients]:
+                db.session.delete(recipe_ingredient)
+                    
+        # for recipe_ingredient in ingredients:
+            # ingredient = recipe_ingredient
+            # print("                                            existing                                   ",existing_ingredient)
+            # if existing_ingredient:
+            #     new_ingredient = existing_ingredient
+            # else:
+            #     new_ingredient = Ingredient(
+            #         name = ingredient['name'],                
+            #         is_seasoning = ingredient['is_seasoning']
+            #     )
+            #     db.session.add(new_ingredient)
+            #     db.session.commit()
+                
+            #     new_recipe_ingredient = RecipeIngredient(
+            #         recipe_id = recipe.id,
+            #         ingredient_id = new_ingredient.id,  
+            #         quantity = recipe_ingredient['quantity'],
+            #         measurement = recipe_ingredient['measurement']
+            #     )
+
+            #     db.session.add(new_recipe_ingredient)
+            #     db.session.commit()
 
 
         db.session.commit()
