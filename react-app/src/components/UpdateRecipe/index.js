@@ -50,7 +50,7 @@ function UpdateRecipe() {
 
     const [errors, setErrors] = useState({});
 
-    console.log("this is current recipe:", currentRecipe)
+    // console.log("this is current recipe:", currentRecipe)
 
     useEffect(() => {
         async function getRecipeThunk() {
@@ -59,7 +59,7 @@ function UpdateRecipe() {
                 return
             }
 
-            const res = await csrfFetch(`/api/recipes/${recipeId}`);
+            const res = await fetch(`/api/recipes/${recipeId}`);
             if (res.ok) {
                 const recipe = await res.json()
 
@@ -117,14 +117,17 @@ function UpdateRecipe() {
             }
         }
         setIngredients(values)
+        // console.log("Updated ingredients", ingredients);
     }
     function handleAddIngredient() {
         setIngredients([...ingredients, { ...initialIngredient }])
+        // console.log("Updated ingredients", ingredients);
     }
     function handleRemoveIngredient(i) {
         const values = [...ingredients];
         values.splice(i, 1);
         setIngredients(values)
+        // console.log("Updated ingredients", ingredients);
     }
 
     function handleDirectionChange(i, event) {
@@ -176,6 +179,7 @@ function UpdateRecipe() {
     //     }
     // }
 
+    // console.log("Ingredients before submit", ingredients);
 
     const handleSubmit = async (e) => {
 
@@ -197,21 +201,53 @@ function UpdateRecipe() {
         // otherImages.forEach((image, index) => {
         //     formData.append(`other_images[${index}]`, image)
         // })
-
+        // console.log("Ingredients to submit", ingredients);
+        // console.log("this is directions", formData)
         formData.append('ingredients', JSON.stringify(ingredients))
         formData.append('directions', JSON.stringify(directions))
 
-        // console.log("this is directions:", directions)
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0] + ', ' + pair[1]);
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
             // console.log("this is pair:", pair)
-        // }
-
-
-        const data = await dispatch(RecipeActions.updateRecipeThunk(recipeId,formData))
-        if(data){
-            history.push(`/recipes/${recipeId}`)
         }
+
+        console.log(formData.get('name')); 
+        console.log(formData.get('ingredients'));
+        let updatedRecipe;
+        try{
+            const recipe = await dispatch(RecipeActions.updateRecipeThunk(recipeId, formData))
+            if (recipe){
+                updatedRecipe = recipe
+                setName('')
+                setDescription('')
+                setIngredients([initialIngredient])
+                setDirections([initialDirection])
+                setPrepHours('')
+                setPrepMinutes('')
+                setCookHours('')
+                setCookMinutes('')
+                setServings('')
+                // setPreviewImage('')
+                // setOtherImages([])
+                setErrors([])
+                history.push(`/recipes/${recipe.id}`)
+            }
+        } catch (error){
+            console.log("Error updating recipe", error)
+        }
+
+        if(updatedRecipe){
+            console.log("Updated recipe", updatedRecipe)
+        }
+
+        // console.log("this is directions:", directions)
+
+        // const data = await dispatch(RecipeActions.updateRecipeThunk(recipeId,formData))
+        // console.log("Updated recipe(after dispatch)", data);
+        // if(data){
+        //     console.log("Updated recipe", data);
+        //     history.push(`/recipes/${recipeId}`)
+        // }
 
         // ingredients.forEach((ingredient, index) => {
         //     formData.append(`ingredients[${index}].name`, ingredient.name)

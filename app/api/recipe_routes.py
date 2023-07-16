@@ -276,7 +276,8 @@ def update_recipe(id):
         recipe = Recipe.query.get(id)
         # print("This is recipe:", recipe.to_dict())
         print("****************Recipe ingredients:************", recipe.recipe_ingredients)
-        # print("----------------request form---------------------", request.form)        
+        print("----------------Recipe directions--------------", recipe.directions)
+        print("----------------request form---------------------", request.form)        
         # print("This is recipe.name", recipe.name)
         # print("this is request form name:", request.form['name'],)
         # print("This is recipe:", recipe.directions)
@@ -286,9 +287,12 @@ def update_recipe(id):
         recipe.cook_time = request.form.get('cook_time', recipe.cook_time)
         recipe.servings = request.form.get('servings', recipe.servings)
 
+        db.session.add(recipe)
+        db.session.commit()
         
-        # directions = json.loads(request.form.get('directions'))
-        directions = recipe.directions
+        directions = json.loads(request.form.get('directions'))
+        # directions = recipe.directions
+        # directions = json.loads(request.data['directions'])
         Direction.query.filter_by(recipe_id=id).delete()
         for direction in directions:
             new_direction = Direction(
@@ -302,35 +306,41 @@ def update_recipe(id):
             db.session.add(new_direction)
             db.session.commit()
             
-        # ingredients = json.loads(request.form.get('ingredients'))
-        ingredients = recipe.recipe_ingredients
-        print("this is ingredients:", ingredients)
-        
+        ingredients = json.loads(request.form.get('ingredients'))
+        # ingredients = json.loads(request.data['ingredients'])
+        # print("Received ingredients", request.form.get('ingredients'))
+        # ingredients = recipe.recipe_ingredients
+        # print("this is ingredients:", ingredients)
         # Loop through the RecipeIngredients
+        # print("Loaded ingredients", ingredients)
         for recipe_ingredient in ingredients:
-
             # Get the related Ingredient using the foreign key
             ingredient = recipe_ingredient.ingredients
+            # print("Updating ingredient", ingredient)
   
-             # Create a new Ingredient object with properties from the related Ingredient
-            new_ingredient = Ingredient(
-                name = ingredient.name,  
-                is_seasoning = ingredient.is_seasoning
-            )
+            existing = Ingredient.query.filter_by(name=ingredient.name).first()
+            if existing:
+                new_ingredient = existing
+            else:
+                # Create a new Ingredient object with properties from the related Ingredient
+                new_ingredient = Ingredient(
+                    name = ingredient.name,  
+                    is_seasoning = ingredient.is_seasoning
+                )
 
-            db.session.add(new_ingredient)
-            db.session.commit()
+                db.session.add(new_ingredient)
+                db.session.commit()
 
-            # Create a new RecipeIngredient linking the new Ingredient 
-            new_recipe_ingredient = RecipeIngredient(
-                recipe_id = recipe.id,
-                ingredient_id = new_ingredient.id,  
-                quantity = recipe_ingredient.quantity,
-                measurement = recipe_ingredient.measurement
-            )
+                # Create a new RecipeIngredient linking the new Ingredient 
+                new_recipe_ingredient = RecipeIngredient(
+                    recipe_id = recipe.id,
+                    ingredient_id = new_ingredient.id,  
+                    quantity = recipe_ingredient.quantity,
+                    measurement = recipe_ingredient.measurement
+                )
 
-            db.session.add(new_recipe_ingredient)
-            db.session.commit()
+                db.session.add(new_recipe_ingredient)
+                db.session.commit()
         
         # Ingredient.query.filter_by(recipe_id=id).delete()
         # for ingredient in ingredients:
