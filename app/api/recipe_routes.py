@@ -266,11 +266,16 @@ def update_recipe(id):
             }), 404
 
         data = request.get_json()
+        
+        prep_time = int(data['prep_time']) 
+        cook_time = int(data['cook_time'])
 
         recipe.name = data.get('name', recipe.name)
         recipe.description = data.get('description', recipe.description)
-        recipe.prep_time = int(data.get('prep_time', recipe.prep_time))
-        recipe.cook_time = int(data.get('cook_time', recipe.cook_time))
+        # recipe.prep_time = int(data.get('prep_time', recipe.prep_time))
+        # recipe.cook_time = int(data.get('cook_time', recipe.cook_time))
+        recipe.prep_time = prep_time
+        recipe.cook_time = cook_time
         recipe.servings = data.get('servings', recipe.servings)
 
         print("                           prep time                          ", recipe.prep_time)
@@ -306,12 +311,10 @@ def update_recipe(id):
         current_recipe_ingredients_ids = {ri.ingredient_id: ri for ri in current_recipe_ingredients}
         ingredient_ids =[]
         for ingredient in ingredients:
-            print("                                      ingredient                                         ", ingredient)
             if 'id' in ingredient:
                 existing_ingredient = Ingredient.query.filter_by(id=ingredient['id']).first()
                 ingredient_ids.append(ingredient['id'])
                 if existing_ingredient:
-                    print("                               existing ingredient                                 ", existing_ingredient.to_dict())
                     existing_ingredient.is_seasoning = ingredient['is_seasoning']
                     if existing_ingredient.id in current_recipe_ingredients_ids:
                         existing_recipe_ingredient = current_recipe_ingredients_ids[existing_ingredient.id]

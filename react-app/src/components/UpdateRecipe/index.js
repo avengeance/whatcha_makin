@@ -176,8 +176,12 @@ function UpdateRecipe() {
         setErrors({})
 
         const formData = new FormData()
-        const totalPrepTime = (parseInt(prepHours) || 0) * 60 + (parseInt(prepMinutes) || 0);
-        const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
+        // const totalPrepTime = (parseInt(prepHours) || 0) * 60 + (parseInt(prepMinutes) || 0);
+        // const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
+        const totalPrepTime = (prepHours || 0) * 60 + (parseInt(prepMinutes) || 0);
+        const totalCookTime = (cookHours || 0) * 60 + (parseInt(cookMinutes) || 0); 
+        // const totalPrepTime = ((prepHours || 0) * 60 + (prepMinutes || 0));
+        // const totalCookTime = ((cookHours || 0) * 60 + (cookMinutes || 0)); 
 
         console.log("this is total prep time:", totalPrepTime)
         console.log("this is total cook time", totalCookTime)
@@ -196,9 +200,9 @@ function UpdateRecipe() {
         formData.append('ingredients', JSON.stringify(ingredients))
         formData.append('directions', JSON.stringify(directions))
 
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
-        }
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ', ' + pair[1]);
+        // }
         
         let updatedRecipe;
         try{
@@ -209,11 +213,13 @@ function UpdateRecipe() {
                 setDescription('')
                 setIngredients([initialIngredient])
                 setDirections([initialDirection])
+                // setPrepTime(totalPrepTime)
+                // setCookTime(totalCookTime)
                 setPrepHours('')
                 setPrepMinutes('')
                 setCookHours('')
                 setCookMinutes('')
-                setServings('')
+                // setServings('')
                 // setPreviewImage('')
                 // setOtherImages([])
                 setErrors([])
@@ -346,7 +352,9 @@ function UpdateRecipe() {
                     <h4>Prep time:</h4>
                     <select
                         name='hours'
-                        value={prepHours !== null ? prepHours.toString() : ''}
+                        type='number'
+                        value={prepHours}
+                        // value={prepHours !== null ? prepHours.toString() : ''}
                         onChange={(e) => setPrepHours(e.target.value !== "" ? parseInt(e.target.value) : null)}
                     >
                         {[...Array(169).keys()].map((i) =>
@@ -355,8 +363,10 @@ function UpdateRecipe() {
                     </select>
                     <select
                         name='minutes'
-                        value={prepTime !== null ? prepTime.toString() : ''}
-                        onChange={(e) => setPrepTime(e.target.value !== "" ? parseInt(e.target.value) : null)}
+                        type='number'
+                        value={prepMinutes}
+                        // value={prepTime !== null ? prepTime.toString() : ''}
+                        onChange={(e) => setPrepMinutes(e.target.value !== "" ? parseInt(e.target.value) : null)}
                         required
                     >
                         {Array.from({ length: 60 }, (_, i) => i + 1).map((i) =>
@@ -367,7 +377,9 @@ function UpdateRecipe() {
                     <h4>Cook time:</h4>
                     <select
                         name='hours'
-                        value={cookHours !== null ? cookHours.toString() : ''}
+                        type='number'
+                        value={cookHours}
+                        // value={cookHours !== null ? cookHours.toString() : ''}
                         onChange={(e) => setCookHours(e.target.value !== "" ? parseInt(e.target.value) : null)}
                     >
                         {[...Array(169).keys()].map((i) =>
@@ -376,8 +388,10 @@ function UpdateRecipe() {
                     </select>
                     <select
                         name='minutes'
-                        value={cookTime !== null ? cookTime.toString() : ''}
-                        onChange={(e) => setCookTime(e.target.value !== "" ? parseInt(e.target.value) : null)}
+                        type='number'
+                        value={cookMinutes}
+                        // value={cookTime !== null ? cookTime.toString() : ''}
+                        onChange={(e) => setCookMinutes(e.target.value !== "" ? parseInt(e.target.value) : null)}
                         required
                     >
                         {Array.from({ length: 60 }, (_, i) => i + 1).map((i) =>
