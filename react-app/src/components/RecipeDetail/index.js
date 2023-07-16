@@ -195,6 +195,7 @@ import "./RecipeDetail.css";
                                 </div>
                             </div>
                         </div>
+                        <div id='recipe-directions-container'>
                         <div className='recipe-directions-container'>
                             <div className='recipe-directions'>
                                 <div id='direction-text'>
@@ -206,30 +207,34 @@ import "./RecipeDetail.css";
                                     ))}
                             </div>
                         </div>
+                        </div>
+                        <div id='recipe-reviews-container'>
                         <div className='recipe-reviews-container'>
                             <div className='recipe-reviews'>
                                 <div className='recipe-review-header'>
                                     {currentRecipe ? (
                                         <>
                                             <div className='recipe-review-header'>
-                                                <h3>{currentRecipe?.reviews?.length}...</h3>
+                                                {/* <h3>{currentRecipe?.reviews?.length}...</h3> */}
                                             {/* <h3>{currentRecipe?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipe.reviews.length === 1 ? 'Review' : 'Reviews'}</h3> */}
+                                            {/* <h3>{currentRecipe && currentRecipe.reviews && currentRecipe.reviews.length === 0 ? 'No Reviews Yet' : currentRecipe.reviews.length === 1 ? 'Review' : 'Reviews'}</h3> */}
+                                            <h3>{currentRecipe?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipe?.reviews?.length === 1 ? 'Review' : 'Reviews'}</h3>
                                             </div>
-
-
-                                        {/* </div> */}
-                                        <p>Number of Reviews: {currentRecipe?.reviews?.length}</p>
                                         {/* <p> Rating: <i className='fas fa-star'></i> {currentRecipe?.avg_rating.toFixed(1)}</p> */}
                                         {user && user.id !== currentRecipe?.owner_id && !hasReviewed ? (
                                             <button id='post-review' onClick={handlePostReview}>Post Your Review</button>
                                             ) :
                                             null
                                     }
+                                        <div id='number-review'>
+                                        <h4># {currentRecipe?.reviews?.length}</h4>
+                                        </div>
                                 </>
                                 ) : (
                                 'Loading...'
                                     )}
                             </div>
+                        </div>
                             {currentReviews.map((review, i) => (
                                     review && (
                                         <div key={i} className='recipe-review-container'>

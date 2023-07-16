@@ -165,16 +165,50 @@
     border: 3px solid black;
 }
 
+#recipe-directions-container{
+    display: flex;
+    justify-content: center;
+}
+
 .recipe-directions-container{
+    display: flex;
+    justify-content: center;
     padding-left: 30px;
     padding-right: 30px;
     background-color: #C6E08D;
     border-radius: 25px;
     border: 3px solid black;
+    width: 60%;
 }
 #direction-text{
     display: flex;
     justify-content: center;
+}
+
+#recipe-reviews-container{
+    display: flex;
+    justify-content: center;
+    /* border: 3px solid blue; */
+}
+
+.recipe-reviews-container{
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: #C6E08D;
+    border-radius: 25px;
+    width: 60%;
+    border: 3px solid black;
+}
+
+.recipe-review-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /* border: 1px solid red; */
+}
+
+.recipe-review-header h3{
+    padding-right: 10px;
 }
 
 #review-created{
