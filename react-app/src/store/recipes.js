@@ -80,9 +80,7 @@ export const updateRecipeThunk = (recipeId, formData) => async (dispatch) => {
         method: "PUT",
         body: JSON.stringify(Object.fromEntries(formData)),
     });
-    console.log("This is thunk formData:", formData)
     const data = await res.json();
-    console.log("This is thunk data:",data)
     dispatch(updateRecipe(data));
     return data;
 }

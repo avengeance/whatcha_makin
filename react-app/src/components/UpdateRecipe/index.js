@@ -84,24 +84,29 @@ function UpdateRecipe() {
         getRecipeThunk();
     }, [recipeId])
 
-    function handleIngredientChange(i, event) {
-        const { name, value, type, checked } = event.target
-
+    function handleIngredientChange(i, field, value) {
         const values = [...ingredients];
-        if (type === 'checkbox') {
-            values[i] = {
-                ...values[i],
-                [name]: checked,
-            }
-        }
-        else {
-            values[i] = {
-                ...values[i],
-                [name]: value
-            }
+        values[i] = {
+            ...values[i],
+            [field]: value
         }
         setIngredients(values)
-        // console.log("Updated ingredients", ingredients);
+        // const { name, value, type, checked } = event.target
+
+        // const values = [...ingredients];
+        // if (type === 'checkbox') {
+        //     values[i] = {
+        //         ...values[i],
+        //         [name]: checked,
+        //     }
+        // }
+        // else {
+        //     values[i] = {
+        //         ...values[i],
+        //         [name]: value
+        //     }
+        // }
+        // setIngredients(values)
     }
     function handleAddIngredient() {
         setIngredients([...ingredients, { ...initialIngredient }])
@@ -174,6 +179,9 @@ function UpdateRecipe() {
         const totalPrepTime = (parseInt(prepHours) || 0) * 60 + (parseInt(prepMinutes) || 0);
         const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
 
+        console.log("this is total prep time:", totalPrepTime)
+        console.log("this is total cook time", totalCookTime)
+
 
         formData.append("name", name)
         formData.append("description", description)
@@ -185,8 +193,6 @@ function UpdateRecipe() {
         // otherImages.forEach((image, index) => {
         //     formData.append(`other_images[${index}]`, image)
         // })
-        // console.log("Ingredients to submit", ingredients);
-        // console.log("this is directions", formData)
         formData.append('ingredients', JSON.stringify(ingredients))
         formData.append('directions', JSON.stringify(directions))
 
@@ -195,11 +201,8 @@ function UpdateRecipe() {
         }
         
         let updatedRecipe;
-        // try{
-            console.log("In Try formData:", formData)
-            console.log("this is recipeId:", recipeId)
+
             const recipe = await dispatch(RecipeActions.updateRecipeThunk(recipeId, formData))
-            console.log("In Try recipe:", recipe)
             if (recipe){
                 updatedRecipe = recipe
                 setName('')
@@ -216,102 +219,11 @@ function UpdateRecipe() {
                 setErrors([])
                 history.push(`/recipes/${recipe.id}`)
             }
-        // } catch (error){
-        //     console.log("Error updating recipe", error)
-        // }
 
         if(updatedRecipe){
             console.log("Updated recipe", updatedRecipe)
         }
 
-        // console.log("this is directions:", directions)
-
-        // const data = await dispatch(RecipeActions.updateRecipeThunk(recipeId,formData))
-        // console.log("Updated recipe(after dispatch)", data);
-        // if(data){
-        //     console.log("Updated recipe", data);
-        //     history.push(`/recipes/${recipeId}`)
-        // }
-
-        // ingredients.forEach((ingredient, index) => {
-        //     formData.append(`ingredients[${index}].name`, ingredient.name)
-        //     formData.append(`ingredients[${index}].quantity`, ingredient.quantity)
-        //     formData.append(`ingredients[${index}].measurement`, ingredient.measurement)
-        //     formData.append(`ingredients[${index}].is_seasoning`, ingredient.isSeasoning)
-        // })
-
-        // directions.forEach((direction, index) => {
-        //     formData.append(`directions[${index}].step`, direction.step)
-        //     formData.append(`directions[${index}].step_info`, direction.stepInfo)
-        // })
-
-
-        // const ingredientData = [];
-        // ingredients.forEach((ingredient) => {
-        //     const ingredientObj = {
-        //         name: ingredient.name,
-        //         quantity: ingredient.quantity,
-        //         measurement: ingredient.measurement,
-        //         is_seasoning: ingredient.isSeasoning,
-        //     };
-        //     ingredientData.push(ingredientObj);
-        // });
-        // const directionData = [];
-        // directions.forEach((direction) => {
-        //     const directionObj = {
-        //         step: direction.step,
-        //         step_info: direction.stepInfo,
-        //     };
-        //     directionData.push(directionObj);
-        // });
-        // const payload = {
-        //     name: name,
-        //     description: description,
-        //     prep_time: totalPrepTime,
-        //     cook_time: totalCookTime,
-        //     servings: servings,
-        //     preview_image: previewImage,
-        //     recipe_image: recipeImage,
-        //     ingredients: ingredientData,
-        //     directions: directionData,
-        // };
-
-        // let updatedRecipe;
-
-        // try {
-        //     const recipe = await dispatch(RecipeActions.updateRecipeThunk(recipeId, formData))
-        //     const updatedRecipeId = recipe.id
-        //     const url = `/recipes/${updatedRecipeId}`
-            
-        //     if(recipe){
-        //         updatedRecipe = recipe
-        //         setName('')
-        //         setDescription('')
-        //         setIngredients([initialIngredient])
-        //         setDirections([initialDirection])
-        //         setPrepHours('')
-        //         setPrepMinutes('')
-        //         setCookHours('')
-        //         setCookMinutes('')
-        //         setServings('')
-        //         setErrors([])
-        //         history.push(url)
-        //     }
-            
-        // } catch (error) {
-            
-        // }
-
-
-
-        //     .catch((error) => {
-        //         // Handle the error here
-        //         console.error("Error:", error)
-        //     });
-
-        // if (updatedRecipe) {
-        //     history.push(`/recipes/${updatedRecipe.id}`);
-        // }
     }
 
     return (
@@ -345,7 +257,7 @@ function UpdateRecipe() {
                                 type='text'
                                 name='name'
                                 value={ingredient.name}
-                                onChange={(e) => handleIngredientChange(index, e)}
+                                onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
                                 placeholder='Ingredient Name'
                                 required={index === 0}
                             />
@@ -353,7 +265,7 @@ function UpdateRecipe() {
                                 type='number'
                                 name='quantity'
                                 value={ingredient.quantity}
-                                onChange={(e) => handleIngredientChange(index, e)}
+                                onChange={(e) => handleIngredientChange(index, 'quantity', e.target.value)}
                                 placeholder='Quantity'
                                 required={index === 0}
                                 min='0'
@@ -363,7 +275,7 @@ function UpdateRecipe() {
                                 name='measurement'
                                 value={ingredient.measurement}
                                 required={index === 0}
-                                onChange={(e) => handleIngredientChange(index, e)}
+                                onChange={(e) => handleIngredientChange(index, 'measurement', e.target.value)}
                             >
                                 <option value='cup'>Cup</option>
                                 <option value='oz'>Oz</option>
@@ -380,9 +292,9 @@ function UpdateRecipe() {
                             <label>
                                 <input
                                     type='checkbox'
-                                    name='iSeasoning'
+                                    name='is_seasoning'
                                     checked={ingredient.is_seasoning}
-                                    onChange={(e) => handleIngredientChange(index, e)}
+                                    onChange={(e) => handleIngredientChange(index, 'is_seasoning', e.target.checked)}
                                 />
                                 Seasoning
                             </label>
