@@ -51,28 +51,26 @@ function UpdateRecipe() {
   const [stepCounter, setStepCounter] = useState(1);
 
   const [nameValid, setNameValid] = useState(false);
+  const [ingredientsValid, setIngredientsValid] = useState(false);
+  const [directionsValid, setDirectionsValid] = useState(false);
+  const [prepTimeValid, setPrepTimeValid] = useState(false);
+  const [cookTimeValid, setCookTimeValid] = useState(false);
+  const [servingsValid, setServingsValid] = useState(false);
 
   const [errors, setErrors] = useState({});
 
   const onNameChange = (e) => {
     const inputValue = e.target.value;
     const valid = validators.validateName(inputValue);
-    console.log("validateName return value: ", valid);
     setNameValid(valid);
     if (!valid) {
       setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
     } else {
       setErrors([]);
       setReviews([]);
-      console.log(nameValid);
     }
     setName(inputValue);
-    console.log("After setting nameValid, valid value: ", valid);
   };
-
-  useEffect(() => {
-    console.log("useEffect name valid:", nameValid);
-  }, [nameValid]);
 
   useEffect(() => {
     async function getRecipeThunk() {
@@ -88,23 +86,41 @@ function UpdateRecipe() {
         setName(recipe.name || "");
         setNameValid(validators.validateName(recipe.name || ""));
         setDescription(recipe.description || "");
-        setIngredients(recipe.ingredients || []);
-        setDirections(recipe.directions || []);
+
+        const recipeIngredients = recipe.ingredients.map((ingredient) => ({
+          ...ingredient,
+          isValid: validators.validateIngredientName(ingredient.name),
+        }));
+        setIngredients(recipeIngredients);
+        setIngredientsValid(
+          recipeIngredients.every((ingredient) => ingredient.isValid)
+        );
+
+        const recipeDirections = recipe.directions.map((direction) => ({
+          ...direction,
+          isValid: validators.validateStepInfo(direction.step_info),
+        }));
+        setDirections(recipeDirections);
+        setDirectionsValid(
+          recipeDirections.every((direction) => direction.isValid)
+        );
 
         setPrepTime(recipe.prep_time);
-        setCookTime(recipe.cook_time);
-
         const prepHours = Math.floor(recipe.prep_time / 60);
         const prepMinutes = recipe.prep_time % 60;
         setPrepHours(prepHours);
         setPrepMinutes(prepMinutes);
+        setPrepTimeValid(validators.validatePrepTime(prepHours, prepMinutes));
 
+        setCookTime(recipe.cook_time);
         const cookHours = Math.floor(recipe.cook_time / 60);
         const cookMinutes = recipe.cook_time % 60;
         setCookHours(cookHours);
         setCookMinutes(cookMinutes);
+        setCookTimeValid(validators.validateCookTime(cookHours, cookMinutes));
 
         setServings(recipe.servings || 1);
+        setServingsValid(validators.validateServings(recipe.servings || 1));
 
         setLoading(false);
       }
@@ -112,12 +128,24 @@ function UpdateRecipe() {
     getRecipeThunk();
   }, [recipeId]);
 
+  useEffect(() => {
+    setIngredientsValid(ingredients.every((ingredient) => ingredient.isValid));
+  }, [ingredients]);
+
+  useEffect(() => {
+    setDirectionsValid(directions.every((direction) => direction.isValid));
+  }, [directions]);
+
   function handleIngredientChange(i, field, value) {
     const values = [...ingredients];
     values[i] = {
       ...values[i],
       [field]: value,
     };
+
+    if (field === "name") {
+      values[i].isValid = validators.validateIngredientName(value);
+    }
     setIngredients(values);
   }
   function handleAddIngredient() {
@@ -143,6 +171,7 @@ function UpdateRecipe() {
       values[i] = {
         ...values[i],
         step_info: value,
+        isValid: validators.validateStepInfo(value),
       };
     }
 
@@ -517,7 +546,18 @@ function UpdateRecipe() {
                     >
                     </input> */}
         <div id="form-submit-button">
-          <button type="submit" className="submit-button" disabled={!nameValid}>
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={
+              !nameValid ||
+              !ingredientsValid ||
+              !directionsValid ||
+              !prepTimeValid ||
+              !cookTimeValid ||
+              !servingsValid
+            }
+          >
             Update Recipe
           </button>
         </div>
