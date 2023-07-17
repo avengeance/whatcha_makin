@@ -4,7 +4,7 @@ export const MIN_INGREDIENT_NAME_LENGTH = 3;
 
 // Name validation
 export const validateName = (name) => {
-  return name.length >= MIN_NAME_LENGTH && /^[a-zA-Z]+$/.test(name);
+  return name.length >= MIN_NAME_LENGTH && /^[a-zA-Z\s]+$/.test(name);
 };
 
 // Ingredient name validation

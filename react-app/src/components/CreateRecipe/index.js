@@ -50,6 +50,7 @@ function CreateRecipe() {
 
   const [errors, setErrors] = useState([]);
   const [csrfToken, setCsrfToken] = useState("");
+  const [reviews, setReviews] = useState([]);
 
   const onNameChange = (e) => {
     const valid = validators.validateName(e.target.value);
@@ -60,6 +61,7 @@ function CreateRecipe() {
     } else {
       setNameValid(valid);
       setName(e.target.value);
+      setReviews([]);
     }
   };
 

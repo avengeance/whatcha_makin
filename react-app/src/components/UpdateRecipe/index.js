@@ -45,6 +45,7 @@ function UpdateRecipe() {
   // const [previewImage, setPreviewImage] = useState(null);
   // const [recipeImage, setRecipeImage] = useState(null);
   // const [otherImages, setOtherImages] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [stepCounter, setStepCounter] = useState(1);
@@ -54,16 +55,24 @@ function UpdateRecipe() {
   const [errors, setErrors] = useState({});
 
   const onNameChange = (e) => {
-    const valid = validators.validateName(e.target.value);
+    const inputValue = e.target.value;
+    const valid = validators.validateName(inputValue);
+    console.log("validateName return value: ", valid);
     setNameValid(valid);
-    setName(e.target.value);
     if (!valid) {
       setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
     } else {
-      setNameValid(valid);
-      setName(e.target.value);
+      setErrors([]);
+      setReviews([]);
+      console.log(nameValid);
     }
+    setName(inputValue);
+    console.log("After setting nameValid, valid value: ", valid);
   };
+
+  useEffect(() => {
+    console.log("useEffect name valid:", nameValid);
+  }, [nameValid]);
 
   useEffect(() => {
     async function getRecipeThunk() {
@@ -77,6 +86,7 @@ function UpdateRecipe() {
 
         setRecipe(recipe);
         setName(recipe.name || "");
+        setNameValid(validators.validateName(recipe.name || ""));
         setDescription(recipe.description || "");
         setIngredients(recipe.ingredients || []);
         setDirections(recipe.directions || []);
