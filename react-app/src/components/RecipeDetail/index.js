@@ -40,6 +40,7 @@ const RecipeDetail = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const postedRef = useRef(false);
   const [reviewCount, setReviewCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (recipeId) {
@@ -48,6 +49,7 @@ const RecipeDetail = () => {
         .then((currentRecipe) => {
           if (currentRecipes?.Owner?.id) {
             setCurrentRecipe(currentRecipes);
+            setLoading(false);
             const avgRating = currentRecipe?.avg_rating || 0;
           }
         })

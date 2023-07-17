@@ -10,7 +10,7 @@ import "./UpdateRecipe.css";
 const initialIngredient = {
   name: "",
   quantity: 0,
-  measurement: "",
+  measurement: "cup",
   is_seasoning: false,
 };
 
@@ -71,13 +71,19 @@ function UpdateRecipe() {
         setPrepTime(recipe.prep_time);
         setCookTime(recipe.cook_time);
 
+        const prepHours = Math.floor(recipe.prep_time / 60);
+        const prepMinutes = recipe.prep_time % 60;
+        setPrepHours(prepHours);
+        setPrepMinutes(prepMinutes);
+
+        const cookHours = Math.floor(recipe.cook_time / 60);
+        const cookMinutes = recipe.cook_time % 60;
+        setCookHours(cookHours);
+        setCookMinutes(cookMinutes);
+
         setServings(recipe.servings || 1);
-        // setPreviewImage(recipe.image || "")
-        // setRecipeImage(recipe.image || [])
 
         setLoading(false);
-
-        // console.log("this is recipe:", recipe)
       }
     }
     getRecipeThunk();
@@ -90,32 +96,14 @@ function UpdateRecipe() {
       [field]: value,
     };
     setIngredients(values);
-    // const { name, value, type, checked } = event.target
-
-    // const values = [...ingredients];
-    // if (type === 'checkbox') {
-    //     values[i] = {
-    //         ...values[i],
-    //         [name]: checked,
-    //     }
-    // }
-    // else {
-    //     values[i] = {
-    //         ...values[i],
-    //         [name]: value
-    //     }
-    // }
-    // setIngredients(values)
   }
   function handleAddIngredient() {
     setIngredients([...ingredients, { ...initialIngredient }]);
-    // console.log("Updated ingredients", ingredients);
   }
   function handleRemoveIngredient(i) {
     const values = [...ingredients];
     values.splice(i, 1);
     setIngredients(values);
-    // console.log("Updated ingredients", ingredients);
   }
 
   function handleDirectionChange(i, event) {
