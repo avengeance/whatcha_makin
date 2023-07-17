@@ -64,6 +64,7 @@ const RecipeDetail = () => {
     );
     setModalContent(modalContent);
     setReviewPosted(true);
+    setHasReviewed(true);
     postedRef.current = true;
     history.push(`/recipes/${recipeId}`);
   }
