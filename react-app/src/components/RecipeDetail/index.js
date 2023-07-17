@@ -23,14 +23,14 @@ const RecipeDetail = () => {
   const history = useHistory();
 
   const user = useSelector((state) => state.session.user);
-  const currRecipe = useSelector((state) => state.recipes.localRecipe);
+  const currRecipe = useSelector((state) => state.recipes.recipes[recipeId]);
   const currentReviews = useSelector((state) => state.reviews.reviews || []);
 
   const currentComments = useSelector((state) => state.comments.comments);
   const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
 
   const [currentRecipe, setCurrentRecipe] = useState({});
-  const currentRecipes = useSelector((state) => state.recipes);
+  const currentRecipes = useSelector((state) => state.recipes.recipes);
 
   const [reviews, setReviews] = useState([]);
   const [reviewPosted, setReviewPosted] = useState(false);
@@ -41,22 +41,6 @@ const RecipeDetail = () => {
   const [reviewCount, setReviewCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const isLoggedIn = !!user;
-  const isRecipeOwner = user?.id === currRecipe?.owner_id;
-  const hasReviewed = currentReviews.some(
-    (review) => review && review.owner_id === user?.id
-  );
-
-  let button;
-
-  if (isLoggedIn && !isRecipeOwner && !hasReviewed) {
-    button = (
-      <button id="post-review" onClick={handlePostReview}>
-        Post Your Review
-      </button>
-    );
-  }
-
   useEffect(() => {
     if (recipeId) {
       setLoading(true); // Assume that you are starting to load
@@ -64,7 +48,7 @@ const RecipeDetail = () => {
       // Fetch recipe details
       dispatch(RecipeActions.getRecipeThunk(recipeId))
         .then((currentRecipes) => setCurrentRecipe(currentRecipes))
-        .then((currentRecipe) => {
+        .then((currentRecipes) => {
           if (currentRecipes?.Owner?.id) {
             setCurrentRecipe(currentRecipes);
           }
@@ -80,6 +64,28 @@ const RecipeDetail = () => {
       console.error("No recipeId");
     }
   }, [dispatch, recipeId, reviewPosted, refreshKey]);
+
+  const isLoggedIn = !!user;
+  const isRecipeOwner = user?.id === currentRecipe.owner_id;
+  const hasReviewed = currentReviews.some(
+    (review) => review && review.owner_id === user?.id
+  );
+
+  let button;
+
+  if (isLoggedIn && !isRecipeOwner && !hasReviewed) {
+    button = (
+      <button id="post-review" onClick={handlePostReview}>
+        Post Your Review
+      </button>
+    );
+  }
+
+  console.log("This is isLoggedIn:", isLoggedIn);
+  console.log("This is isRecipeOwner", isRecipeOwner);
+  console.log("This is has reviewed:", hasReviewed);
+  console.log("This is curr recipe", currRecipe);
+  console.log("This is user:", user);
 
   // useEffect(() => {
   //   if (recipeId) {
