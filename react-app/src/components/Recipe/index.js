@@ -9,10 +9,11 @@ function Recipe() {
     const history = useHistory();
     const tooltipRef = useRef();
     const recipe = useSelector((state) => Object.values(state.recipes));
+    const recipeRating = useSelector((state)=>state.recipes.recipes)
+    const [recipes, setRecipes] = useState([]);
 
     const avgRating = recipe.avg_rating || 0
 
-    const [recipes, setRecipes] = useState([]);
 
     useEffect(() => {
         fetch("/api/recipes")
@@ -41,7 +42,10 @@ function Recipe() {
     return (
         <div className='recipe-tile-container'>
             <div ref={tooltipRef} id='recipe-tooltip'></div>
-            {recipes.map(recipe => (
+            {recipes.map(recipe => {
+                const recipeDetails = recipeRating[recipe.id];
+                return (
+
                 <div className='recipe-tile'
                     key={recipe.id}
                     onMouseEnter={(e) => tileHover(e, recipe.name)}
@@ -59,8 +63,7 @@ function Recipe() {
                             <div className='recipe-review-likes'>
                                 <div id='avgRating'>
                                     <i className='fas fa-star'></i>
-                                    {/* {recipe.avg_rating ? recipe.avg_rating.toFixed(1) : 'New'} */}
-                                    {avgRating ? avgRating.toFixed(1) : "New"}
+                                    {recipeDetails?.avg_rating ? parseFloat(recipeDetails.avg_rating).toFixed(1) : "New"} 
                                 </div>
                                 <div id='likes'>
                                     {recipe.likes > 0
@@ -71,8 +74,9 @@ function Recipe() {
                         </div>
                     </div>
                 </div>
+                )
 
-            ))}
+                                    })}
         </div>
     )
 }
