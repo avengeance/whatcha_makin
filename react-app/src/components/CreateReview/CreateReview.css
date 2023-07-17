@@ -1,0 +1,49 @@
+.create-review-modal{
+    display: flex;
+    justify-content: center;
+    /* border: 4px solid red; */
+}
+#review-stars-container{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+#review-label{
+    display: flex;
+    justify-content: center;
+    /* border: 3px solid green; */
+}
+#review-input{
+    width: 80%;
+    /* border: 2px solid blue; */
+}
+#stars{
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    /* border: 2px solid orange; */
+}
+.fas.fa-star.modal-star {
+    color: grey;
+}
+
+.fas.fa-star.modal-star.active {
+    color: yellow;
+}
+
+#submit-button{
+    display: flex;
+    align-items: center;
+    background-color:  #C6E08D;
+    border: 2px solid #4D7E3E;
+    color: white;
+    box-shadow: 5px 9px 17px 4px #8ABE53;
+}
+.modal-button{
+    display: flex;
+    justify-content: center;
+    height: 35px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}

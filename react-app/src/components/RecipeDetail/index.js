@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { useModal } from '../../context/Modal';
@@ -41,6 +41,8 @@ import "./RecipeDetail.css";
         const [comments, setComments] = useState([]);
         const [liked, setLiked] = useState(false);
         const [refreshKey, setRefreshKey] = useState(0);
+        const postedRef = useRef(false)
+        const [reviewCount, setReviewCount] = useState(0)
 
         useEffect(() => {
             if(recipeId){
@@ -55,24 +57,26 @@ import "./RecipeDetail.css";
                     })
                     .catch(err => console.log(err))
             }
-        }, [dispatch, recipeId]);
+        }, [dispatch, recipeId, reviewPosted]);
 
 
 
         function handlePostReview() {
 
             const modalContent = <CreateReviewModal recipeId={recipeId} onReviewSubmit={handleReviewSubmit} />;
-            setReviewPosted(true)
-            history.push(`/recipes/${recipeId}`);
             setModalContent(modalContent);
+            setReviewPosted(true)
+            postedRef.current = true
+            history.push(`/recipes/${recipeId}`);
         }
 
         function handleReviewSubmit() {
             setReviewPosted(true)
+            setHasReviewed(true)
+            postedRef.current = true
         }
 
         function handleUpdateReview(reviewId) {
-            console.log("this is review Id in update review:", reviewId)
             const modalContent = (
                 <UpdateReviewModal
                     recipeId={recipeId}
@@ -81,21 +85,22 @@ import "./RecipeDetail.css";
                 />
                 
             )
-            console.log("This is recipe ID in parent component:", recipeId)
             history.push(`/recipes/${recipeId}`)
             setModalContent(modalContent)
         }
 
         useEffect(() => {
             if(recipeId){
-
-                dispatch(ReviewActions.getAllReviewsThunk(recipeId))
-                    .then(reviews => {
-                        setReviews(reviews.Reviews)
-                        setHasReviewed(currentReviews?.some(review => review?.owner_id === user?.id))
-                        setReviewPosted(false)
-                    })
-                    .catch(err => console.log(err))
+                if(postedRef.current){
+                    dispatch(ReviewActions.getAllReviewsThunk(recipeId))
+                        .then(reviews => {
+                            setReviews(reviews.Reviews)
+                            setHasReviewed(currentReviews?.some(review => review?.owner_id === user?.id))
+                            setReviewPosted(false)
+                        })
+                        .catch(err => console.log(err))
+                        postedRef.current = false;
+                }
             }
         }, [dispatch, recipeId, refreshKey, user, reviewPosted])
 
@@ -107,15 +112,8 @@ import "./RecipeDetail.css";
             dispatch(ReviewActions.getAllReviewsThunk(recipeId))
                 .then(reviews => setReviews(reviews.Reviews))
                 .catch(err => console.log(err))
-            // dispatch(CommentActions.getAllCommentsThunk(recipeId))
-            //     .then(comments => setComments(comments.Comments))
-            //     .catch(err => console.log(err))
-            // dispatch(LikeActions.getLikesByRecipeThunk(recipeId))
-            //     .then(likes => setLiked(likes.likes))
-            //     .catch(err => console.log(err))
-        }, [dispatch, recipeId, refreshKey])
+        }, [dispatch, recipeId, postedRef, refreshKey])
 
-        console.log("this is current recipe:", currentRecipe)
 
     return (
         <>
@@ -218,14 +216,11 @@ import "./RecipeDetail.css";
                                                 {/* <h3>{currentRecipe?.reviews?.length}...</h3> */}
                                             {/* <h3>{currentRecipe?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipe.reviews.length === 1 ? 'Review' : 'Reviews'}</h3> */}
                                             {/* <h3>{currentRecipe && currentRecipe.reviews && currentRecipe.reviews.length === 0 ? 'No Reviews Yet' : currentRecipe.reviews.length === 1 ? 'Review' : 'Reviews'}</h3> */}
-                                            <h3>{currentRecipe?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipe?.reviews?.length === 1 ? 'Review' : 'Reviews'}</h3>
+                                            <h3>{currentRecipe?.reviews?.length === 0 ? 
+                                            'No Reviews Yet' : currentRecipe?.reviews?.length === 1 ? 'Review' : 'Reviews'}</h3>
                                             </div>
                                         {/* <p> Rating: <i className='fas fa-star'></i> {currentRecipe?.avg_rating.toFixed(1)}</p> */}
-                                        {user && user.id !== currentRecipe?.owner_id && !hasReviewed ? (
-                                            <button id='post-review' onClick={handlePostReview}>Post Your Review</button>
-                                            ) :
-                                            null
-                                    }
+
                                         <div id='number-review'>
                                         <h4># {currentRecipe?.reviews?.length}</h4>
                                         </div>
@@ -235,23 +230,38 @@ import "./RecipeDetail.css";
                                     )}
                             </div>
                         </div>
+                        {user && user.id !== currentRecipe?.owner_id && !hasReviewed ? (
+                                            <button 
+                                            id='post-review' onClick={handlePostReview}>Post Your Review</button>
+                                            ) :
+                                            null
+                                    }
                             {currentReviews.map((review, i) => (
                                     review && (
                                         <div key={i} className='recipe-review-container'>
                                             <div className='recipe-review-user'>
                                                 <div className='recipe-review-user-name'>
                                                     <h3>{review?.owner_name}</h3>
-                                                    <p><i className='fas fa-star'></i>{review?.stars}</p>
+                                                    <p><i id='recipe-detail-star' className='fas fa-star'></i>{review?.stars}</p>
                                                 </div>
                                                 <p id='review-created'>{review?.created_at}</p>
                                             </div>
                                             <p>{review?.review}</p>
                                             {user && user.id === review.owner_id && (
                                                 <div>
-
-                                                    <button id='update-button' onClick={() => handleUpdateReview(review.id)}>Update</button>
                                                     <OpenModalButton
-                                                        buttonText={<i class="fas fa-trash">Delete Review</i>}
+                                                        buttonText={'Update'}
+                                                        modalComponent={
+                                                            <UpdateReviewModal
+                                                                recipeId={recipeId}
+                                                                reviewId={review.id}
+                                                                closeModal={closeModal}
+                                                                refreshKey={refreshKey}
+                                                                setRefreshKey={setRefreshKey}
+                                                            />}
+                                                    />
+                                                    <OpenModalButton
+                                                        buttonText={'Delete Review'}
                                                         modalComponent={
                                                             <DeleteReviewModal
                                                                 recipeId={recipeId}

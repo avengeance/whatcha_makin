@@ -30,9 +30,10 @@ function CreateReviewModal({ recipeId, onReviewSubmit }) {
                 starArray.push(
                     <span
                         key={i}
-                        className={i <= stars ? "active" : "inactive"}
+                        // className={i <= stars ? "active" : "inactive"}
                         onClick={() => handleStarClick(i)}>
-                        <i class="fas fa-star"></i>
+                        {/* <i class="fas fa-star"></i> */}
+                        <i className={`fas fa-star modal-star ${i <= stars ? "active" : ""}`}></i>
                     </span>
                 )
             }
@@ -79,6 +80,7 @@ function CreateReviewModal({ recipeId, onReviewSubmit }) {
                             {!validReview && (<li>Review must be at least {MIN_REVIEW_LENGTH} characters long</li>)}
                         </ul>
                     )}
+                    <div id="review-stars-container">
                     <label id="review-label">
                         <textarea
                             placeholder="Leave your review here..."
@@ -91,6 +93,7 @@ function CreateReviewModal({ recipeId, onReviewSubmit }) {
                     </label>
                     <div id="stars">
                         <StarRating stars={stars} setStars={setStars} />
+                    </div>
                     </div>
                     <div className="modal-button">
                         <button
