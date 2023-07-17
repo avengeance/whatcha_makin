@@ -36,16 +36,19 @@ const UserRecipes = () => {
     }, [dispatch, user, refreshKey])
 
     return (
-        <div>
+        <div className='user-container'>
             {recipes.map(recipe => (
                 <div className='recipe-tile'
                     key={recipe.id}>
+                        <div className='recipe-tile-container-box'>
+
                     <div className='recipe-tile-image'>
                         <Link to={`/recipes/${recipe.id}`}>
                             <img src={recipe.preview_image[0].url} alt={recipe.name} id='recipe-tile-image' />
                         </Link>
 
                     </div>
+                        </div>
                     <div title={recipe.name}>
                         <div className='recipe-review-likes-container'>
                             <div id='recipe-name'>
@@ -65,12 +68,18 @@ const UserRecipes = () => {
                         </div>
                         <div className='recipe-buttons'>
                             <div className='update-button'>
-                                <Link to={`/recipes/${recipe.id}/edit`}>Update</Link>
+                                <Link to={`/recipes/${recipe.id}/edit`}>
+                                <button type="button">Update</button>
+                                </Link>
                             </div>
                             <div className='delete-button'>
                                 <OpenModalButton
                                     type='button'
-                                    buttonText={<i class="fas fa-trash">Delete Recipe</i>}
+                                    buttonText={"Delete Recipe"}
+                                    style={{
+                                        backgroundColor: 'transparent',
+                                        border: 'none'  // This removes the border, if any
+                                    }}
                                     modalComponent={
                                         <DeleteRecipeModal
                                             recipeId={recipe.id}

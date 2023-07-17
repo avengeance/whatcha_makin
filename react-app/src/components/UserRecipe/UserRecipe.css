@@ -1,18 +1,72 @@
-.recipe-tile{
+body {
+    font-family: Exo, sans-serif;
+}
+
+.user-container{
     display: flex;
     justify-content: center;
+    flex-direction: row;
+    /* border: 2px solid blue; */
+}
+
+.recipe-tile{
+    order: 1;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    flex-basis: calc(25%-10px);
+    border-radius: 25px;
     margin-bottom: 25px;
-    /* border: 1px solid black; */
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 30%;
+    border: 3px solid black;
 }
-.recipe-review-likes-container{
-    /* border: 1px solid red; */
-}
-#recipe-name{
-    /* border: 1px solid blue; */
-}
-.recipe-review-likes{
-    /* border: 1px solid orange; */
+
+.recipe-tile-container-box{
+    display: flex;
+    justify-content: center;
+    /* border: 3px solid black; */
 }
 .recipe-tile-image{
-    /* border: 1px solid white; */
+    display: flex;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+    padding: 10px;
+    /* border: 3px solid green; */
 }
+
+.recipe-buttons{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    padding: 5px;
+    /* border: 3px solid orange; */
+}
+
+.recipe-tile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.update-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+
+  .delete-button{
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+  }
