@@ -21,13 +21,14 @@ function LoginFormModal() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = await dispatch(login(email, password));
-    if (data && data.errors) {
-      setErrors(data.errors);
-    } else {
-      setErrors(["The provided credentials are invalid"])
-    }
-    if(data.ok){
-      closeModal();
+    if(data){
+      if(data.errors){
+        setErrors(data.errors);
+      }else{
+        setErrors(["The provided credentials are invalid"])
+      }
+    } else{
+      closeModal()
     }
 
     setButtonColor(!validEmail || !validPassword ? "red" : "grey")
