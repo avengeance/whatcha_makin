@@ -24,9 +24,9 @@ const updateReview = (review) => ({
   type: UPDATE_REVIEW,
   review,
 });
-const deleteReview = (reviews) => ({
+const deleteReview = (reviewId) => ({
   type: DELETE_REVIEW,
-  reviews,
+  reviewId,
 });
 
 // Thunks
@@ -104,9 +104,7 @@ export const deleteReviewThunk = (reviewId) => async (dispatch) => {
       method: "DELETE",
     });
     if (!res.ok) throw res;
-    const data = await res.json();
-    dispatch(deleteReview(data));
-    return data;
+    dispatch(deleteReview(reviewId));
   } catch (error) {
     throw error;
   }
@@ -136,8 +134,8 @@ const reviewsReducer = (state = initialState, action) => {
       newState.reviews[id] = action.review;
       return newState;
     case DELETE_REVIEW:
-      delete newState.reviews[action.reviews.id];
-      return { ...state, reviews: [...state.reviews, action.review] };
+      delete newState.reviews[action.reviewId];
+      return newState;
     default:
       return state;
   }

@@ -22,9 +22,11 @@ const RecipeDetail = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const currentReviews = useSelector((state) => state.reviews.reviews);
-  const currentComments = useSelector((state) => state.comments.comments);
   const user = useSelector((state) => state.session.user);
+  const currRecipe = useSelector((state) => state.recipes.localRecipe);
+  const currentReviews = useSelector((state) => state.reviews.reviews || []);
+
+  const currentComments = useSelector((state) => state.comments.comments);
   const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
 
   const [currentRecipe, setCurrentRecipe] = useState({});
@@ -33,7 +35,7 @@ const RecipeDetail = () => {
   const avgRating = currentRecipes?.avg_rating || 0;
 
   const [reviews, setReviews] = useState([]);
-  const [hasReviewed, setHasReviewed] = useState(false);
+  // const [hasReviewed, setHasReviewed] = useState(false);
   const [reviewPosted, setReviewPosted] = useState(false);
   const [comments, setComments] = useState([]);
   const [liked, setLiked] = useState(false);
@@ -41,6 +43,22 @@ const RecipeDetail = () => {
   const postedRef = useRef(false);
   const [reviewCount, setReviewCount] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  const isLoggedIn = !!user;
+  const isRecipeOwner = user?.id === currRecipe?.owner_id;
+  const hasReviewed = currentReviews.some(
+    (review) => review && review.owner_id === user?.id
+  );
+
+  let button;
+
+  if (isLoggedIn && !isRecipeOwner && !hasReviewed) {
+    button = (
+      <button id="post-review" onClick={handlePostReview}>
+        Post Your Review
+      </button>
+    );
+  }
 
   useEffect(() => {
     if (recipeId) {
@@ -64,16 +82,18 @@ const RecipeDetail = () => {
         onReviewSubmit={handleReviewSubmit}
       />
     );
+    setLoading(true);
     setModalContent(modalContent);
     setReviewPosted(true);
-    setHasReviewed(true);
+    // setHasReviewed(true);
     postedRef.current = true;
+    setLoading(false);
     history.push(`/recipes/${recipeId}`);
   }
 
   function handleReviewSubmit() {
     setReviewPosted(true);
-    setHasReviewed(true);
+    // setHasReviewed(true);
     postedRef.current = true;
   }
 
@@ -114,7 +134,7 @@ const RecipeDetail = () => {
     dispatch(ReviewActions.getAllReviewsThunk(recipeId))
       .then((reviews) => setReviews(reviews.Reviews))
       .catch((err) => console.log(err));
-  }, [dispatch, recipeId, postedRef, refreshKey]);
+  }, [dispatch, recipeId, refreshKey]);
 
   return (
     <>
@@ -258,11 +278,12 @@ const RecipeDetail = () => {
                     )}
                   </div>
                 </div>
-                {user && user.id !== currentRecipe?.owner_id && !hasReviewed ? (
+                {/* {user && user.id !== currentRecipe?.owner_id && !hasReviewed ? (
                   <button id="post-review" onClick={handlePostReview}>
                     Post Your Review
                   </button>
-                ) : null}
+                ) : null} */}
+                {button}
                 {currentReviews.map(
                   (review, i) =>
                     review && (
