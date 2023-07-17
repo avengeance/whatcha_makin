@@ -128,8 +128,12 @@ const reviewsReducer = (state = initialState, action) => {
       newState.reviews[action.review.id] = action.review;
       return newState;
     case CREATE_REVIEW:
-      newState.reviews = action.payload;
-      return { ...state, reviews: [...state.reviews, action.review] };
+      // newState.reviews = action.payload;
+      // return { ...state, reviews: [...state.reviews, action.review] };
+      return {
+        ...state,
+        reviews: [...state.reviews, action.review],
+      };
     case UPDATE_REVIEW:
       const { id } = action.review;
       newState.reviews[id] = action.review;

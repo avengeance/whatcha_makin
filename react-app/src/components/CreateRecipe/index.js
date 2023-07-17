@@ -17,7 +17,7 @@ import "./CreateRecipe.css";
 
 const initialIngredient = {
   name: "",
-  quantity: 0,
+  quantity: 1,
   measurement: "cup",
   is_seasoning: false,
 };
