@@ -45,6 +45,8 @@ function CreateRecipe() {
   const [cookTimeValid, setCookTimeValid] = useState(false);
   const [servingsValid, setServingsValid] = useState(false);
 
+  const [hasReviewed, setHasReviewed] = useState(false);
+
   const [errors, setErrors] = useState([]);
   const [csrfToken, setCsrfToken] = useState("");
 
@@ -214,6 +216,7 @@ function CreateRecipe() {
         // setPreviewImage('')
         // setOtherImages([])
         setErrors([]);
+        setHasReviewed(false);
         history.push(url);
       }
     } catch (err) {

@@ -41,35 +41,11 @@ const RecipeDetail = () => {
   const [reviewCount, setReviewCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(!!user);
-  const [isRecipeOwner, setIsRecipeOwner] = useState(
-    user?.id === currRecipe?.owner_id
+  const isLoggedIn = !!user;
+  const isRecipeOwner = user?.id === currRecipe?.owner_id;
+  const hasReviewed = currentReviews.some(
+    (review) => review && review.owner_id === user?.id
   );
-  const [hasReviewed, setHasReviewed] = useState(
-    currentReviews.some((review) => review && review.owner_id === user?.id)
-  );
-
-  // const isLoggedIn = !!user;
-  // const isRecipeOwner = user?.id === currRecipe?.owner_id;
-  // const hasReviewed = currentReviews.some(
-  //   (review) => review && review.owner_id === user?.id
-  // );
-  // useEffect(() => {
-  //   setIsLoggedIn(isLoggedIn);
-  //   setIsRecipeOwner(isRecipeOwner);
-  //   setHasReviewed(hasReviewed);
-  // }, [user, currRecipe, currentReviews]);
-
-  // useEffect(() => {
-  //   setIsRecipeOwner(user?.id === currRecipe?.owner_id);
-  // }, [user, currRecipe]);
-  useEffect(() => {
-    setIsLoggedIn(!!user);
-    setIsRecipeOwner(user?.id === currRecipe?.owner_id);
-    setHasReviewed(
-      currentReviews.some((review) => review && review.owner_id === user?.id)
-    );
-  }, [user, currRecipe, currentReviews]);
 
   let button;
 
@@ -83,17 +59,41 @@ const RecipeDetail = () => {
 
   useEffect(() => {
     if (recipeId) {
+      setLoading(true); // Assume that you are starting to load
+
+      // Fetch recipe details
       dispatch(RecipeActions.getRecipeThunk(recipeId))
         .then((currentRecipes) => setCurrentRecipe(currentRecipes))
         .then((currentRecipe) => {
           if (currentRecipes?.Owner?.id) {
             setCurrentRecipe(currentRecipes);
-            setLoading(false);
           }
         })
         .catch((err) => console.log(err));
+
+      // Fetch reviews for this recipe
+      dispatch(ReviewActions.getAllReviewsThunk(recipeId))
+        .then((reviews) => setReviews(reviews.Reviews))
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false)); // End loading when all requests are completed
+    } else {
+      console.error("No recipeId");
     }
-  }, [dispatch, recipeId, reviewPosted]);
+  }, [dispatch, recipeId, reviewPosted, refreshKey]);
+
+  // useEffect(() => {
+  //   if (recipeId) {
+  //     dispatch(RecipeActions.getRecipeThunk(recipeId))
+  //       .then((currentRecipes) => setCurrentRecipe(currentRecipes))
+  //       .then((currentRecipe) => {
+  //         if (currentRecipes?.Owner?.id) {
+  //           setCurrentRecipe(currentRecipes);
+  //           setLoading(false);
+  //         }
+  //       })
+  //       .catch((err) => console.log(err));
+  //   }
+  // }, [dispatch, recipeId, reviewPosted]);
 
   function handlePostReview() {
     const modalContent = (
@@ -152,15 +152,15 @@ const RecipeDetail = () => {
   //     }
   //   }, [dispatch, recipeId, refreshKey, user, reviewPosted]);
 
-  useEffect(() => {
-    if (!recipeId) {
-      console.error("No recipeId");
-      return;
-    }
-    dispatch(ReviewActions.getAllReviewsThunk(recipeId))
-      .then((reviews) => setReviews(reviews.Reviews))
-      .catch((err) => console.log(err));
-  }, [dispatch, recipeId, refreshKey]);
+  // useEffect(() => {
+  //   if (!recipeId) {
+  //     console.error("No recipeId");
+  //     return;
+  //   }
+  //   dispatch(ReviewActions.getAllReviewsThunk(recipeId))
+  //     .then((reviews) => setReviews(reviews.Reviews))
+  //     .catch((err) => console.log(err));
+  // }, [dispatch, recipeId, refreshKey]);
 
   return (
     <>

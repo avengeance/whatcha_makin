@@ -18,7 +18,8 @@ const DeleteReviewModal = ({
 
   const deleteReview = async () => {
     await dispatch(ReviewActions.deleteReviewThunk(reviewId));
-    setRefreshKey(refreshKey + 1);
+    await dispatch(ReviewActions.getAllReviewsThunk(recipeId));
+    // setRefreshKey(refreshKey + 1);
     closeModal();
     history.push(`/recipes/${recipeId}`);
   };

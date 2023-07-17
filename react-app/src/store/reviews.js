@@ -146,13 +146,8 @@ const reviewsReducer = (state = initialState, action) => {
       newState.reviews[id] = action.review;
       return newState;
     case DELETE_REVIEW:
-      return {
-        ...state,
-        reviews: state.reviews.filter((review) => {
-          if (!review) return true;
-          return review.id !== action.reviewId;
-        }),
-      };
+      delete newState.reviews[action.reviewId];
+      return newState;
     default:
       return state;
   }
