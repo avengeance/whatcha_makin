@@ -92,15 +92,6 @@ def seed_reviews():
         created_at=datetime.now(),
         updated_at=datetime.now()
     )
-    review6_owner_2 = Review(
-        owner_id=2,
-        recipe_id=5,
-        review='Better than the restaurants!',
-        stars=5,
-        created_at=datetime.now(),
-        updated_at=datetime.now()
-    )
-
 
     review1_owner_3 = Review(
         owner_id=3,
