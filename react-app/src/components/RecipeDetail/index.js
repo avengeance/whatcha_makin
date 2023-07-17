@@ -213,14 +213,9 @@ import "./RecipeDetail.css";
                                     {currentRecipe ? (
                                         <>
                                             <div className='recipe-review-header'>
-                                                {/* <h3>{currentRecipe?.reviews?.length}...</h3> */}
-                                            {/* <h3>{currentRecipe?.reviews?.length === 0 ? 'No Reviews Yet' : currentRecipe.reviews.length === 1 ? 'Review' : 'Reviews'}</h3> */}
-                                            {/* <h3>{currentRecipe && currentRecipe.reviews && currentRecipe.reviews.length === 0 ? 'No Reviews Yet' : currentRecipe.reviews.length === 1 ? 'Review' : 'Reviews'}</h3> */}
                                             <h3>{currentRecipe?.reviews?.length === 0 ? 
                                             'No Reviews Yet' : currentRecipe?.reviews?.length === 1 ? 'Review' : 'Reviews'}</h3>
                                             </div>
-                                        {/* <p> Rating: <i className='fas fa-star'></i> {currentRecipe?.avg_rating.toFixed(1)}</p> */}
-
                                         <div id='number-review'>
                                         <h4># {currentRecipe?.reviews?.length}</h4>
                                         </div>
@@ -241,12 +236,14 @@ import "./RecipeDetail.css";
                                         <div key={i} className='recipe-review-container'>
                                             <div className='recipe-review-user'>
                                                 <div className='recipe-review-user-name'>
+                                                    <div id='review-owner-name'>
                                                     <h3>{review?.owner_name}</h3>
+                                                    </div>
                                                     <p><i id='recipe-detail-star' className='fas fa-star'></i>{review?.stars}</p>
                                                 </div>
                                                 <p id='review-created'>{review?.created_at}</p>
-                                            </div>
                                             <p>{review?.review}</p>
+                                            </div>
                                             {user && user.id === review.owner_id && (
                                                 <div>
                                                     <OpenModalButton

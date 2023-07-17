@@ -35,6 +35,7 @@ function SignupFormModal() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setEmailValid(isValidEmail);
+		
 		if(isValidEmail){
 			if (password === confirmPassword) {
 				setErrors([])
