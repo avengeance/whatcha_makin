@@ -66,7 +66,6 @@ def get_all_recipes():
 def get_recipe(id):
     # recipe = Recipe.query.get(id)
     recipe = Recipe.query.options(joinedload('user')).get(id)
-    print(recipe)
     
     if (recipe):
         images = RecipeImage.query.filter_by(recipe_id=id).all()
@@ -171,10 +170,6 @@ def get_recipe(id):
 @recipe_routes.route('/new/', methods=['POST'])
 @login_required
 def create_recipe():
-        for key in request.form:
-            print(f"{key}: {request.form[key]}")
-            for key in request.form:
-                print(f"{key}: {request.form[key]}")
         new_recipe = Recipe(
             owner_id = current_user.id,
             name = request.form.get('name'),
@@ -184,7 +179,6 @@ def create_recipe():
             servings = request.form.get('servings')
             )
         # preview_image = request.files.get('preview_image')
-        # print("                       this is preview image                  ", preview_image)
         # preview_image_string = ''
         # if preview_image:
         #     preview_image_string = base64.b64encode(preview_image.read()).decode()
@@ -208,11 +202,8 @@ def create_recipe():
 
         # db.session.add(new_recipe_image)
         db.session.add(new_recipe)
-            # print(new_recipe)
             # db.session.add(new_recipe_image)
-            # print(new_recipe_image)
             # db.session.add(new_recipe_image2)
-            # print(new_recipe_image2)
         db.session.commit()
         directions = json.loads(request.form.get('directions'))
         for direction in directions:
@@ -225,7 +216,6 @@ def create_recipe():
             db.session.commit()
 
         ingredients = json.loads(request.form.get('ingredients'))
-        print("This is ingredients:", ingredients)
         for ingredient in ingredients:
             new_ingredient = Ingredient(
                 name = ingredient['name'],

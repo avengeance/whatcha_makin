@@ -30,7 +30,6 @@ const UserRecipes = () => {
       const response = await dispatch(
         RecipeActions.getRecipesByUserThunk(user.id)
       );
-      console.log("response:", response);
       setRecipes(response["User Recipes"]);
     };
     if (user) {

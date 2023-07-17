@@ -50,8 +50,6 @@ function UpdateRecipe() {
 
   const [errors, setErrors] = useState({});
 
-  // console.log("this is current recipe:", currentRecipe)
-
   useEffect(() => {
     async function getRecipeThunk() {
       if (!recipeId) {
@@ -154,8 +152,6 @@ function UpdateRecipe() {
   //     }
   // }
 
-  // console.log("Ingredients before submit", ingredients);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -180,10 +176,6 @@ function UpdateRecipe() {
     // })
     formData.append("ingredients", JSON.stringify(ingredients));
     formData.append("directions", JSON.stringify(directions));
-
-    // for (let pair of formData.entries()) {
-    //     console.log(pair[0] + ', ' + pair[1]);
-    // }
 
     let updatedRecipe;
     try {
