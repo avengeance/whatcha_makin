@@ -232,7 +232,7 @@ function CreateRecipe() {
     return (
         <div id="create-recipe-container">
             <form className='form' onSubmit={handleSubmit}>
-            {errors?.lkength > 0 && errors.map(error => (<p>{error}</p>))}
+            {errors?.length > 0 && errors.map(error => (<p>{error}</p>))}
             <div className="container">       
             <div className="create-recipe-form">
                 <h2 id="create-recipe-title">Create a New Recipe</h2>

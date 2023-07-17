@@ -46,7 +46,7 @@ function CreateReviewModal({ recipeId, onReviewSubmit }) {
     }
 
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setErrors([]);
 
@@ -54,16 +54,30 @@ function CreateReviewModal({ recipeId, onReviewSubmit }) {
             console.log('recipeId is missing')
             return
         }
-
-        try {
-            await dispatch(ReviewActions.createReviewThunk(recipeId, review, stars));
-            onReviewSubmit()
-            closeModal();
-            setRefreshKey(refreshKey + 1)
-            history.push(`/recipes/${recipeId}`);
-        } catch (error) {
-            setErrors([...errors, errors.message]);
-        }
+        if (validReview){
+            // try {
+                setErrors([])
+                return dispatch(ReviewActions.createReviewThunk(recipeId, review, stars))
+                    .then(onReviewSubmit())
+                    .then(closeModal())
+                    .then(setRefreshKey(refreshKey + 1))
+                    .then(history.push(`/recipes/${recipeId}`))
+                    .catch(async (res) =>{
+                        const data = await res.json()
+                        console.log("This is errors", data.errors)
+                        if (data && data.errors) {
+                            setErrors(data.errors)
+                            console.log("this is errors in conditional:", errors)
+                            return
+                        }
+                    })
+            // } catch (error) {
+                // setErrors([...errors, error.message]);
+                // setErrors((prevErrors) => [...prevErrors, error.message]);
+            }
+        // }else{
+            return setErrors([`Review must be at least ${MIN_REVIEW_LENGTH} characters long.`])
+        // }
     }
 
     return (
@@ -72,14 +86,24 @@ function CreateReviewModal({ recipeId, onReviewSubmit }) {
             <div className="modal">
                 <h1 id="modal-title">How was this recipe?</h1>
                 <form onSubmit={handleSubmit}>
-                    {errors.length > 0 && (
+                    {/* {errors.length > 0 && (
                         <ul className="error">
                             {errors.map((error, i) => (
                                 <li key={i}>{error}</li>
                             ))}
-                            {!validReview && (<li>Review must be at least {MIN_REVIEW_LENGTH} characters long</li>)}
+                            {!validReview && (
+                            <li>Review must be at least {MIN_REVIEW_LENGTH} characters long</li>
+                            )}
                         </ul>
+                    )} */}
+                    {errors.length > 0 && (
+                    <ul>
+                    {Object.values(errors).map((error, idx) => {
+                     return (
+                    <li className='errors' key={idx}>{error}</li>)})}
+                    </ul>
                     )}
+
                     <div id="review-stars-container">
                     <label id="review-label">
                         <textarea
@@ -98,7 +122,7 @@ function CreateReviewModal({ recipeId, onReviewSubmit }) {
                     <div className="modal-button">
                         <button
                             type="submit"
-                            id="submit-button"
+                            id="submit-modal-button"
                             className="submit-button"
                             disabled={!validReview}
                         >

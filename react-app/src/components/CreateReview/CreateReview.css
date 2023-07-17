@@ -1,6 +1,8 @@
 .create-review-modal{
     display: flex;
     justify-content: center;
+    height: 250px;
+    width: 350px;
     /* border: 4px solid red; */
 }
 
@@ -40,12 +42,13 @@
 
 }
 
-#submit-button{
+#submit-modal-button{
     display: flex;
     align-items: center;
     background-color:  #C6E08D;
     border: 2px solid #4D7E3E;
     color: white;
+    font-size: large;
     box-shadow: 5px 9px 17px 4px #8ABE53;
 }
 .modal-button{
@@ -54,4 +57,9 @@
     height: 35px;
     margin-top: 15px;
     margin-bottom: 10px;
+}
+
+.errors{
+    color: red;
+    font-size: small;
 }
