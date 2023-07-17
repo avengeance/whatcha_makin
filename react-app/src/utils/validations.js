@@ -9,7 +9,9 @@ export const validateName = (name) => {
 
 // Ingredient name validation
 export const validateIngredientName = (name) => {
-  return name.length >= MIN_INGREDIENT_NAME_LENGTH && /^[a-zA-Z]+$/.test(name);
+  return (
+    name.length >= MIN_INGREDIENT_NAME_LENGTH && /^[a-zA-Z0-9-' ]+$/.test(name)
+  );
 };
 
 // Ingredient quantity

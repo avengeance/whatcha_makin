@@ -87,10 +87,13 @@ function UpdateRecipe() {
         setNameValid(validators.validateName(recipe.name || ""));
         setDescription(recipe.description || "");
 
-        const recipeIngredients = recipe.ingredients.map((ingredient) => ({
-          ...ingredient,
-          isValid: validators.validateIngredientName(ingredient.name),
-        }));
+        const recipeIngredients = recipe.ingredients.map((ingredient) => {
+          const isValid = validators.validateIngredientName(ingredient.name);
+          return {
+            ...ingredient,
+            isValid: isValid,
+          };
+        });
         setIngredients(recipeIngredients);
         setIngredientsValid(
           recipeIngredients.every((ingredient) => ingredient.isValid)
@@ -211,13 +214,8 @@ function UpdateRecipe() {
     setErrors({});
 
     const formData = new FormData();
-    // const totalPrepTime = (parseInt(prepHours) || 0) * 60 + (parseInt(prepMinutes) || 0);
-    // const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
     const totalPrepTime = (prepHours || 0) * 60 + (parseInt(prepMinutes) || 0);
     const totalCookTime = (cookHours || 0) * 60 + (parseInt(cookMinutes) || 0);
-    // const totalPrepTime = ((prepHours || 0) * 60 + (prepMinutes || 0));
-    // const totalCookTime = ((cookHours || 0) * 60 + (cookMinutes || 0));
-
     formData.append("name", name);
     formData.append("description", description);
     formData.append("prep_time", totalPrepTime);
@@ -242,13 +240,11 @@ function UpdateRecipe() {
         setDescription("");
         setIngredients([initialIngredient]);
         setDirections([initialDirection]);
-        // setPrepTime(totalPrepTime)
-        // setCookTime(totalCookTime)
         setPrepHours("");
         setPrepMinutes("");
         setCookHours("");
         setCookMinutes("");
-        // setServings('')
+        setServings("");
         // setPreviewImage('')
         // setOtherImages([])
         setErrors([]);
