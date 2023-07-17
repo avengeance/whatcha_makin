@@ -70,7 +70,6 @@ export const createReviewThunk =
     } else {
       return ["An error occurred. Please try again."];
     }
-    // return data;
   };
 
 export const updateReviewThunk =
