@@ -191,7 +191,7 @@ const RecipeDetail = () => {
                 {/* {currentRecipe.avg_rating ? currentRecipe.avg_rating.toFixed(1) : 'New'} */}
                 {/* {avgRating ? avgRating.toFixed(1) : 'New'} */}
                 {currentRecipe ? (
-                  <div>{currentRecipe.avg_rating}</div>
+                  <div>{parseFloat(currentRecipe.avg_rating).toFixed(1)}</div>
                 ) : (
                   "Loading..."
                 )}
