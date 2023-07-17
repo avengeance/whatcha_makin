@@ -5,14 +5,9 @@ import { useHistory } from "react-router-dom";
 import "./Recipe.css";
 
 function Recipe() {
-  const dispatch = useDispatch();
-  const history = useHistory();
   const tooltipRef = useRef();
-  const recipe = useSelector((state) => Object.values(state.recipes));
   const recipeRating = useSelector((state) => state.recipes.recipes);
   const [recipes, setRecipes] = useState([]);
-
-  const avgRating = recipe.avg_rating || 0;
 
   useEffect(() => {
     fetch("/api/recipes")

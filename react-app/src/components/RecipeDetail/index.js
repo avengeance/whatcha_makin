@@ -32,10 +32,7 @@ const RecipeDetail = () => {
   const [currentRecipe, setCurrentRecipe] = useState({});
   const currentRecipes = useSelector((state) => state.recipes);
 
-  const avgRating = currentRecipes?.avg_rating || 0;
-
   const [reviews, setReviews] = useState([]);
-  // const [hasReviewed, setHasReviewed] = useState(false);
   const [reviewPosted, setReviewPosted] = useState(false);
   const [comments, setComments] = useState([]);
   const [liked, setLiked] = useState(false);
@@ -44,11 +41,20 @@ const RecipeDetail = () => {
   const [reviewCount, setReviewCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isRecipeOwner, setIsRecipeOwner] = useState(false);
+  // const [hasReviewed, setHasReviewed] = useState(false);
+
   const isLoggedIn = !!user;
   const isRecipeOwner = user?.id === currRecipe?.owner_id;
   const hasReviewed = currentReviews.some(
     (review) => review && review.owner_id === user?.id
   );
+  // useEffect(() => {
+  //   setIsLoggedIn(isLoggedIn);
+  //   setIsRecipeOwner(isRecipeOwner);
+  //   setHasReviewed(hasReviewed);
+  // }, [user, currRecipe, currentReviews]);
 
   let button;
 
@@ -68,7 +74,6 @@ const RecipeDetail = () => {
           if (currentRecipes?.Owner?.id) {
             setCurrentRecipe(currentRecipes);
             setLoading(false);
-            const avgRating = currentRecipe?.avg_rating || 0;
           }
         })
         .catch((err) => console.log(err));
@@ -85,7 +90,6 @@ const RecipeDetail = () => {
     setLoading(true);
     setModalContent(modalContent);
     setReviewPosted(true);
-    // setHasReviewed(true);
     postedRef.current = true;
     setLoading(false);
     history.push(`/recipes/${recipeId}`);
@@ -93,7 +97,6 @@ const RecipeDetail = () => {
 
   function handleReviewSubmit() {
     setReviewPosted(true);
-    // setHasReviewed(true);
     postedRef.current = true;
   }
 

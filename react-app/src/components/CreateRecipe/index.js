@@ -1,17 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import * as RecipeActions from "../../store/recipes";
-// import { createRecipeThunk } from "../../store/recipes";
-import IngredientForm from "../IngredientForm";
-import DirectionForm from "../DirectionForm";
-import { csrfFetch } from "../../store/csrf";
-
 import * as validators from "../../utils/validations.js";
-
-import stockLogo from "../../images/StockLogo.png";
-// import smallPhoto from "../../images/smallPhoto.png"
 
 import "./CreateRecipe.css";
 
@@ -30,8 +22,6 @@ function CreateRecipe() {
   const user = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
   const history = useHistory();
-
-  const { recipeId } = useParams();
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -55,16 +45,8 @@ function CreateRecipe() {
   const [cookTimeValid, setCookTimeValid] = useState(false);
   const [servingsValid, setServingsValid] = useState(false);
 
-  // const [errors, setErrors] = useState({});
   const [errors, setErrors] = useState([]);
   const [csrfToken, setCsrfToken] = useState("");
-
-  //   console.log("This is the console log of valid name:", nameValid);
-  //   console.log("This is the console log of valid ingredient:", ingredientsValid);
-  //   console.log("This is the console log of valid directions:", directionsValid);
-  //   console.log("This is the console log of valid prep:", prepTimeValid);
-  //   console.log("This is the console log of valid cook:", cookTimeValid);
-  //   console.log("This is the console log of valid servings:", servingsValid);
 
   const onNameChange = (e) => {
     const valid = validators.validateName(e.target.value);
@@ -78,21 +60,21 @@ function CreateRecipe() {
     }
   };
 
-  const onIngredientChange = (ingredients) => {
-    const valid = ingredients.every((ing) => {
-      return (
-        validators.validateIngredientName(ing.name) &&
-        validators.validateIngredientQuantity(ing.quantity)
-      );
-    });
-    setIngredientsValid(valid);
-    setIngredients(ingredients);
-  };
+  // const onIngredientChange = (ingredients) => {
+  //   const valid = ingredients.every((ing) => {
+  //     return (
+  //       validators.validateIngredientName(ing.name) &&
+  //       validators.validateIngredientQuantity(ing.quantity)
+  //     );
+  //   });
+  //   setIngredientsValid(valid);
+  //   setIngredients(ingredients);
+  // };
 
-  const onDirectionChange = (dir) => {
-    const valid = validators.validateStepInfo(dir.stepInfo);
-    setDirectionsValid(valid);
-  };
+  // const onDirectionChange = (dir) => {
+  //   const valid = validators.validateStepInfo(dir.stepInfo);
+  //   setDirectionsValid(valid);
+  // };
 
   const onPrepMinsChange = (e) => {
     const mins = e.target.value;
@@ -127,33 +109,6 @@ function CreateRecipe() {
     let csrf_token = getCookie("csrf_token");
     setCsrfToken(csrf_token);
   }, []);
-
-  //   function handleIngredientChange(i, event) {
-  //     const values = [...ingredients];
-  //     if (event.target.name === "name") {
-  //       const nameValid = validators.validateIngredientName(event.target.value);
-  //       if (nameValid) {
-  //         values[i][event.target.name] = event.target.value;
-  //       }
-  //       setIngredientsValid(nameValid);
-  //     }
-  //     if (event.target.name === "is_seasoning") {
-  //       values[i][event.target.name] = JSON.parse(event.target.checked);
-  //       //   console.log("this is json parsed", JSON.parse(event.target.checked));
-  //     }
-  //     if (event.target.name === "measurement") {
-  //       values[i][event.target.name] = event.target.value;
-  //     }
-  //     if (
-  //       event.target.name !== "name" &&
-  //       event.target.name !== "measurement" &&
-  //       event.target.name !== "is_seasoning"
-  //     ) {
-  //       values[i][event.target.name] = event.target.value;
-  //     }
-  //     setIngredients(values);
-  //     // console.log("this is json parsed", JSON.parse(event.target.checked));
-  //   }
 
   function handleIngredientChange(i, event) {
     const values = [...ingredients];
@@ -264,7 +219,6 @@ function CreateRecipe() {
     } catch (err) {
       console.log("Error in catch block", err);
       setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
-      //   setErrors([...err]);
     }
   };
   return (
@@ -272,13 +226,6 @@ function CreateRecipe() {
       <form className="form" onSubmit={handleSubmit}>
         {errors?.length > 0 &&
           errors.map((error) => <p className="errors">{error}</p>)}
-        {/* <ul>
-          {errors?.map((error, idx) => (
-            <li className="errors" key={idx}>
-              {error}
-            </li>
-          ))}
-        </ul> */}
         <div className="container">
           <div className="create-recipe-form">
             <h2 id="create-recipe-title">Create a New Recipe</h2>

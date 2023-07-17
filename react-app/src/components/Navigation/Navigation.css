@@ -27,7 +27,7 @@ li {
   right: 40px;
 }
 
-.navigation-container{
+.navigation-container {
   display: flex;
   justify-content: center;
 }
@@ -41,7 +41,6 @@ li {
   margin-bottom: 50px;
   /* border-bottom: 2px solid lightgray; */
   /* border: 1px solid black; */
-
 }
 
 .profile-button {
@@ -50,7 +49,7 @@ li {
   justify-content: flex-end;
   flex-direction: column;
   padding-right: 25px;
-  width: 40%;
+  width: 50%;
   height: 50%;
   /* border: 1px solid green; */
 }
@@ -62,7 +61,7 @@ li {
   align-items: center;
   flex-direction: row;
   border: 1px lightgray solid;
-  width: 75px;
+  width: 175px;
   height: 42px;
   margin: 1px;
   padding: 1px;
@@ -91,7 +90,7 @@ li {
   top: 50px;
   width: 200px;
   text-align: start;
-  background-color: #C6E08D;
+  background-color: #c6e08d;
 }
 
 #profile-dropdown.hidden {
@@ -117,6 +116,7 @@ li {
   align-content: center;
   width: 125px;
   height: 135px;
+  margin-left: 280px;
   /* border: 1px solid white; */
 }
 
@@ -136,7 +136,7 @@ li {
   /* border: 1px solid black; */
 }
 
-.login-button .modal-button{
+.login-button .modal-button {
   width: 150px;
   height: 100px;
   padding: 10px 20px;
@@ -146,7 +146,7 @@ li {
   background-color: #ddd;
 }
 
-.login-button:hover>button {
+.login-button:hover > button {
   color: blue;
 }
 
@@ -178,7 +178,7 @@ li {
   align-self: center;
   border: 0;
   width: 170px;
-  color: #4D7E3E;
+  color: #4d7e3e;
   text-decoration: none !important;
 }
 
