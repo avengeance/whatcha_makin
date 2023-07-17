@@ -8,6 +8,9 @@ import IngredientForm from "../IngredientForm";
 import DirectionForm from "../DirectionForm";
 import { csrfFetch } from "../../store/csrf";
 
+import stockLogo from "../../images/StockLogo.png"
+// import smallPhoto from "../../images/smallPhoto.png"
+
 import "./CreateRecipe.css";
 
 const initialIngredient = {
@@ -120,26 +123,18 @@ function CreateRecipe() {
         formData.append("prep_time", totalPrepTime)
         formData.append("cook_time", totalCookTime)
         formData.append("servings", servings)
+
+        // formData.append("preview_image",JSON.stringify(stockLogo))
         // formData.append('preview_image', previewImage)
         // // formData.append('recipe_image', recipeImage)
         // otherImages.forEach((image, index) => {
         //     formData.append(`other_images[${index}]`, image)
         // })
 
-
-        // ingredients.forEach((ingredient, index) => {
-        //     formData.append(`ingredients[${index}].name`, ingredient.name)
-        //     formData.append(`ingredients[${index}].quantity`, ingredient.quantity)
-        //     formData.append(`ingredients[${index}].measurement`, ingredient.measurement)
-        //     formData.append(`ingredients[${index}].is_seasoning`, ingredient.is_seasoning)
-        // })
-
-        // directions.forEach((direction, index) => {
-        //     formData.append(`directions[${index}].step`, direction.step)
-        //     formData.append(`directions[${index}].step_info`, direction.step_info)
-        // })
         formData.append('ingredients', JSON.stringify(ingredients))
         formData.append('directions', JSON.stringify(directions))
+
+
 
         let newRecipe;
 
@@ -225,6 +220,12 @@ function CreateRecipe() {
                             <option value='tsp'>Tsp</option>
                             <option value='g'>G</option>
                             <option value='lb'>Lb</option>
+                            <option value='slice'>Slice</option>
+                            <option value='Large'>Large</option>
+                            <option value='whole'>Whole</option>
+                            <option value='sheet'>Sheet</option>
+                            <option value='split'>Split</option>
+                            <option value='cloves'>Cloves</option>
 
                         </select>
                         <label>
