@@ -48,7 +48,7 @@ li {
   display: flex;
   justify-content: flex-end;
   flex-direction: column;
-  padding-right: 25px;
+  /* padding-right: 25px; */
   width: 50%;
   height: 50%;
   /* border: 1px solid green; */
@@ -86,7 +86,7 @@ li {
   font-size: 12px;
   padding-top: 10px;
   padding-bottom: 10px;
-  left: 0px;
+  /* left: 0px; */
   top: 50px;
   width: 200px;
   text-align: start;
@@ -116,7 +116,7 @@ li {
   align-content: center;
   width: 125px;
   height: 135px;
-  margin-left: 280px;
+  margin-left: 20%;
   /* border: 1px solid white; */
 }
 

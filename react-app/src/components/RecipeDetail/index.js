@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, useLocation } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 
 import OpenModalButton from "../OpenModalButton";
@@ -21,6 +21,7 @@ const RecipeDetail = () => {
   const { closeModal, setModalContent } = useModal();
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
 
   const user = useSelector((state) => state.session.user);
   const currRecipe = useSelector((state) => state.recipes.recipes[recipeId]);
@@ -42,10 +43,14 @@ const RecipeDetail = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (location.pathname === "/recipes/new") {
+      setReviews([]);
+    }
+  }, [location.pathname]);
+  useEffect(() => {
     if (recipeId) {
-      setLoading(true); // Assume that you are starting to load
+      setLoading(true);
 
-      // Fetch recipe details
       dispatch(RecipeActions.getRecipeThunk(recipeId))
         .then((currentRecipes) => setCurrentRecipe(currentRecipes))
         .then((currentRecipes) => {
@@ -55,15 +60,22 @@ const RecipeDetail = () => {
         })
         .catch((err) => console.log(err));
 
-      // Fetch reviews for this recipe
       dispatch(ReviewActions.getAllReviewsThunk(recipeId))
         .then((reviews) => setReviews(reviews.Reviews))
         .catch((err) => console.log(err))
-        .finally(() => setLoading(false)); // End loading when all requests are completed
+        .finally(() => {
+          setLoading(false);
+        });
     } else {
       console.error("No recipeId");
     }
   }, [dispatch, recipeId, reviewPosted, refreshKey]);
+
+  useEffect(() => {
+    return () => {
+      setReviews([]);
+    };
+  }, []);
 
   const isLoggedIn = !!user;
   const isRecipeOwner = user?.id === currentRecipe.owner_id;
@@ -80,12 +92,6 @@ const RecipeDetail = () => {
       </button>
     );
   }
-
-  console.log("This is isLoggedIn:", isLoggedIn);
-  console.log("This is isRecipeOwner", isRecipeOwner);
-  console.log("This is has reviewed:", hasReviewed);
-  console.log("This is curr recipe", currRecipe);
-  console.log("This is user:", user);
 
   // useEffect(() => {
   //   if (recipeId) {
@@ -110,9 +116,9 @@ const RecipeDetail = () => {
     );
     setLoading(true);
     setModalContent(modalContent);
+    setLoading(false);
     setReviewPosted(true);
     postedRef.current = true;
-    setLoading(false);
     history.push(`/recipes/${recipeId}`);
   }
 

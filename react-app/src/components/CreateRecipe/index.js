@@ -131,6 +131,7 @@ function CreateRecipe() {
       ...ingredients,
       { name: "", quantity: 0, measurement: "cup", is_seasoning: false },
     ]);
+    setIngredientsValid(false);
   }
 
   function handleRemoveIngredient(i) {
@@ -151,6 +152,7 @@ function CreateRecipe() {
   function handleAddDirection() {
     const newStep = directions.length + 1;
     setDirections([...directions, { step: newStep, step_info: "" }]);
+    setDirectionsValid(false);
   }
   function handleRemoveDirection(i) {
     const values = [...directions];
