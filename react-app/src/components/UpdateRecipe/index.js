@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 
 import * as RecipeActions from "../../store/recipes";
+import * as validators from "../../utils/validations.js";
 import { csrfFetch } from "../../store/csrf";
 
 import "./UpdateRecipe.css";
 
 const initialIngredient = {
   name: "",
-  quantity: 0,
+  quantity: 1,
   measurement: "cup",
   is_seasoning: false,
 };
@@ -48,7 +49,21 @@ function UpdateRecipe() {
   const [loading, setLoading] = useState(true);
   const [stepCounter, setStepCounter] = useState(1);
 
+  const [nameValid, setNameValid] = useState(false);
+
   const [errors, setErrors] = useState({});
+
+  const onNameChange = (e) => {
+    const valid = validators.validateName(e.target.value);
+    setNameValid(valid);
+    setName(e.target.value);
+    if (!valid) {
+      setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
+    } else {
+      setNameValid(valid);
+      setName(e.target.value);
+    }
+  };
 
   useEffect(() => {
     async function getRecipeThunk() {
@@ -202,6 +217,7 @@ function UpdateRecipe() {
       }
     } catch (error) {
       console.error("There was an error updating the recipe", error);
+      setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
     }
     if (updatedRecipe) {
       console.log("Updated recipe", updatedRecipe);
@@ -213,6 +229,8 @@ function UpdateRecipe() {
   ) : (
     <div id="update-recipe-container">
       <form className="form" onSubmit={handleSubmit}>
+        {errors?.length > 0 &&
+          errors.map((error) => <p className="errors">{error}</p>)}
         <div className="container">
           <div className="update-recipe-form">
             <h2 id="update-recipe-title">Update Recipe</h2>
@@ -224,7 +242,7 @@ function UpdateRecipe() {
               type="text"
               name="name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={onNameChange}
               placeholder="Recipe Name"
               required
             />
@@ -489,7 +507,7 @@ function UpdateRecipe() {
                     >
                     </input> */}
         <div id="form-submit-button">
-          <button type="submit" className="submit-button">
+          <button type="submit" className="submit-button" disabled={!nameValid}>
             Update Recipe
           </button>
         </div>

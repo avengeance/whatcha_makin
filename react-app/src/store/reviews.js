@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 // Constants
 const GET_ALL_REVIEWS = "reviews/GET_ALL_REVIEWS";
 const GET_REVIEW = "reviews/GET_REVIEW";
+const CLEAR_REVIEWS = "reviews/CLEAR_REVIEWS";
 const CREATE_REVIEW = "reviews/CREATE_REVIEW";
 const UPDATE_REVIEW = "reviews/UPDATE_REVIEW";
 const DELETE_REVIEW = "reviews/DELETE_REVIEW";
@@ -15,6 +16,10 @@ const getAllReviews = (reviews) => ({
 const getReview = (review) => ({
   type: GET_REVIEW,
   review,
+});
+const clearReviews = (reviews) => ({
+  type: CLEAR_REVIEWS,
+  reviews,
 });
 const createReview = (review) => ({
   type: CREATE_REVIEW,
@@ -127,6 +132,8 @@ const reviewsReducer = (state = initialState, action) => {
     case GET_REVIEW:
       newState.reviews[action.review.id] = action.review;
       return newState;
+    case CLEAR_REVIEWS:
+      return { reviews: [] };
     case CREATE_REVIEW:
       // newState.reviews = action.payload;
       // return { ...state, reviews: [...state.reviews, action.review] };

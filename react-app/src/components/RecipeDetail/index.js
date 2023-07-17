@@ -41,20 +41,35 @@ const RecipeDetail = () => {
   const [reviewCount, setReviewCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const [isRecipeOwner, setIsRecipeOwner] = useState(false);
-  // const [hasReviewed, setHasReviewed] = useState(false);
-
-  const isLoggedIn = !!user;
-  const isRecipeOwner = user?.id === currRecipe?.owner_id;
-  const hasReviewed = currentReviews.some(
-    (review) => review && review.owner_id === user?.id
+  const [isLoggedIn, setIsLoggedIn] = useState(!!user);
+  const [isRecipeOwner, setIsRecipeOwner] = useState(
+    user?.id === currRecipe?.owner_id
   );
+  const [hasReviewed, setHasReviewed] = useState(
+    currentReviews.some((review) => review && review.owner_id === user?.id)
+  );
+
+  // const isLoggedIn = !!user;
+  // const isRecipeOwner = user?.id === currRecipe?.owner_id;
+  // const hasReviewed = currentReviews.some(
+  //   (review) => review && review.owner_id === user?.id
+  // );
   // useEffect(() => {
   //   setIsLoggedIn(isLoggedIn);
   //   setIsRecipeOwner(isRecipeOwner);
   //   setHasReviewed(hasReviewed);
   // }, [user, currRecipe, currentReviews]);
+
+  // useEffect(() => {
+  //   setIsRecipeOwner(user?.id === currRecipe?.owner_id);
+  // }, [user, currRecipe]);
+  useEffect(() => {
+    setIsLoggedIn(!!user);
+    setIsRecipeOwner(user?.id === currRecipe?.owner_id);
+    setHasReviewed(
+      currentReviews.some((review) => review && review.owner_id === user?.id)
+    );
+  }, [user, currRecipe, currentReviews]);
 
   let button;
 

@@ -70,6 +70,7 @@ export const createRecipeThunk = (formData) => async (dispatch) => {
   });
   const data = await res.json();
   dispatch(createRecipe(data));
+  dispatch(getRecipeThunk(data.id));
   return data;
 };
 
