@@ -234,11 +234,12 @@ function UpdateRecipe() {
     return (
         loading ? <div>Loading...</div> :
             <div id="update-recipe-container">
+                <form className='form' onSubmit={handleSubmit}>
+                <div className="container">
                 <div className="update-recipe-form">
                     <h2 id="update-recipe-title">Update Recipe</h2>
                     <h3>What is the name of your recipe?</h3>
                 </div>
-                <form className='form' onSubmit={handleSubmit}>
                     <div id='form-container' className='form-input'>
                         <input
                             id='recipe-name-input'
@@ -248,12 +249,10 @@ function UpdateRecipe() {
                             onChange={(e) => setName(e.target.value)}
                             placeholder='Recipe Name'
                             required
-                            style={({
-                                width: "98%",
-                                backgroundColor: "#e2e2e2",
-                            })}
                         />
                     </div>
+                </div>
+                <div className="container">
                     <h2 id='ingredient-title'>Ingredients</h2>
                     <h3 id="ingredient-subtitle">What ingredients will we need?</h3>
                     {ingredients.map((ingredient, index) => (
@@ -310,10 +309,14 @@ function UpdateRecipe() {
                             )}
                         </div>
                     ))}
+                    <div className="increase-button">
                     <button type='button' onClick={handleAddIngredient} className='add-button'>
                         <i class="fas fa-plus"></i>
                         <span>Add Ingredient</span>
                     </button>
+                    </div>
+                </div>
+                <div className="container">
                     <h2>Directions</h2>
                     <h3>How will we make this recipe?</h3>
                     {directions.map((direction, index) => (
@@ -339,15 +342,23 @@ function UpdateRecipe() {
                             )}
                         </div>
                     ))}
+                    <div className="increase-button">
                     <button type="button" onClick={handleAdddirection} className='add-button'>
                         <i class="fas fa-plus"></i>
                         <span>Add Direction</span>
                     </button>
+                    </div>
+                </div>
+                <div className="container">
                     <h2>Time to Cook</h2>
                     <h3>How long will this take to cook?</h3>
+                    <div className='time-container'>
+                    <div id="prep-time">
                     <h4>Prep time:</h4>
+                    <div className="time-select">
                     <select
                         name='hours'
+                        className='time-drop-down'
                         type='number'
                         value={prepHours}
                         // value={prepHours !== null ? prepHours.toString() : ''}
@@ -359,6 +370,7 @@ function UpdateRecipe() {
                     </select>
                     <select
                         name='minutes'
+                        className='time-drop-down'
                         type='number'
                         value={prepMinutes}
                         // value={prepTime !== null ? prepTime.toString() : ''}
@@ -369,10 +381,14 @@ function UpdateRecipe() {
                             <option key={i} value={i}>{i} Minutes</option>
                         )}
                     </select>
-
-                    <h4>Cook time:</h4>
+                    </div>
+                    </div>
+                    <div id="cook-time">
+                        <h4>Cook time:</h4>
+                        <div className="time-select">
                     <select
                         name='hours'
+                        className='time-drop-down'
                         type='number'
                         value={cookHours}
                         // value={cookHours !== null ? cookHours.toString() : ''}
@@ -384,6 +400,7 @@ function UpdateRecipe() {
                     </select>
                     <select
                         name='minutes'
+                        className='time-drop-down'
                         type='number'
                         value={cookMinutes}
                         // value={cookTime !== null ? cookTime.toString() : ''}
@@ -394,7 +411,12 @@ function UpdateRecipe() {
                             <option key={i} value={i}>{i} Minutes</option>
                         )}
                     </select>
+                        </div>
+                    </div>
+                    </div>
+                    <div id="servings">
                     <h4>Servings:</h4>
+                    <div className="time-select">
                     <select
                         type="number"
                         name='servings'
@@ -405,15 +427,23 @@ function UpdateRecipe() {
                             <option key={i} value={i}>{i} Servings</option>
                         )}
                     </select>
+                    </div>
+                    </div>
+                </div>
+                <div className="container">
                     <h2>Description</h2>
                     <h3>What is it about this recipe?</h3>
+                    <div className="textarea-container">
                     <textarea
                         name="description"
+                        id='description-text'
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         rows="4"
                         placeholder='Description'>
                     </textarea>
+                    </div>
+                </div>
                     {/* <h2>Images</h2>
                     <h3>What will this recipe look like?</h3>
                     <h4>Main Image</h4>

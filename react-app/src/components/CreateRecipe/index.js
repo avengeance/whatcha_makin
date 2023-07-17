@@ -172,8 +172,7 @@ function CreateRecipe() {
     return (
         <div id="create-recipe-container">
             <form className='form' onSubmit={handleSubmit}>
-            <div className="container">
-                
+            <div className="container">       
             <div className="create-recipe-form">
                 <h2 id="create-recipe-title">Create a New Recipe</h2>
                 <h3>What is the name of your new recipe?</h3>

@@ -37,8 +37,9 @@ const UserRecipes = () => {
 
     return (
         <div className='user-container'>
+            
             {recipes.map(recipe => (
-                <div className='recipe-tile'
+                <div id='recipe-tile'
                     key={recipe.id}>
                         <div className='recipe-tile-container-box'>
 
