@@ -191,9 +191,13 @@ const RecipeDetail = () => {
                 {/* {currentRecipe.avg_rating ? currentRecipe.avg_rating.toFixed(1) : 'New'} */}
                 {/* {avgRating ? avgRating.toFixed(1) : 'New'} */}
                 {currentRecipe ? (
-                  <div>{parseFloat(currentRecipe.avg_rating).toFixed(1)}</div>
+                  <div>
+                    {!isNaN(currentRecipe.avg_rating)
+                      ? parseFloat(currentRecipe.avg_rating).toFixed(1)
+                      : "New"}
+                  </div>
                 ) : (
-                  "Loading..."
+                  "New"
                 )}
               </div>
               <div className="recipe-likes">
