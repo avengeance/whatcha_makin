@@ -38,8 +38,6 @@ const UserRecipes = () => {
     }
   }, [dispatch, user, refreshKey]);
 
-  console.log("this is currentRecipes", currentRecipes);
-
   return (
     <div className="user-container">
       {recipes.map((recipe) => (
