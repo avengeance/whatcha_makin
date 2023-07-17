@@ -347,7 +347,6 @@ def update_recipe(id):
 def delete_recipe(id):
     recipe = Recipe.query.get(id)
     if recipe:
-        Recipe.query.filter_by(id=id).delete()
         db.session.delete(recipe)
         db.session.commit()
         
