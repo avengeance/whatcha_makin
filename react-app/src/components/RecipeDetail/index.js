@@ -132,7 +132,7 @@ const RecipeDetail = () => {
       <UpdateReviewModal
         recipeId={recipeId}
         reviewId={reviewId}
-        onReviewSubmit={handlePostReview}
+        onReviewSubmit={handleReviewSubmit}
       />
     );
     history.push(`/recipes/${recipeId}`);

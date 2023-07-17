@@ -74,12 +74,16 @@ const UpdateReviewModal = ({
         await dispatch(
           ReviewActions.updateReviewThunk(reviewId, stars, review)
         );
-        setRefreshKey(refreshKey + 1);
+        dispatch(ReviewActions.getReviewThunk(recipeId, reviewId));
         closeModal();
+        onReviewSubmit();
+        // setRefreshKey(refreshKey + 1);
       } catch (err) {
-        const data = await err.json();
-        if (data && data.errors) setErrors(data.errors);
-        else setErrors(["Unexpected error while creating the review."]);
+        if (err.response && err.response.status == 400) {
+          const data = await err.json();
+          if (data && data.errors) setErrors(data.errors);
+          else setErrors(["Unexpected error while creating the review."]);
+        }
       }
     } else {
       setErrors([`Review must be ${MIN_REVIEW_LENGTH} characters long`]);
