@@ -8,6 +8,8 @@ import IngredientForm from "../IngredientForm";
 import DirectionForm from "../DirectionForm";
 import { csrfFetch } from "../../store/csrf";
 
+import * as validators from '../../utils/validations.js'
+
 import stockLogo from "../../images/StockLogo.png"
 // import smallPhoto from "../../images/smallPhoto.png"
 
@@ -24,6 +26,7 @@ const initialDirection = {
     step_info: "",
 }
 
+
 function CreateRecipe() {
     const user = useSelector((state) => state.session.user);
     const dispatch = useDispatch();
@@ -37,17 +40,72 @@ function CreateRecipe() {
     const [directions, setDirections] = useState([initialDirection]);
 
     const [prepHours, setPrepHours] = useState(null);
-    const [prepMinutes, setPrepMinutes] = useState(null);
+    const [prepMinutes, setPrepMinutes] = useState(0);
     const [cookHours, setCookHours] = useState(null);
-    const [cookMinutes, setCookMinutes] = useState(null);
+    const [cookMinutes, setCookMinutes] = useState(0);
 
     const [servings, setServings] = useState(1);
     // const [previewImage, setPreviewImage] = useState(null);
     // const [recipeImage, setRecipeImage] = useState(null);
     // const [otherImages, setOtherImages] = useState([]);
 
-    const [errors, setErrors] = useState({});
+    const [nameValid, setNameValid] = useState(false)
+    const [ingredientsValid, setIngredientsValid] = useState(false)
+    const [directionsValid, setDirectionsValid] = useState(false)
+    const [prepTimeValid, setPrepTimeValid] = useState(false)
+    const [cookTimeValid, setCookTimeValid] = useState(false)
+    const [servingsValid, setServingsValid] = useState(false)
+
+    // const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState([])
     const [csrfToken, setCsrfToken] = useState("")
+
+    console.log('This is the console log of valid name:',nameValid)
+    console.log('This is the console log of valid ingredient:',ingredientsValid)
+    console.log('This is the console log of valid directions:',directionsValid)
+    console.log('This is the console log of valid prep:',prepTimeValid)
+    console.log('This is the console log of valid cook:',cookTimeValid)
+    console.log('This is the console log of valid servings:',servingsValid)
+
+    const onNameChange = e => {
+        const valid = validators.validateName(e.target.value); 
+        setNameValid(valid);
+        setName(e.target.value);
+      }
+    
+      const onIngredientChange = ingredients => {
+        const valid = ingredients.every(ing =>{
+            return validators.validateIngredientName(ing.name) &&
+                   validators.validateIngredientQuantity(ing.quantity)
+        });  
+        setIngredientsValid(valid);
+        setIngredients(ingredients); 
+      }
+
+      const onDirectionChange = dir => {
+        const valid = validators.validateStepInfo(dir.stepInfo);
+        setDirectionsValid(valid); 
+      }
+
+      const onPrepMinsChange = (e) => {
+        const mins = e.target.value
+        const valid = validators.validatePrepTime(0, mins);
+        setPrepTimeValid(valid);
+        setPrepMinutes(mins);
+      }
+
+      const onCookMinsChange = (e) => {
+        const mins = e.target.value
+        const valid = validators.validateCookTime(0, mins);
+        setCookTimeValid(valid);
+        setCookMinutes(mins)
+      }
+
+      const onServingsChange = (e) => {
+        const val = e.target.value
+        const valid = validators.validateServings(val);
+        setServingsValid(valid);
+      }
 
     useEffect(() => {
         const getCookie = (name) => {
@@ -61,10 +119,12 @@ function CreateRecipe() {
 
     }, []);
 
-
-
     function handleIngredientChange(i, event) {
         const values = [...ingredients];
+        if(event.target.name === 'name'){
+            const nameValid = validators.validateIngredientName(event.target.value)
+            setIngredientsValid(nameValid)
+        }
         if (event.target.name === 'is_seasoning') {
             values[i][event.target.name] = event.target.checked;
         } else {
@@ -85,6 +145,10 @@ function CreateRecipe() {
 
     function handleDirectionChange(i, event) {
         const values = [...directions];
+        if(event.target.name === 'step_info'){
+            const directionValid = validators.validateStepInfo(event.target.value)
+            setDirectionsValid(directionValid)
+        }
         values[i][event.target.name] = event.target.value
         setDirections(values)
     }
@@ -115,7 +179,7 @@ function CreateRecipe() {
         const formData = new FormData()
         const totalPrepTime = (parseInt(prepHours) || 0) * 60 + (parseInt(prepMinutes) || 0);
         const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
-
+        
         formData.append('csrf_token', csrfToken)
         formData.append('owner_id', user.id)
         formData.append("name", name)
@@ -130,43 +194,45 @@ function CreateRecipe() {
         // otherImages.forEach((image, index) => {
         //     formData.append(`other_images[${index}]`, image)
         // })
-
+        
         formData.append('ingredients', JSON.stringify(ingredients))
         formData.append('directions', JSON.stringify(directions))
-
-
-
-        let newRecipe;
-
-        try {
-            const recipe = await dispatch(RecipeActions.createRecipeThunk(formData))
-            const newRecipeId = recipe.id
-            const url = `/recipes/${newRecipeId}`
-            if (recipe) {
-                newRecipe = recipe
-                setName('')
-                setDescription('')
-                setIngredients([initialIngredient])
-                setDirections([initialDirection])
-                setPrepHours('')
-                setPrepMinutes('')
-                setCookHours('')
-                setCookMinutes('')
-                setServings('')
-                // setPreviewImage('')
-                // setOtherImages([])
-                setErrors([])
-                history.push(url)
+        
+        // const formValid = validateForm(formData)
+        // setIsValid(formValid)
+            let newRecipe;
+    
+            try {
+                const recipe = await dispatch(RecipeActions.createRecipeThunk(formData))
+                const newRecipeId = recipe.id
+                const url = `/recipes/${newRecipeId}`
+                if (recipe) {
+                    newRecipe = recipe
+                    setName('')
+                    setDescription('')
+                    setIngredients([initialIngredient])
+                    setDirections([initialDirection])
+                    setPrepHours('')
+                    setPrepMinutes('')
+                    setCookHours('')
+                    setCookMinutes('')
+                    setServings('')
+                    // setPreviewImage('')
+                    // setOtherImages([])
+                    setErrors([])
+                    history.push(url)
+                }
+            } catch (error) {
+                console.log("Error in catch block", error)
             }
-        } catch (error) {
-            console.log("Error in catch block", error)
-        }
+        
+
 
     }
-
     return (
         <div id="create-recipe-container">
             <form className='form' onSubmit={handleSubmit}>
+            {errors?.lkength > 0 && errors.map(error => (<p>{error}</p>))}
             <div className="container">       
             <div className="create-recipe-form">
                 <h2 id="create-recipe-title">Create a New Recipe</h2>
@@ -178,7 +244,8 @@ function CreateRecipe() {
                         type='text'
                         name='name'
                         value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        // onChange={(e) => setName(e.target.value)}
+                        onChange={onNameChange} 
                         placeholder='Recipe Name'
                         required
                         />
@@ -309,7 +376,8 @@ function CreateRecipe() {
                     name='minutes'
                     className="time-drop-down"
                     value={prepMinutes}
-                    onChange={(e) => setPrepMinutes(e.target.value)}
+                    // onChange={(e) => setPrepMinutes(e.target.value)}
+                    onChange={onPrepMinsChange}
                     required
                 >
                     {Array.from({ length: 60 }, (_, i) => i + 1).map((i) =>
@@ -336,7 +404,8 @@ function CreateRecipe() {
                     name='minutes'
                     className="time-drop-down"
                     value={cookMinutes}
-                    onChange={(e) => setCookMinutes(e.target.value)}
+                    // onChange={(e) => setCookMinutes(e.target.value)}
+                    onChange={onCookMinsChange}
                     required
                 >
                     {Array.from({ length: 60 }, (_, i) => i + 1).map((i) =>
@@ -354,7 +423,8 @@ function CreateRecipe() {
                     type="number"
                     name='servings'
                     value={servings}
-                    onChange={(e) => setServings(e.target.value)}
+                    // onChange={(e) => setServings(e.target.value)}
+                    onChange={onServingsChange}
                 >
                     {[...Array(101).keys()].map((i) =>
                         <option key={i} value={i}>{i} Servings</option>
@@ -397,6 +467,14 @@ function CreateRecipe() {
                 <div id="form-submit-button">
                     <button
                         type="submit"
+                        disabled={
+                            !nameValid || 
+                            !ingredientsValid || 
+                            !directionsValid || 
+                            !prepTimeValid ||
+                            !cookTimeValid ||
+                            !servingsValid
+                        }
                         className="submit-button"
                         onClick={handleSubmit}
                     >
