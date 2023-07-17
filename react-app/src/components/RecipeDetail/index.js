@@ -109,6 +109,14 @@ const RecipeDetail = () => {
     setModalContent(modalContent);
   }
 
+  function formatTime(minutes) {
+    let hours = Math.floor(minutes / 60);
+    let remainderMinutes = minutes % 60;
+
+    // Return a formatted string
+    return `${hours} hr ${remainderMinutes} min`;
+  }
+
   //   useEffect(() => {
   //     if (recipeId) {
   //       if (postedRef.current) {
@@ -206,7 +214,9 @@ const RecipeDetail = () => {
                   </div>
                 </div>
                 <div className="recipe-time">
-                  <h3>Total Time to Cook - {currentRecipe?.total_time} min</h3>
+                  <h3>
+                    Total Time to Cook - {formatTime(currentRecipe?.total_time)}
+                  </h3>
                   <h4>Prep Time - {currentRecipe?.prep_time} min</h4>
                   <h4>Cook Time - {currentRecipe?.cook_time} min</h4>
                   <h3>Servings - {currentRecipe?.servings}</h3>
