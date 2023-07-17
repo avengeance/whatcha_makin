@@ -158,7 +158,6 @@ def seed_reviews():
     db.session.add(review3_owner_2)
     db.session.add(review4_owner_2)
     db.session.add(review5_owner_2)
-    db.session.add(review6_owner_2)
     
     # User 3 Reviews
     db.session.add(review1_owner_3)
