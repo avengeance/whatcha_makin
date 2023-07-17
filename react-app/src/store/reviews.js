@@ -85,9 +85,18 @@ export const updateReviewThunk =
         "Content-Type": "application/json",
       },
     });
-    const data = await res.json();
-    dispatch(updateReview(data));
-    return data;
+    if (res.ok) {
+      const data = await res.json();
+      dispatch(updateReview(data));
+      return null;
+    } else if (res.status < 500) {
+      const data = await res.json();
+      if (data.errors) {
+        return data.errors;
+      }
+    } else {
+      return ["An error occurred. Please try again."];
+    }
   };
 
 export const deleteReviewThunk = (reviewId) => async (dispatch) => {
@@ -100,7 +109,6 @@ export const deleteReviewThunk = (reviewId) => async (dispatch) => {
     dispatch(deleteReview(data));
     return data;
   } catch (error) {
-    console.error("Failed to delete review:", error);
     throw error;
   }
 };
@@ -130,7 +138,6 @@ const reviewsReducer = (state = initialState, action) => {
       return newState;
     case DELETE_REVIEW:
       delete newState.reviews[action.reviews.id];
-      // return newState
       return { ...state, reviews: [...state.reviews, action.review] };
     default:
       return state;
