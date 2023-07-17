@@ -1,13 +1,119 @@
+#create-recipe-container {
+  padding: 15px;
+  background-color: #c6e08d;
+  border-radius: 25px;
+  border: 3px solid black;
+  /* border: 1px solid red; */
+}
+
+h3 {
+  display: flex;
+  justify-content: center;
+}
+
+h4 {
+  display: flex;
+  justify-content: center;
+  /* border: 2px solid blue; */
+}
+
+.container {
+  border: 2px dotted black;
+  border-radius: 25px;
+  padding-bottom: 10px;
+  margin-bottom: 5px;
+}
+
+#recipe-name-input {
+  width: 50%;
+  /* border: 3px solid green; */
+}
+
+.ingredient-input {
+  display: flex;
+  justify-content: center;
+  /* border: 4px solid black; */
+}
+
+.increase-button {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.direction-input {
+  display: flex;
+  justify-content: center;
+}
+
 .add-button {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 10px;
-    background-color: #e2e2e2;
-    border: none;
-    color: #333;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 20px;
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 15%;
+  gap: 5px;
+  padding: 5px 10px;
+  background-color: #e2e2e2;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.time-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  /* border: 3px solid red; */
+}
+
+.time-drop-down {
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  /* border: 2px solid blue; */
+}
+
+.time-select {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  /* border: 3px solid orange; */
+}
+
+.textarea-container {
+  display: flex;
+  justify-content: center;
+  /* border: 2px solid red; */
+}
+
+#description-text {
+  width: 35%;
+}
+
+#form-submit-button {
+  display: flex;
+  justify-content: center;
+  /* border: 2px solid red; */
+}
+
+.submit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+  font-size: x-large;
+  height: 50px;
+  width: 60%;
+  background-color: #c6e08d;
+  border: 3px solid #4d7e3e;
+  color: white;
+  box-shadow: 5px 9px 17px 4px #8abe53;
+}
+
+.errors {
+  display: flex;
+  justify-content: center;
+  /* border: 1px solid black; */
+}

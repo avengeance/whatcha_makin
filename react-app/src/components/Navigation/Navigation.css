@@ -19,14 +19,6 @@ li {
   justify-content: space-evenly;
 }
 
-/* .header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid red;
-} */
-
 .home-button {
   position: relative;
   display: flex;
@@ -35,14 +27,19 @@ li {
   right: 40px;
 }
 
+.navigation-container{
+  display: flex;
+  justify-content: center;
+}
+
 .navigation-header {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
+  justify-content: space-evenly;
+  width: 60%;
   padding: 10px;
   margin-bottom: 50px;
-  border-bottom: 2px solid lightgray;
+  /* border-bottom: 2px solid lightgray; */
   /* border: 1px solid black; */
 
 }
@@ -51,8 +48,10 @@ li {
   position: relative;
   display: flex;
   justify-content: flex-end;
+  flex-direction: column;
   padding-right: 25px;
   width: 40%;
+  height: 50%;
   /* border: 1px solid green; */
 }
 
@@ -88,11 +87,11 @@ li {
   font-size: 12px;
   padding-top: 10px;
   padding-bottom: 10px;
-  right: 0px;
+  left: 0px;
   top: 50px;
   width: 200px;
   text-align: start;
-  background-color: white;
+  background-color: #C6E08D;
 }
 
 #profile-dropdown.hidden {
@@ -102,35 +101,45 @@ li {
 .logo-link {
   order: 1;
   display: inline-block;
-  width: 80px;
-  height: 80px;
+  width: 125px;
+  height: 125px;
   background-size: cover;
   background-position: center;
-  /* border: 1px solid green; */
+  /* border: 1px solid red; */
 }
 
 .logo-image {
   order: 2;
   position: absolute;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80px;
-  height: 80px;
-  /* border: 1px solid red; */
+  /* align-items: center; */
+  /* align-self: center; */
+  align-content: center;
+  width: 125px;
+  height: 135px;
+  /* border: 1px solid white; */
 }
 
 .header-text {
   display: flex;
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
 }
 
 .login-button {
   display: flex;
+  /* justify-content: center; */
+  align-self: center;
   padding-top: 10px;
   padding-bottom: 10px;
   width: 100%;
   margin-left: 0;
+  /* border: 1px solid black; */
+}
+
+.login-button .modal-button{
+  width: 150px;
+  height: 100px;
+  padding: 10px 20px;
 }
 
 .login-button:hover {
@@ -161,6 +170,7 @@ li {
   width: 170px;
   color: blue;
   text-decoration: none !important;
+  /* border: 1px solid red; */
 }
 
 #recipe-button-link {
@@ -170,4 +180,29 @@ li {
   width: 170px;
   color: #4D7E3E;
   text-decoration: none !important;
+}
+
+#firstname {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  padding: 5px;
+}
+
+#email {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  padding: 5px;
+}
+
+#manage-recipes {
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  padding-right: 20px;
+  width: 80%;
+  font-weight: bold;
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
 }

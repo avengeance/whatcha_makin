@@ -49,6 +49,16 @@ function ProfileButton({ user }) {
 
   return (
     <>
+      <button onClick={openMenu} id="profile-button" style={{ backgroundColor: '#8ABE53' }}>
+        {/* <i className='fas fa-bars' style={{
+          fontSize: '14px',
+          paddingRight: '12px',
+          paddingLeft: '5px',
+        }} /> */}
+        <i className="fas fa-user-circle" style={{
+          fontSize: '30px',
+        }} />
+      </button>
       {user && (
         <button onClick={toggleCreateButton} id="create-recipe-button" style={{ backgroundColor: 'transparent' }}>
           <NavLink exact to="/recipes/new" id='recipe-button-link'>
@@ -56,16 +66,6 @@ function ProfileButton({ user }) {
           </NavLink>
         </button>
       )}
-      <button onClick={openMenu} id="profile-button" style={{ backgroundColor: '#8ABE53' }}>
-        <i className='fas fa-bars' style={{
-          fontSize: '14px',
-          paddingRight: '12px',
-          paddingLeft: '5px',
-        }} />
-        <i className="fas fa-user-circle" style={{
-          fontSize: '30px',
-        }} />
-      </button>
       <ul className={ulClassName} ref={ulRef} id="profile-dropdown">
         {user ? (
           <>
@@ -84,6 +84,7 @@ function ProfileButton({ user }) {
           <>
             <div className="login-button">
               <OpenModalButton
+                className='modal-button'
                 buttonText="Log In"
                 onItemClick={closeMenu}
                 modalComponent={<LoginFormModal />}

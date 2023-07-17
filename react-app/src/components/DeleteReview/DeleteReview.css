@@ -1,0 +1,8 @@
+#yes-button{
+    background-color: grey;
+}
+.button-div{
+    display: flex;
+    justify-content: center;
+    border-radius: 15px;
+}

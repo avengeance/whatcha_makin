@@ -20,6 +20,7 @@ from datetime import datetime
 from sqlalchemy.orm import joinedload
 
 import json
+import base64
 
 recipe_routes = Blueprint('recipes', __name__)
 
@@ -29,7 +30,6 @@ recipe_routes = Blueprint('recipes', __name__)
 def get_all_recipes():
     recipes = Recipe.query.all()
     recipe_list = []
-    print("-----------------------------------------------------")
     for recipe in recipes:
         images = RecipeImage.query.filter_by(recipe_id=recipe.id).all()
         reviews = Review.query.filter_by(recipe_id=recipe.id).all()
@@ -183,18 +183,17 @@ def create_recipe():
             cook_time = request.form.get('cook_time'),
             servings = request.form.get('servings')
             )
-            # preview_image = request.files.get('preview_image')
-            # if preview_image:
-            #     preview_image_string = base64.b64encode(preview_image.read()).decode()
-            # else:
-            #     print(form.errors)
+        # preview_image = request.files.get('preview_image')
+        # print("                       this is preview image                  ", preview_image)
+        # preview_image_string = ''
+        # if preview_image:
+        #     preview_image_string = base64.b64encode(preview_image.read()).decode()
 
-            # new_recipe_image = RecipeImage(
-            #     url = preview_image_string,
-            #     is_preview = True,
-            #     recipe = new_recipe
-            # )
-
+        # new_recipe_image = RecipeImage(
+        #         url = preview_image_string,
+        #         is_preview = True,
+        #         recipe = new_recipe
+        #     )
             # recipe_image = request.files.get('recipe_image')
             # if recipe_image:
             #     recipe_image_string = base64.b64encode(recipe_image.read()).decode()
@@ -207,6 +206,7 @@ def create_recipe():
             #     recipe = new_recipe
             # )
 
+        # db.session.add(new_recipe_image)
         db.session.add(new_recipe)
             # print(new_recipe)
             # db.session.add(new_recipe_image)
