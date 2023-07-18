@@ -48,6 +48,7 @@ const RecipeDetail = () => {
     }
   }, [location.pathname]);
   useEffect(() => {
+    setReviews([]);
     if (recipeId) {
       setLoading(true);
 
@@ -68,6 +69,7 @@ const RecipeDetail = () => {
         });
     } else {
       console.error("No recipeId");
+      setReviews([]);
     }
   }, [dispatch, recipeId, reviewPosted, refreshKey]);
 
