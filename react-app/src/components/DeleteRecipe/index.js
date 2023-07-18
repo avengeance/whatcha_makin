@@ -20,7 +20,7 @@ const DeleteRecipeModal = ({
   const deleteRecipe = async (e) => {
     e.preventDefault();
     await dispatch(RecipeActions.deleteRecipeThunk(recipeId));
-    setRefreshKey();
+    setRefreshKey((prevKey) => prevKey + 1);
     closeModal();
     history.push(`/users/${ownerId}/recipes`);
   };
