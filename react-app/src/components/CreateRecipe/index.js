@@ -196,7 +196,10 @@ function CreateRecipe() {
 
       // Validate quantity
       if (!validators.validateIngredientQuantity(ingredient.quantity)) {
-        alert("Invalid quantity for ingredient: " + ingredient.name);
+        alert(
+          "Invalid quantity for ingredient whole numbers only: " +
+            ingredient.name
+        );
         return; // Prevent form submission
       }
     }
@@ -321,6 +324,7 @@ function CreateRecipe() {
                 <option value="sheet">Sheet</option>
                 <option value="split">Split</option>
                 <option value="cloves">Cloves</option>
+                <option value="milligrams">mg</option>
               </select>
               <label>
                 <input

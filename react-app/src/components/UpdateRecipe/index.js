@@ -308,7 +308,6 @@ function UpdateRecipe() {
                 placeholder="Quantity"
                 required={index === 0}
                 min="0"
-                step="0.01"
               />
               <select
                 name="measurement"
@@ -328,6 +327,7 @@ function UpdateRecipe() {
                 <option value="large">Large</option>
                 <option value="slices">Slices</option>
                 <option value="whole">Whole</option>
+                <option value="milligrams">mg</option>
               </select>
               <label>
                 <input
