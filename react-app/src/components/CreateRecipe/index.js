@@ -121,6 +121,15 @@ function CreateRecipe() {
       const nameValid = validators.validateIngredientName(event.target.value);
       setIngredientsValid(nameValid);
     }
+    if (event.target.name === "quantity") {
+      const quantityValid = validators.validateIngredientQuantity(
+        event.target.value
+      );
+      setIngredientsValid(quantityValid);
+      if (!quantityValid) {
+        return setIngredientsValid(quantityValid);
+      }
+    }
     if (event.target.name === "is_seasoning") {
       values[i][event.target.name] = event.target.checked;
     } else {
@@ -174,6 +183,23 @@ function CreateRecipe() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
+
+    // Validate all ingredients
+    for (let i = 0; i < ingredients.length; i++) {
+      const ingredient = ingredients[i];
+
+      // Validate name
+      if (!validators.validateIngredientName(ingredient.name)) {
+        alert("Invalid ingredient name");
+        return; // Prevent form submission
+      }
+
+      // Validate quantity
+      if (!validators.validateIngredientQuantity(ingredient.quantity)) {
+        alert("Invalid quantity for ingredient: " + ingredient.name);
+        return; // Prevent form submission
+      }
+    }
 
     const formData = new FormData();
     const totalPrepTime =
