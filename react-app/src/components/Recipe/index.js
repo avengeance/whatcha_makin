@@ -35,20 +35,22 @@ function Recipe() {
 
   return (
     <div className="recipe-tile-container">
-      <div ref={tooltipRef} id="recipe-tooltip"></div>
-      {recipes.map((recipe) => {
+      {/* <div ref={tooltipRef} id="recipe-tooltip"></div> */}
+      {recipes.map((recipe, index) => {
         const recipeDetails = recipeRating[recipe.id];
         return (
           <div
             className="recipe-tile"
             key={recipe.id}
-            onMouseEnter={(e) => tileHover(e, recipe.name)}
-            onMouseOut={() => {
-              const tooltip = document.getElementById("recipe-tooltip");
-              tooltip.textContent = "";
-            }}
+            style={{ "--card-index": index }}
+            // onMouseEnter={(e) => tileHover(e, recipe.name)}
+            // onMouseOut={() => {
+            //   const tooltip = document.getElementById("recipe-tooltip");
+            //   tooltip.textContent = "";
+            // }}
             onClick={() => (window.location.href = `/recipes/${recipe.id}`)}
           >
+            <div id="recipe-name">{recipe.name}</div>
             <img
               src={recipe.preview_image[0].url}
               alt={recipe.name}
@@ -56,7 +58,6 @@ function Recipe() {
             />
             <div title={recipe.name}>
               <div className="recipe-review-likes-container">
-                <div id="recipe-name">{recipe.name}</div>
                 <div className="recipe-review-likes">
                   <div id="avgRating">
                     <i className="fas fa-star"></i>
