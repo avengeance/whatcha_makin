@@ -6,7 +6,6 @@ import { Route, Switch } from "react-router-dom";
 import * as RecipeActions from "./store/recipes";
 import * as SessionActions from "./store/session";
 
-
 import SignupFormPage from "./components/SignupFormPage";
 import LoginFormPage from "./components/LoginFormPage";
 import Navigation from "./components/Navigation";
@@ -29,11 +28,11 @@ function App() {
   }, [dispatch]);
 
   return (
-    <>
+    <div className="flex">
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-          <Route path="/login" >
+          <Route path="/login">
             <LoginFormPage />
           </Route>
           <Route path="/signup">
@@ -51,12 +50,12 @@ function App() {
           <Route exact path="/recipes/:recipeId/edit">
             <UpdateRecipe />
           </Route>
-          <Route path='/recipes/:recipeId'>
+          <Route path="/recipes/:recipeId">
             <RecipeDetail />
           </Route>
         </Switch>
       )}
-    </>
+    </div>
   );
 }
 

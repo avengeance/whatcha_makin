@@ -22,6 +22,7 @@ function ProfileButton({ user }) {
 
   const toggleCreateButton = () => {
     setShowCreateButton((prev) => !prev);
+    setShowMenu(false);
   };
 
   useEffect(() => {
@@ -66,22 +67,29 @@ function ProfileButton({ user }) {
           }}
         />
       </button>
-      {user && (
-        <button
-          onClick={toggleCreateButton}
-          id="create-recipe-button"
-          style={{ backgroundColor: "transparent" }}
-        >
-          <NavLink exact to="/recipes/new" id="recipe-button-link">
-            Create a New Recipe!
-          </NavLink>
-        </button>
-      )}
+      {/* {user && (
+      )} */}
       <ul className={ulClassName} ref={ulRef} id="profile-dropdown">
         {user ? (
           <>
-            <li id="firstname">{user.first_name}</li>
+            <li id="firstname">Hi, {user.first_name} welcome back!</li>
             <li id="email">{user.email}</li>
+            <li>
+              {/* <button
+                onClick={toggleCreateButton}
+                id="create-recipe-button"
+                style={{ backgroundColor: "transparent" }}
+              > */}
+              <NavLink
+                exact
+                to="/recipes/new"
+                id="recipe-button-link"
+                onClick={toggleCreateButton}
+              >
+                Create New Recipe
+              </NavLink>
+              {/* </button> */}
+            </li>
             <li id="manage-recipes">
               <NavLink
                 to={`/users/${user.id}/recipes`}
@@ -92,7 +100,11 @@ function ProfileButton({ user }) {
               </NavLink>
             </li>
             <li id="li-logout">
-              <button onClick={handleLogout} id="logout-button">
+              <button
+                onClick={handleLogout}
+                id="logout-button"
+                // className="rounded-full"
+              >
                 Log Out
               </button>
             </li>
