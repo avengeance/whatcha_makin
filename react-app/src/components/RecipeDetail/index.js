@@ -185,11 +185,9 @@ const RecipeDetail = () => {
             <div className="recipe-owner-name">
               <h3>Recipe Created by: {currentRecipe?.owner_name}</h3>
             </div>
-            <div className="recipe-review-likes-container">
-              <div className="recipe-review">
+            <div className="recipe-detail-review-likes-container">
+              <div className="recipe-detail-review">
                 <i className="fas fa-star"></i>
-                {/* {currentRecipe.avg_rating ? currentRecipe.avg_rating.toFixed(1) : 'New'} */}
-                {/* {avgRating ? avgRating.toFixed(1) : 'New'} */}
                 {currentRecipe ? (
                   <div>
                     {!isNaN(currentRecipe.avg_rating)
@@ -322,11 +320,6 @@ const RecipeDetail = () => {
                     )}
                   </div>
                 </div>
-                {/* {user && user.id !== currentRecipe?.owner_id && !hasReviewed ? (
-                  <button id="post-review" onClick={handlePostReview}>
-                    Post Your Review
-                  </button>
-                ) : null} */}
                 {button}
                 {currentReviews.map(
                   (review, i) =>

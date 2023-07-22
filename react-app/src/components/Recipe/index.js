@@ -50,15 +50,10 @@ function Recipe() {
             // }}
             onClick={() => (window.location.href = `/recipes/${recipe.id}`)}
           >
-            <div id="recipe-name">{recipe.name}</div>
-            <img
-              src={recipe.preview_image[0].url}
-              alt={recipe.name}
-              id="recipe-tile-image"
-            />
             <div title={recipe.name}>
               <div className="recipe-review-likes-container">
                 <div className="recipe-review-likes">
+                  <div id="recipe-name">{recipe.name}</div>
                   <div id="avgRating">
                     <i className="fas fa-star"></i>
                     {/* {recipeDetails?.avg_rating ? parseFloat(recipeDetails.avg_rating).toFixed(1) : "New"}  */}
@@ -81,6 +76,11 @@ function Recipe() {
                 </div>
               </div>
             </div>
+            <img
+              src={recipe.preview_image[0].url}
+              alt={recipe.name}
+              id="recipe-tile-image"
+            />
           </div>
         );
       })}

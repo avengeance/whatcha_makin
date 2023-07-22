@@ -102,6 +102,7 @@ body {
   justify-content: center;
   flex-direction: column;
   font-weight: bold;
+  color: white;
   padding-bottom: 10px;
   opacity: 0;
   transition: opacity 0.5s;
@@ -110,12 +111,17 @@ body {
 #recipe-name {
   font-weight: bolder;
   opacity: 0;
+  color: white;
+  margin-bottom: 10px;
+  margin-right: auto;
   transition: opacity 0.5s;
 }
 
 .recipe-review-likes {
   display: flex;
   justify-content: flex-end;
+  margin-top: 10px;
+  /* border: 1px solid red; */
 }
 
 #likes {
