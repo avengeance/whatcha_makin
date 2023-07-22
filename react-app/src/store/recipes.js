@@ -9,6 +9,9 @@ const UPDATE_RECIPE = "recipes/UPDATE_RECIPE";
 const DELETE_RECIPE = "recipes/DELETE_RECIPE";
 const GET_RECIPES_BY_USER = "recipes/GET_RECIPES_BY_USER";
 
+const CLEAR_RECIPE_DATA = "recipes/CLEAR_RECIPE_DATA";
+const CLEAR_REVIEW_DATA = "recipes/CLEAR_REVIEW_DATA";
+
 // Actions
 const getAllRecipes = (recipes) => ({
   type: GET_ALL_RECIPES,
@@ -38,6 +41,14 @@ const deleteRecipe = (recipe) => ({
 const getRecipesByUser = (recipes) => ({
   type: GET_RECIPES_BY_USER,
   recipes,
+});
+
+const clearRecipeData = () => ({
+  type: CLEAR_RECIPE_DATA,
+});
+
+const clearReviewData = () => ({
+  type: CLEAR_REVIEW_DATA,
 });
 
 // Thunks
@@ -143,6 +154,10 @@ const recipesReducer = (state = intialState, action) => {
         });
       }
       return newState;
+    case CLEAR_RECIPE_DATA:
+      return {};
+    case CLEAR_REVIEW_DATA:
+      return {};
     default:
       return state;
   }

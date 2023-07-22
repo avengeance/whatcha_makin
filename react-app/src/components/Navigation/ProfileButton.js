@@ -55,11 +55,6 @@ function ProfileButton({ user }) {
         id="profile-button"
         style={{ backgroundColor: "#8ABE53" }}
       >
-        {/* <i className='fas fa-bars' style={{
-          fontSize: '14px',
-          paddingRight: '12px',
-          paddingLeft: '5px',
-        }} /> */}
         <i
           className="fas fa-user-circle"
           style={{
@@ -75,11 +70,6 @@ function ProfileButton({ user }) {
             <li id="firstname">Hi, {user.first_name} welcome back!</li>
             <li id="email">{user.email}</li>
             <li>
-              {/* <button
-                onClick={toggleCreateButton}
-                id="create-recipe-button"
-                style={{ backgroundColor: "transparent" }}
-              > */}
               <NavLink
                 exact
                 to="/recipes/new"

@@ -21,17 +21,17 @@ function Recipe() {
       });
   }, []);
 
-  const tileHover = (e, recipeName) => {
-    const tooltip = tooltipRef.current;
-    tooltip.textContent = recipeName;
-    tooltip.style.display = "block";
+  // const tileHover = (e, recipeName) => {
+  //   const tooltip = tooltipRef.current;
+  //   tooltip.textContent = recipeName;
+  //   tooltip.style.display = "block";
 
-    const x = e.clientX;
-    const y = e.clientY;
+  //   const x = e.clientX;
+  //   const y = e.clientY;
 
-    tooltip.style.top = `${y + 20}px`;
-    tooltip.style.left = `${x + 10}px`;
-  };
+  //   tooltip.style.top = `${y + 20}px`;
+  //   tooltip.style.left = `${x + 10}px`;
+  // };
 
   return (
     <div className="recipe-tile-container">

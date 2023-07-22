@@ -8,6 +8,7 @@ import OpenModalButton from "../OpenModalButton";
 import CreateReviewModal from "../CreateReview";
 import UpdateReviewModal from "../UpdateReview";
 import DeleteReviewModal from "../DeleteReview";
+import LoadingPage from "../LoadingPage";
 
 import * as RecipeActions from "../../store/recipes";
 import * as ReviewActions from "../../store/reviews";
@@ -176,205 +177,214 @@ const RecipeDetail = () => {
 
   return (
     <>
-      {currentRecipe && (
+      {loading ? (
+        <LoadingPage />
+      ) : (
         <div>
-          <div className="recipe-name-detail">
-            <div id="recipe-name">
-              <h2>{currentRecipe?.name}</h2>
-            </div>
-            <div className="recipe-owner-name">
-              <h3>Recipe Created by: {currentRecipe?.owner_name}</h3>
-            </div>
-            <div className="recipe-detail-review-likes-container">
-              <div className="recipe-detail-review">
-                <i className="fas fa-star"></i>
-                {currentRecipe ? (
-                  <div>
-                    {!isNaN(currentRecipe.avg_rating)
-                      ? parseFloat(currentRecipe.avg_rating).toFixed(1)
-                      : "New"}
-                  </div>
-                ) : (
-                  "New"
-                )}
-              </div>
-              <div className="recipe-likes">
-                {currentRecipe?.likes > 0 ? (
-                  <>
-                    <i className="fa-solid fa-heart"></i> {currentRecipe?.likes}{" "}
-                  </>
-                ) : (
-                  <>
-                    <i className="far fa-heart"></i> New
-                  </>
-                )}
-              </div>
-            </div>
-            <div id="recipe-detail-info">
-              <div className="recipe-image">
-                <div id="main-recipe-image">
-                  <img
-                    className="main-image"
-                    src={
-                      currentRecipe?.images && currentRecipe.images.length > 0
-                        ? currentRecipe.images[0].url
-                        : null
-                    }
-                    alt="Main Image"
-                  />
+          {currentRecipe && (
+            <div>
+              <div className="recipe-name-detail">
+                <div id="recipe-name">
+                  <h2>{currentRecipe?.name}</h2>
                 </div>
-                <div className="recipe-image-overlay">
-                  {currentRecipe?.images
-                    ?.filter((image) => image.is_preview !== true)
-                    .map((images, i) => (
-                      <img
-                        key={i}
-                        className="recipe-images"
-                        src={images.url}
-                        alt={currentRecipe.name}
-                      />
-                    ))}
-                </div>
-              </div>
-            </div>
-            <div className="recipe-description">
-              <div className="recipe-description-time-container">
-                <div className="recipe-description-owner-container">
-                  <div className="recipe-description-text">
-                    <h4>Recipe Description</h4>
-                    <p>{currentRecipe?.description}</p>
-                  </div>
-                </div>
-                <div className="recipe-time">
-                  <h3>
-                    Total Time to Cook - {formatTime(currentRecipe?.total_time)}
+                <div className="recipe-owner-name">
+                  <h3 id="h3-recipe-name">
+                    Recipe Created by: {currentRecipe?.owner_name}
                   </h3>
-                  <h4>Prep Time - {currentRecipe?.prep_time} min</h4>
-                  <h4>Cook Time - {currentRecipe?.cook_time} min</h4>
-                  <h3>Servings - {currentRecipe?.servings}</h3>
                 </div>
-              </div>
-              <div className="recipe-ingredients-seasoning-containter">
-                <div className="recipe-ingredients">
-                  <h3>Ingredients</h3>
-                  {currentRecipe?.ingredients &&
-                    currentRecipe.ingredients
-                      .filter((ingredient) => !ingredient.is_seasoning)
-                      .map((ingredient, i) => (
-                        <p key={i}>
-                          {ingredient.quantity} {ingredient.measurement}{" "}
-                          {ingredient.name}
-                        </p>
-                      ))}
-                </div>
-                <div className="recipe-seasoning">
-                  <h3>Seasoning</h3>
-                  {currentRecipe?.ingredients &&
-                    currentRecipe.ingredients
-                      .filter((ingredient) => ingredient.is_seasoning)
-                      .map((ingredient, i) => (
-                        <p key={i}>
-                          {ingredient.quantity} {ingredient.measurement}{" "}
-                          {ingredient.name}
-                        </p>
-                      ))}
-                </div>
-              </div>
-            </div>
-            <div id="recipe-directions-container">
-              <div className="recipe-directions-container">
-                <div className="recipe-directions">
-                  <div id="direction-text">
-                    <h3>Directions</h3>
-                  </div>
-                  {currentRecipe?.directions &&
-                    currentRecipe.directions.map((direction, i) => (
-                      <p key={i}>
-                        {direction.step}: {direction.step_info}
-                      </p>
-                    ))}
-                </div>
-              </div>
-            </div>
-            <div id="recipe-reviews-container">
-              <div className="recipe-reviews-container">
-                <div className="recipe-reviews">
-                  <div className="recipe-review-header">
+                <div className="recipe-detail-review-likes-container">
+                  <div className="recipe-detail-review">
+                    <i className="fas fa-star"></i>
                     {currentRecipe ? (
+                      <div>
+                        {!isNaN(currentRecipe.avg_rating)
+                          ? parseFloat(currentRecipe.avg_rating).toFixed(1)
+                          : "New"}
+                      </div>
+                    ) : (
+                      "New"
+                    )}
+                  </div>
+                  <div className="recipe-likes">
+                    {currentRecipe?.likes > 0 ? (
                       <>
-                        <div className="recipe-review-header">
-                          <h3>
-                            {currentRecipe?.reviews?.length === 0
-                              ? "No Reviews Yet"
-                              : currentRecipe?.reviews?.length === 1
-                              ? "Review"
-                              : "Reviews"}
-                          </h3>
-                        </div>
-                        <div id="number-review">
-                          <h4># {currentRecipe?.reviews?.length}</h4>
-                        </div>
+                        <i className="fa-solid fa-heart"></i>{" "}
+                        {currentRecipe?.likes}{" "}
                       </>
                     ) : (
-                      "Loading..."
+                      <>
+                        <i className="far fa-heart"></i> New
+                      </>
                     )}
                   </div>
                 </div>
-                {button}
-                {currentReviews.map(
-                  (review, i) =>
-                    review && (
-                      <div key={i} className="recipe-review-container">
-                        <div className="recipe-review-user">
-                          <div className="recipe-review-user-name">
-                            <div id="review-owner-name">
-                              <h3>{review?.owner_name}</h3>
-                            </div>
-                            <p>
-                              <i
-                                id="recipe-detail-star"
-                                className="fas fa-star"
-                              ></i>
-                              {review?.stars}
+                <div id="recipe-detail-info">
+                  <div className="recipe-image">
+                    <div id="main-recipe-image">
+                      <img
+                        className="main-image"
+                        src={
+                          currentRecipe?.images &&
+                          currentRecipe.images.length > 0
+                            ? currentRecipe.images[0].url
+                            : null
+                        }
+                        alt="Main Image"
+                      />
+                    </div>
+                    <div className="recipe-image-overlay">
+                      {currentRecipe?.images
+                        ?.filter((image) => image.is_preview !== true)
+                        .map((images, i) => (
+                          <img
+                            key={i}
+                            className="recipe-images"
+                            src={images.url}
+                            alt={currentRecipe.name}
+                          />
+                        ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="recipe-description">
+                  <div className="recipe-description-time-container">
+                    <div className="recipe-description-owner-container">
+                      <div className="recipe-description-text">
+                        <h4>Recipe Description</h4>
+                        <p>{currentRecipe?.description}</p>
+                      </div>
+                    </div>
+                    <div className="recipe-time">
+                      <h3>
+                        Total Time to Cook -{" "}
+                        {formatTime(currentRecipe?.total_time)}
+                      </h3>
+                      <h4>Prep Time - {currentRecipe?.prep_time} min</h4>
+                      <h4>Cook Time - {currentRecipe?.cook_time} min</h4>
+                      <h3>Servings - {currentRecipe?.servings}</h3>
+                    </div>
+                  </div>
+                  <div className="recipe-ingredients-seasoning-containter">
+                    <div className="recipe-ingredients">
+                      <h3>Ingredients</h3>
+                      {currentRecipe?.ingredients &&
+                        currentRecipe.ingredients
+                          .filter((ingredient) => !ingredient.is_seasoning)
+                          .map((ingredient, i) => (
+                            <p key={i}>
+                              {ingredient.quantity} {ingredient.measurement}{" "}
+                              {ingredient.name}
                             </p>
-                          </div>
-                          <p id="review-created">{review?.created_at}</p>
-                          <p>{review?.review}</p>
-                        </div>
-                        {user && user.id === review.owner_id && (
-                          <div>
-                            <OpenModalButton
-                              buttonText={"Update"}
-                              modalComponent={
-                                <UpdateReviewModal
-                                  recipeId={recipeId}
-                                  reviewId={review.id}
-                                  closeModal={closeModal}
-                                  refreshKey={refreshKey}
-                                  setRefreshKey={setRefreshKey}
-                                />
-                              }
-                            />
-                            <OpenModalButton
-                              buttonText={"Delete Review"}
-                              modalComponent={
-                                <DeleteReviewModal
-                                  recipeId={recipeId}
-                                  reviewId={review.id}
-                                  closeModal={closeModal}
-                                  refreshKey={refreshKey}
-                                  setRefreshKey={setRefreshKey}
-                                />
-                              }
-                            />
-                          </div>
+                          ))}
+                    </div>
+                    <div className="recipe-seasoning">
+                      <h3>Seasoning</h3>
+                      {currentRecipe?.ingredients &&
+                        currentRecipe.ingredients
+                          .filter((ingredient) => ingredient.is_seasoning)
+                          .map((ingredient, i) => (
+                            <p key={i}>
+                              {ingredient.quantity} {ingredient.measurement}{" "}
+                              {ingredient.name}
+                            </p>
+                          ))}
+                    </div>
+                  </div>
+                </div>
+                <div id="recipe-directions-container">
+                  <div className="recipe-directions-container">
+                    <div className="recipe-directions">
+                      <div id="direction-text">
+                        <h3>Directions</h3>
+                      </div>
+                      {currentRecipe?.directions &&
+                        currentRecipe.directions.map((direction, i) => (
+                          <p key={i}>
+                            {direction.step}: {direction.step_info}
+                          </p>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+                <div id="recipe-reviews-container">
+                  <div className="recipe-reviews-container">
+                    <div className="recipe-reviews">
+                      <div className="recipe-review-header">
+                        {currentRecipe ? (
+                          <>
+                            <div className="recipe-review-header">
+                              <h3>
+                                {currentRecipe?.reviews?.length === 0
+                                  ? "No Reviews Yet"
+                                  : currentRecipe?.reviews?.length === 1
+                                  ? "Review"
+                                  : "Reviews"}
+                              </h3>
+                            </div>
+                            <div id="number-review">
+                              <h4># {currentRecipe?.reviews?.length}</h4>
+                            </div>
+                          </>
+                        ) : (
+                          "Loading..."
                         )}
                       </div>
-                    )
-                )}
-              </div>
-            </div>
-            {/* <div className='recipe-comments-container'>
+                    </div>
+                    {button}
+                    {currentReviews.map(
+                      (review, i) =>
+                        review && (
+                          <div key={i} className="recipe-review-container">
+                            <div className="recipe-review-user">
+                              <div className="recipe-review-user-name">
+                                <div id="review-owner-name">
+                                  <h3>{review?.owner_name}</h3>
+                                </div>
+                                <p>
+                                  <i
+                                    id="recipe-detail-star"
+                                    className="fas fa-star"
+                                  ></i>
+                                  {review?.stars}
+                                </p>
+                              </div>
+                              <p id="review-created">{review?.created_at}</p>
+                              <p>{review?.review}</p>
+                            </div>
+                            {user && user.id === review.owner_id && (
+                              <div>
+                                <OpenModalButton
+                                  buttonText={"Update"}
+                                  modalComponent={
+                                    <UpdateReviewModal
+                                      recipeId={recipeId}
+                                      reviewId={review.id}
+                                      closeModal={closeModal}
+                                      refreshKey={refreshKey}
+                                      setRefreshKey={setRefreshKey}
+                                    />
+                                  }
+                                />
+                                <OpenModalButton
+                                  buttonText={"Delete Review"}
+                                  modalComponent={
+                                    <DeleteReviewModal
+                                      recipeId={recipeId}
+                                      reviewId={review.id}
+                                      closeModal={closeModal}
+                                      refreshKey={refreshKey}
+                                      setRefreshKey={setRefreshKey}
+                                    />
+                                  }
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )
+                    )}
+                  </div>
+                </div>
+                {/* <div className='recipe-comments-container'>
                             <div className='recipe-comments'>
                                 <div className='recipe-comment-header'>
                                     <h3>{currentRecipe?.comments?.length === 0 ? 'No Comments Yet' : currentRecipe.comments.length === 1 ? 'Comment' : 'Comments'}</h3>
@@ -392,7 +402,9 @@ const RecipeDetail = () => {
                                 ))}
                             </div>
                         </div> */}
-          </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </>
