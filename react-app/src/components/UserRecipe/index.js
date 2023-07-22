@@ -63,7 +63,10 @@ const UserRecipes = () => {
                   <button type="button">Update</button>
                 </Link>
               </div>
-              <div className="delete-button">
+              <div
+                className="delete-button modal-style"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <OpenModalButton
                   type="button"
                   buttonText={"Delete Recipe"}

@@ -16,6 +16,7 @@ import * as LikeActions from "../../store/likes";
 import * as CommentActions from "../../store/comments";
 
 import "./RecipeDetail.css";
+// import "./OpenModalButton.css";
 
 const RecipeDetail = () => {
   const { recipeId } = useParams();
@@ -353,30 +354,34 @@ const RecipeDetail = () => {
                             </div>
                             {user && user.id === review.owner_id && (
                               <div>
-                                <OpenModalButton
-                                  buttonText={"Update"}
-                                  modalComponent={
-                                    <UpdateReviewModal
-                                      recipeId={recipeId}
-                                      reviewId={review.id}
-                                      closeModal={closeModal}
-                                      refreshKey={refreshKey}
-                                      setRefreshKey={setRefreshKey}
-                                    />
-                                  }
-                                />
-                                <OpenModalButton
-                                  buttonText={"Delete Review"}
-                                  modalComponent={
-                                    <DeleteReviewModal
-                                      recipeId={recipeId}
-                                      reviewId={review.id}
-                                      closeModal={closeModal}
-                                      refreshKey={refreshKey}
-                                      setRefreshKey={setRefreshKey}
-                                    />
-                                  }
-                                />
+                                <div className="update-button">
+                                  <OpenModalButton
+                                    buttonText={"Update"}
+                                    modalComponent={
+                                      <UpdateReviewModal
+                                        recipeId={recipeId}
+                                        reviewId={review.id}
+                                        closeModal={closeModal}
+                                        refreshKey={refreshKey}
+                                        setRefreshKey={setRefreshKey}
+                                      />
+                                    }
+                                  />
+                                </div>
+                                <div className="delete-button">
+                                  <OpenModalButton
+                                    buttonText={"Delete Review"}
+                                    modalComponent={
+                                      <DeleteReviewModal
+                                        recipeId={recipeId}
+                                        reviewId={review.id}
+                                        closeModal={closeModal}
+                                        refreshKey={refreshKey}
+                                        setRefreshKey={setRefreshKey}
+                                      />
+                                    }
+                                  />
+                                </div>
                               </div>
                             )}
                           </div>

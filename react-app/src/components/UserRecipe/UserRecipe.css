@@ -84,3 +84,8 @@ div.delete-button button {
   width: 130px;
   transition: background-color 0.3s ease;
 }
+
+.modal-style {
+  width: 500px;
+  height: 600px;
+}
