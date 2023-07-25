@@ -49,6 +49,12 @@ const RecipeDetail = () => {
       setReviews([]);
     }
   }, [location.pathname]);
+
+  useEffect(() => {
+    return () => {
+      setReviews([]);
+    };
+  }, []);
   useEffect(() => {
     if (recipeId) {
       setLoading(true);
@@ -72,12 +78,6 @@ const RecipeDetail = () => {
       console.error("No recipeId");
     }
   }, [dispatch, recipeId, reviewPosted, refreshKey]);
-
-  useEffect(() => {
-    return () => {
-      setReviews([]);
-    };
-  }, []);
 
   const isLoggedIn = !!user;
   const isRecipeOwner = user?.id === currentRecipe.owner_id;
@@ -175,6 +175,30 @@ const RecipeDetail = () => {
   //     .then((reviews) => setReviews(reviews.Reviews))
   //     .catch((err) => console.log(err));
   // }, [dispatch, recipeId, refreshKey]);
+
+  // const handleLike = () => {
+  //   dispatch(LikeActions.createRecipeLikeThunk(recipeId)).then(() => {
+  //     setLiked(true);
+  //     dispatch(RecipeActions.getRecipeThunk(recipeId));
+  //     setRefreshKey(refreshKey + 1);
+  //   });
+  // };
+
+  // const handleUnlike = () => {
+  //   const likesObj = Object.values(likesByRecipe).find(
+  //     (like) => like.userId === user.Id && like.recipeId === parseInt(recipeId)
+  //   );
+  //   if (!likesObj) {
+  //     console.error("No like found for the current user and song");
+  //     return;
+  //   }
+  //   const likeId = likesObj.id;
+  //   dispatch(LikeActions.deleteRecipeLikeThunk(recipeId, likeId)).then(() => {
+  //     setLiked(false);
+  //     dispatch(RecipeActions.getRecipeThunk(recipeId));
+  //     setRefreshKey(refreshKey + 1);
+  //   });
+  // };
 
   return (
     <>
