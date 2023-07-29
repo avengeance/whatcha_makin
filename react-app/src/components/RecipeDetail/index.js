@@ -26,11 +26,18 @@ const RecipeDetail = () => {
   const location = useLocation();
 
   const user = useSelector((state) => state.session.user);
-  const currRecipe = useSelector((state) => state.recipes.recipes[recipeId]);
+  // const currRecipe = useSelector((state) => state.recipes.recipes[recipeId]);
   const currentReviews = useSelector((state) => state.reviews.reviews || []);
 
-  const currentComments = useSelector((state) => state.comments.comments);
+  // const currentComments = useSelector((state) =>
+  //   Object.values(state.recipes.comments)
+  // );
+
+  const currentComments = useSelector((state) => state.recipes.comments || []);
   const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
+
+  console.log("current comments", currentComments);
+  console.log("current reviews", currentReviews);
 
   const [currentRecipe, setCurrentRecipe] = useState({});
   const currentRecipes = useSelector((state) => state.recipes.recipes);
@@ -74,6 +81,10 @@ const RecipeDetail = () => {
         .finally(() => {
           setLoading(false);
         });
+
+      dispatch(CommentActions.getAllCommentsThunk(recipeId))
+        .then((comments) => setComments(comments.Comments))
+        .catch((err) => console.log(err));
     } else {
       console.error("No recipeId");
     }
@@ -412,25 +423,44 @@ const RecipeDetail = () => {
                         )
                     )}
                   </div>
-                </div>
-                {/* <div className='recipe-comments-container'>
-                            <div className='recipe-comments'>
-                                <div className='recipe-comment-header'>
-                                    <h3>{currentRecipe?.comments?.length === 0 ? 'No Comments Yet' : currentRecipe.comments.length === 1 ? 'Comment' : 'Comments'}</h3>
+                  <div className="recipe-comments-container">
+                    <div className="recipe-comments">
+                      <div className="recipe-comment-header">
+                        {currentRecipe ? (
+                          <div className="recipe-comment-header">
+                            <h3>
+                              {currentRecipe?.comments?.length === 0
+                                ? "No Comments Yet"
+                                : currentRecipe?.comments?.length === 1
+                                ? "Comment"
+                                : "Comments"}
+                            </h3>
+                          </div>
+                        ) : (
+                          "Loading..."
+                        )}
+                      </div>
+                      {currentComments[recipeId].map(
+                        (comment, i) => (
+                          console.log("comments map", comment),
+                          (
+                            <div key={i} className="recipe-comment-container">
+                              <div className="recipe-comment-user">
+                                <div className="recipe-comment-user-name">
+                                  <h3>{comment?.owner_name}</h3>
                                 </div>
-                                {currentRecipe.comments.map((comment, i) => (
-                                    <div key={i} className='recipe-comment-container'>
-                                        <div className='recipe-comment-user'>
-                                            <div className='recipe-comment-user-name'>
-                                                <h3>{comment?.owner_name}</h3>
-                                            </div>
-                                            <p id='comment-created'>{comment?.created_at}</p>
-                                        </div>
-                                        <p>{comment?.comment}</p>
-                                    </div>
-                                ))}
+                                <p id="comment-created">
+                                  {comment?.created_at}
+                                </p>
+                                <p>{comment?.comment}</p>
+                              </div>
                             </div>
-                        </div> */}
+                          )
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}

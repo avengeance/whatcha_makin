@@ -188,13 +188,15 @@ h2 {
   justify-content: center;
 }
 
-#recipe-reviews-container {
+#recipe-reviews-container,
+.recipe-comments-container {
   display: flex;
   justify-content: center;
   /* border: 3px solid blue; */
 }
 
-.recipe-reviews-container {
+.recipe-reviews-container,
+.recipe-comments-container {
   padding-left: 30px;
   padding-right: 30px;
   background-color: #c6e08d;
@@ -204,7 +206,8 @@ h2 {
   border: 3px solid black;
 }
 
-.recipe-review-header {
+.recipe-review-header,
+.recipe-comment-header {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -282,22 +285,6 @@ h2 {
   box-shadow: 4px 4px 0px 0px #000000;
 }
 
-/* #reviews-box {
-  display: flex;
-  justify-content: flex-start;
-  margin-top: 15px;
-  border-top: 2px solid lightgray;
-  border: 2px solid blue;
-} */
-
-/* #reviews-box #stars-review {
-  display: flex;
-  justify-content: space-evenly;
-  padding-top: 10px;
-  width: 25%;
-  border: 2px solid blue;
-} */
-
 #review-map {
   display: flex;
   flex-direction: column;
@@ -345,7 +332,8 @@ h2 {
   /* margin-right: 10px; */
   /* border: 3px solid red; */
 }
-.recipe-review-user {
+.recipe-review-user,
+.recipe-comment-user {
   margin-top: 15px;
   padding-left: 15px;
   border-radius: 15px;
