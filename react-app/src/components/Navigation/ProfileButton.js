@@ -15,8 +15,6 @@ function ProfileButton({ user }) {
   const [showCreateButton, setShowCreateButton] = useState(false);
 
   const openMenu = () => {
-    // if (showMenu) return;
-    // setShowMenu(true);
     setShowMenu((prev) => !prev);
   };
 
@@ -62,8 +60,6 @@ function ProfileButton({ user }) {
           }}
         />
       </button>
-      {/* {user && (
-      )} */}
       <ul className={ulClassName} ref={ulRef} id="profile-dropdown">
         {user ? (
           <>
@@ -78,7 +74,6 @@ function ProfileButton({ user }) {
               >
                 Create New Recipe
               </NavLink>
-              {/* </button> */}
             </li>
             <li id="manage-recipes">
               <NavLink
@@ -90,11 +85,7 @@ function ProfileButton({ user }) {
               </NavLink>
             </li>
             <li id="li-logout">
-              <button
-                onClick={handleLogout}
-                id="logout-button"
-                // className="rounded-full"
-              >
+              <button onClick={handleLogout} id="logout-button">
                 Log Out
               </button>
             </li>
