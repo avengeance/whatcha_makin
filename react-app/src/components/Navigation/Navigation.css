@@ -44,14 +44,18 @@ li {
 }
 
 .profile-button {
-  position: relative;
-  display: flex;
-  justify-content: flex-end;
-  flex-direction: column;
+  /* position: relative; */
+  /* display: flex; */
+  /* justify-content: flex-end; */
+  /* flex-direction: column; */
   /* padding-right: 25px; */
-  width: 50%;
-  height: 50%;
+  /* width: 50%; */
+  /* height: 50%; */
   /* border: 1px solid green; */
+}
+
+.dropdown-container {
+  border: 5px solid black;
 }
 
 #profile-button {
@@ -61,17 +65,24 @@ li {
   align-items: center;
   flex-direction: row;
   border: 1px lightgray solid;
-  width: 175px;
-  height: 42px;
-  margin: 1px;
-  padding: 1px;
-  border-radius: 50px;
+  width: 120px;
+  height: 120px;
+  margin: 10px;
+  /* padding: 10px; */
+  border-radius: 75px;
+  top: 10px;
   opacity: 0.6;
-  border: 1px solid black;
+  border: 16px solid black;
 }
 
 #profile-button:hover {
   cursor: pointer;
+}
+
+.profile-dropdown {
+  display: flex;
+  justify-content: center;
+  border: 5px solid black;
 }
 
 #profile-dropdown {
@@ -81,14 +92,16 @@ li {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  border-radius: 10px;
+  border-radius: 30px;
   box-shadow: 0px 0px 10px #888;
   font-size: 12px;
   padding-top: 10px;
   padding-bottom: 10px;
   /* left: 0px; */
-  top: 50px;
+  top: 0px;
+  left: 135px;
   width: 200px;
+  padding-right: 25px;
   text-align: start;
   background-color: #c6e08d;
 }
@@ -132,7 +145,8 @@ li {
   padding-top: 10px;
   padding-bottom: 10px;
   width: 100%;
-  margin-left: 0;
+  /* background-color: transparent !important; */
+  /* margin-left: 0; */
   /* border: 1px solid black; */
 }
 
@@ -142,13 +156,13 @@ li {
   padding: 10px 20px;
 }
 
-.login-button:hover {
+/* .login-button:hover {
   background-color: #ddd;
-}
+} */
 
-.login-button:hover > button {
+/* .login-button:hover > button {
   color: blue;
-}
+} */
 
 .signup-button {
   display: flex;
@@ -159,27 +173,30 @@ li {
   text-decoration: none;
 }
 
-.signup-button:hover {
+/* .signup-button:hover {
   background-color: #ddd;
-}
+} */
 
 #create-recipe-button {
   display: flex;
-  align-self: center;
-  border: 0;
-  width: 170px;
-  color: blue;
-  text-decoration: none !important;
-  /* border: 1px solid red; */
+  justify-content: center;
+  padding: 5px;
+  padding-right: 20px;
+  width: 80%;
+  font-weight: bold;
+  background-color: transparent;
 }
 
 #recipe-button-link {
-  display: flex;
-  align-self: center;
-  border: 0;
-  width: 170px;
-  color: #4d7e3e;
   text-decoration: none !important;
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+  margin-left: 28px;
+  width: 90%;
+  font-weight: bold;
+  background-color: transparent;
+  /* border: 1px solid black; */
 }
 
 #firstname {
@@ -205,4 +222,5 @@ li {
   font-weight: bold;
   border-top: 2px solid black;
   border-bottom: 2px solid black;
+  /* border: 1px solid black; */
 }

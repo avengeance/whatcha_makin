@@ -21,43 +21,39 @@ function Recipe() {
       });
   }, []);
 
-  const tileHover = (e, recipeName) => {
-    const tooltip = tooltipRef.current;
-    tooltip.textContent = recipeName;
-    tooltip.style.display = "block";
+  // const tileHover = (e, recipeName) => {
+  //   const tooltip = tooltipRef.current;
+  //   tooltip.textContent = recipeName;
+  //   tooltip.style.display = "block";
 
-    const x = e.clientX;
-    const y = e.clientY;
+  //   const x = e.clientX;
+  //   const y = e.clientY;
 
-    tooltip.style.top = `${y + 20}px`;
-    tooltip.style.left = `${x + 10}px`;
-  };
+  //   tooltip.style.top = `${y + 20}px`;
+  //   tooltip.style.left = `${x + 10}px`;
+  // };
 
   return (
     <div className="recipe-tile-container">
-      <div ref={tooltipRef} id="recipe-tooltip"></div>
-      {recipes.map((recipe) => {
+      {/* <div ref={tooltipRef} id="recipe-tooltip"></div> */}
+      {recipes.map((recipe, index) => {
         const recipeDetails = recipeRating[recipe.id];
         return (
           <div
             className="recipe-tile"
             key={recipe.id}
-            onMouseEnter={(e) => tileHover(e, recipe.name)}
-            onMouseOut={() => {
-              const tooltip = document.getElementById("recipe-tooltip");
-              tooltip.textContent = "";
-            }}
+            style={{ "--card-index": index }}
+            // onMouseEnter={(e) => tileHover(e, recipe.name)}
+            // onMouseOut={() => {
+            //   const tooltip = document.getElementById("recipe-tooltip");
+            //   tooltip.textContent = "";
+            // }}
             onClick={() => (window.location.href = `/recipes/${recipe.id}`)}
           >
-            <img
-              src={recipe.preview_image[0].url}
-              alt={recipe.name}
-              id="recipe-tile-image"
-            />
             <div title={recipe.name}>
               <div className="recipe-review-likes-container">
-                <div id="recipe-name">{recipe.name}</div>
                 <div className="recipe-review-likes">
+                  <div id="recipe-name">{recipe.name}</div>
                   <div id="avgRating">
                     <i className="fas fa-star"></i>
                     {/* {recipeDetails?.avg_rating ? parseFloat(recipeDetails.avg_rating).toFixed(1) : "New"}  */}
@@ -80,6 +76,11 @@ function Recipe() {
                 </div>
               </div>
             </div>
+            <img
+              src={recipe.preview_image[0].url}
+              alt={recipe.name}
+              id="recipe-tile-image"
+            />
           </div>
         );
       })}

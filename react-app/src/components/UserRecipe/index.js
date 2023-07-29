@@ -38,59 +38,42 @@ const UserRecipes = () => {
   }, [dispatch, user, refreshKey]);
 
   return (
-    <div className="user-container">
-      {recipes.map((recipe) => (
-        <div id="recipe-tile" key={recipe.id}>
-          <div className="recipe-tile-container-box">
-            <div className="recipe-tile-image">
-              <Link to={`/recipes/${recipe.id}`}>
-                <img
-                  src={recipe.preview_image[0].url}
-                  alt={recipe.name}
-                  id="recipe-tile-image"
-                />
-              </Link>
+    <div className="recipe-tile-container">
+      {recipes.map((recipe, index) => {
+        return (
+          <div
+            className="recipe-tile"
+            key={recipe.id}
+            style={{ "--card-index": index }}
+            onClick={() => (window.location.href = `/recipes/${recipe.id}`)}
+          >
+            <div title={recipe.name}>
+              <div className="recipe-review-likes-container">
+                <div id="recipe-name">{recipe.name}</div>
+              </div>
             </div>
-          </div>
-          <div title={recipe.name}>
-            <div className="recipe-review-likes-container">
-              <div id="recipe-name">{recipe.name}</div>
-              {/* <div className="recipe-review-likes">
-                <div id="avgRating">
-                  <i className="fas fa-star"></i>
-                  {currentRecipes ? (
-                    <div>{currentRecipes.avg_rating}</div>
-                  ) : (
-                    "Loading..."
-                  )}
-                </div>
-                <div id="likes">
-                  {recipe.likes > 0 ? (
-                    <>
-                      <i className="fa-solid fa-heart"></i> {recipe.likes}{" "}
-                    </>
-                  ) : (
-                    <>
-                      <i className="far fa-heart"></i> New
-                    </>
-                  )}
-                </div>
-              </div> */}
-            </div>
+            <img
+              src={recipe.preview_image[0].url}
+              alt={recipe.name}
+              id="recipe-tile-image"
+            />
             <div className="recipe-buttons">
               <div className="update-button">
                 <Link to={`/recipes/${recipe.id}/edit`}>
                   <button type="button">Update</button>
                 </Link>
               </div>
-              <div className="delete-button">
+              <div
+                className="delete-button modal-style"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <OpenModalButton
                   type="button"
                   buttonText={"Delete Recipe"}
-                  style={{
-                    backgroundColor: "transparent",
-                    border: "none",
-                  }}
+                  // style={{
+                  //   backgroundColor: "transparent",
+                  //   border: "none",
+                  // }}
                   modalComponent={
                     <DeleteRecipeModal
                       recipeId={recipe.id}
@@ -104,8 +87,8 @@ const UserRecipes = () => {
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

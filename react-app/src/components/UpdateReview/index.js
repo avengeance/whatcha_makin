@@ -77,7 +77,6 @@ const UpdateReviewModal = ({
         dispatch(ReviewActions.getReviewThunk(recipeId, reviewId));
         closeModal();
         onReviewSubmit();
-        // setRefreshKey(refreshKey + 1);
       } catch (err) {
         if (err.response && err.response.status == 400) {
           const data = await err.json();
