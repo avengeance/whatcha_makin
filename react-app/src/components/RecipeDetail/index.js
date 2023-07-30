@@ -26,6 +26,7 @@ const RecipeDetail = () => {
   const location = useLocation();
 
   const user = useSelector((state) => state.session.user);
+  const userId = useSelector((state) => state.session.user?.id);
   // const currRecipe = useSelector((state) => state.recipes.recipes[recipeId]);
   const currentReviews = useSelector((state) => state.reviews.reviews || []);
 
@@ -33,11 +34,13 @@ const RecipeDetail = () => {
   //   Object.values(state.recipes.comments)
   // );
 
-  const currentComments = useSelector((state) => state.recipes.comments || []);
-  const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
+  const currentComments = useSelector((state) => state.recipes.comments);
+  const likesByRecipe = useSelector((state) => state.likes);
 
-  console.log("current comments", currentComments);
-  console.log("current reviews", currentReviews);
+  // console.log("current comments", currentComments);
+  // console.log("current reviews", currentReviews);
+  console.log("current user ID:", userId);
+  console.log("Likes by recipe:", likesByRecipe);
 
   const [currentRecipe, setCurrentRecipe] = useState({});
   const currentRecipes = useSelector((state) => state.recipes.recipes);
@@ -85,6 +88,11 @@ const RecipeDetail = () => {
       dispatch(CommentActions.getAllCommentsThunk(recipeId))
         .then((comments) => setComments(comments.Comments))
         .catch((err) => console.log(err));
+
+      dispatch(LikeActions.getLikesByRecipeThunk(recipeId)).then((likes) => {
+        const userLike = likes.find((like) => like.user_id === userId);
+        setLiked(!!userLike);
+      });
     } else {
       console.error("No recipeId");
     }
@@ -187,29 +195,29 @@ const RecipeDetail = () => {
   //     .catch((err) => console.log(err));
   // }, [dispatch, recipeId, refreshKey]);
 
-  // const handleLike = () => {
-  //   dispatch(LikeActions.createRecipeLikeThunk(recipeId)).then(() => {
-  //     setLiked(true);
-  //     dispatch(RecipeActions.getRecipeThunk(recipeId));
-  //     setRefreshKey(refreshKey + 1);
-  //   });
-  // };
+  const handleLike = () => {
+    dispatch(LikeActions.createRecipeLikeThunk(recipeId)).then(() => {
+      setLiked(true);
+      dispatch(RecipeActions.getRecipeThunk(recipeId));
+      setRefreshKey(refreshKey + 1);
+    });
+  };
 
-  // const handleUnlike = () => {
-  //   const likesObj = Object.values(likesByRecipe).find(
-  //     (like) => like.userId === user.Id && like.recipeId === parseInt(recipeId)
-  //   );
-  //   if (!likesObj) {
-  //     console.error("No like found for the current user and song");
-  //     return;
-  //   }
-  //   const likeId = likesObj.id;
-  //   dispatch(LikeActions.deleteRecipeLikeThunk(recipeId, likeId)).then(() => {
-  //     setLiked(false);
-  //     dispatch(RecipeActions.getRecipeThunk(recipeId));
-  //     setRefreshKey(refreshKey + 1);
-  //   });
-  // };
+  const handleUnlike = () => {
+    const likesObj = Object.values(likesByRecipe.likes).find(
+      (like) => like.user_id === userId && like.recipe_id === parseInt(recipeId)
+    );
+    if (!likesObj) {
+      console.error("No like found for the current user and recipe");
+      return;
+    }
+    const likeId = likesObj.id;
+    dispatch(LikeActions.deleteRecipeLikeThunk(recipeId, likeId)).then(() => {
+      setLiked(false);
+      dispatch(RecipeActions.getRecipeThunk(recipeId));
+      setRefreshKey(refreshKey + 1);
+    });
+  };
 
   return (
     <>
@@ -244,13 +252,33 @@ const RecipeDetail = () => {
                   <div className="recipe-likes">
                     {currentRecipe?.likes > 0 ? (
                       <>
-                        <i className="fa-solid fa-heart"></i>{" "}
+                        {liked ? (
+                          <i
+                            className="fa-solid fa-heart liked"
+                            onClick={() => {
+                              if (user) handleUnlike();
+                            }}
+                          ></i>
+                        ) : (
+                          <i
+                            className="fa-solid fa-heart"
+                            onClick={() => {
+                              if (user) handleLike();
+                            }}
+                          ></i>
+                        )}{" "}
                         {currentRecipe?.likes}{" "}
                       </>
                     ) : (
-                      <>
-                        <i className="far fa-heart"></i> New
-                      </>
+                      <i
+                        className={`far fa-heart ${liked ? "liked" : ""}`}
+                        onClick={() => {
+                          if (user) handleLike();
+                        }}
+                      >
+                        {" "}
+                        New
+                      </i>
                     )}
                   </div>
                 </div>
@@ -426,7 +454,7 @@ const RecipeDetail = () => {
                   <div className="recipe-comments-container">
                     <div className="recipe-comments">
                       <div className="recipe-comment-header">
-                        {currentRecipe ? (
+                        {/* {currentRecipe ? (
                           <div className="recipe-comment-header">
                             <h3>
                               {currentRecipe?.comments?.length === 0
@@ -438,9 +466,9 @@ const RecipeDetail = () => {
                           </div>
                         ) : (
                           "Loading..."
-                        )}
+                        )} */}
                       </div>
-                      {currentComments[recipeId].map(
+                      {/* {currentComments[recipeId].map(
                         (comment, i) => (
                           console.log("comments map", comment),
                           (
@@ -457,7 +485,7 @@ const RecipeDetail = () => {
                             </div>
                           )
                         )
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>

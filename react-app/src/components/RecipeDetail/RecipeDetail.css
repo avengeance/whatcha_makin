@@ -347,3 +347,7 @@ h2 {
   justify-content: center;
   /* border: 1px solid black; */
 }
+
+.fa-heart.liked {
+  color: red;
+}
