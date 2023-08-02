@@ -111,6 +111,7 @@ def get_recipe(id):
                     "id": review.id,
                     "owner_id": review.owner_id,
                     "recipe_id": review.recipe_id,
+                    "owner_name": review.users.first_name,
                     "review": review.review,
                     "stars": review.stars,
                     "created_at": review.created_at,

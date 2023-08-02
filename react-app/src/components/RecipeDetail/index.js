@@ -65,6 +65,7 @@ const RecipeDetail = () => {
       setReviews([]);
     };
   }, []);
+
   useEffect(() => {
     if (recipeId) {
       setLoading(true);
@@ -76,18 +77,24 @@ const RecipeDetail = () => {
             setCurrentRecipe(currentRecipes);
           }
         })
-        .catch((err) => console.log(err));
-
-      dispatch(ReviewActions.getAllReviewsThunk(recipeId))
-        .then((reviews) => setReviews(reviews.Reviews))
         .catch((err) => console.log(err))
         .finally(() => {
           setLoading(false);
         });
 
-      dispatch(CommentActions.getAllCommentsThunk(recipeId))
-        .then((comments) => setComments(comments.Comments))
-        .catch((err) => console.log(err));
+      // dispatch(ReviewActions.getAllReviewsThunk(recipeId))
+      //   .then((reviews) => setReviews(reviews.Reviews))
+      //   .catch((err) => console.log(err))
+      //   .finally(() => {
+      //     setLoading(false);
+      //   });
+
+      // dispatch(CommentActions.getAllCommentsThunk(recipeId))
+      //   .then((comments) => setComments(comments.Comments))
+      //   .catch((err) => console.log(err))
+      //   .finally(() => {
+      //     setLoading(false);
+      //   });
 
       dispatch(LikeActions.getLikesByRecipeThunk(recipeId)).then((likes) => {
         const userLike = likes.find((like) => like.user_id === userId);
@@ -99,8 +106,8 @@ const RecipeDetail = () => {
   }, [dispatch, recipeId, reviewPosted, refreshKey]);
 
   const isLoggedIn = !!user;
-  const isRecipeOwner = user?.id === currentRecipe.owner_id;
-  const hasReviewed = currentReviews.some(
+  const isRecipeOwner = userId === currentRecipe.owner_id;
+  const hasReviewed = currentRecipe.reviews?.some(
     (review) => review && review.owner_id === user?.id
   );
 
@@ -270,15 +277,24 @@ const RecipeDetail = () => {
                         {currentRecipe?.likes}{" "}
                       </>
                     ) : (
-                      <i
-                        className={`far fa-heart ${liked ? "liked" : ""}`}
-                        onClick={() => {
-                          if (user) handleLike();
-                        }}
-                      >
-                        {" "}
+                      <>
+                        {liked ? (
+                          <i
+                            className="fa-solid fa-heart liked"
+                            onClick={() => {
+                              if (user) handleUnlike();
+                            }}
+                          ></i>
+                        ) : (
+                          <i
+                            className="far fa-heart"
+                            onClick={() => {
+                              if (user) handleLike();
+                            }}
+                          ></i>
+                        )}{" "}
                         New
-                      </i>
+                      </>
                     )}
                   </div>
                 </div>
@@ -395,7 +411,7 @@ const RecipeDetail = () => {
                       </div>
                     </div>
                     {button}
-                    {currentReviews.map(
+                    {currentRecipe.reviews?.map(
                       (review, i) =>
                         review && (
                           <div key={i} className="recipe-review-container">
@@ -454,7 +470,7 @@ const RecipeDetail = () => {
                   <div className="recipe-comments-container">
                     <div className="recipe-comments">
                       <div className="recipe-comment-header">
-                        {/* {currentRecipe ? (
+                        {currentRecipe ? (
                           <div className="recipe-comment-header">
                             <h3>
                               {currentRecipe?.comments?.length === 0
@@ -466,9 +482,9 @@ const RecipeDetail = () => {
                           </div>
                         ) : (
                           "Loading..."
-                        )} */}
+                        )}
                       </div>
-                      {/* {currentComments[recipeId].map(
+                      {currentRecipe.comments.map(
                         (comment, i) => (
                           console.log("comments map", comment),
                           (
@@ -485,7 +501,7 @@ const RecipeDetail = () => {
                             </div>
                           )
                         )
-                      )} */}
+                      )}
                     </div>
                   </div>
                 </div>
