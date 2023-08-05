@@ -66,17 +66,6 @@ function CreateRecipe() {
     setServings(e.target.value);
   };
 
-  // useEffect(() => {
-  //   const getCookie = (name) => {
-  //     const value = "; " + document.cookie;
-  //     const parts = value.split("; " + name + "=");
-  //     if (parts.length === 2) return parts.pop().split(";").shift();
-  //   };
-
-  //   let csrf_token = getCookie("csrf_token");
-  //   setCsrfToken(csrf_token);
-  // }, []);
-
   function handleIngredientChange(i, event) {
     const values = [...ingredients];
     if (event.target.name === "name") {
