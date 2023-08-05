@@ -111,10 +111,11 @@ def get_recipe(id):
                     "id": review.id,
                     "owner_id": review.owner_id,
                     "recipe_id": review.recipe_id,
+                    "owner_name": review.users.first_name,
                     "review": review.review,
                     "stars": review.stars,
                     "created_at": review.created_at,
-                    "udated_at": review.updated_at
+                    "updated_at": review.updated_at
                 }
                 reviews_list.append(review_dict)
         else:
@@ -133,6 +134,7 @@ def get_recipe(id):
             comment_dict = {
                 "id": comment.id,
                 "owner_id": comment.owner_id,
+                # "owner_name":comment.users.first_name,
                 "recipe_id": comment.recipe_id,
                 "comment": comment.comment,
                 "created_at": comment.created_at,
@@ -401,20 +403,7 @@ def create_review(id):
         return jsonify(new_review.to_dict()), 201
     else:
         return jsonify(form.errors), 400
-    
-# Get a review
-# @recipe_routes.route('/<int:id>/reviews/<int:review_id>', methods=['GET'])
-# def get_review(review_id):
-#     review = Review.query.get(review_id)
-
-#     if review is None:
-#         return jsonify({
-#             "error": "Review does not exist",
-#             "status_code": 404
-#         }), 404
-
-#     review_dict = review.to_dict()
-#     return jsonify(review_dict), 200
+ 
 
 # View Likes by Recipe ID (Bonus Feature)
 @recipe_routes.route('/<int:id>/likes', methods=['GET'])
@@ -473,9 +462,10 @@ def delete_like(id,like_id):
 @recipe_routes.route('/<int:id>/comments', methods=['GET'])
 def view_comments(id):
     recipe = Recipe.query.get(id)
-    
+    # from sqlalchemy.orm import joinedload
     if recipe:
         comments = Comment.query.filter_by(recipe_id=id).all()
+        # comments = Comment.query.options(joinedload(Comment.users)).filter_by(recipe_id=id).all()
         comments_dict = [comment.to_dict() for comment in comments]
         return jsonify(comments_dict), 200
     else:

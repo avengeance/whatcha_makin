@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -33,7 +33,7 @@ function CreateRecipe() {
   const [cookHours, setCookHours] = useState(null);
   const [cookMinutes, setCookMinutes] = useState(0);
 
-  const [servings, setServings] = useState(1);
+  const [servings, setServings] = useState(0);
   // const [previewImage, setPreviewImage] = useState(null);
   // const [recipeImage, setRecipeImage] = useState(null);
   // const [otherImages, setOtherImages] = useState([]);
@@ -41,8 +41,6 @@ function CreateRecipe() {
   const [nameValid, setNameValid] = useState(false);
   const [ingredientsValid, setIngredientsValid] = useState(false);
   const [directionsValid, setDirectionsValid] = useState(false);
-  const [prepTimeValid, setPrepTimeValid] = useState(false);
-  const [cookTimeValid, setCookTimeValid] = useState(false);
   const [servingsValid, setServingsValid] = useState(false);
 
   const [hasReviewed, setHasReviewed] = useState(false);
@@ -53,67 +51,31 @@ function CreateRecipe() {
   const [reviews, setReviews] = useState([]);
 
   const onNameChange = (e) => {
-    const valid = validators.validateName(e.target.value);
-    setNameValid(valid);
     setName(e.target.value);
-    if (!valid) {
-      setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
-    } else {
-      setNameValid(valid);
-      setName(e.target.value);
-      setReviews([]);
-    }
   };
 
-  // const onIngredientChange = (ingredients) => {
-  //   const valid = ingredients.every((ing) => {
-  //     return (
-  //       validators.validateIngredientName(ing.name) &&
-  //       validators.validateIngredientQuantity(ing.quantity)
-  //     );
-  //   });
-  //   setIngredientsValid(valid);
-  //   setIngredients(ingredients);
-  // };
-
-  // const onDirectionChange = (dir) => {
-  //   const valid = validators.validateStepInfo(dir.stepInfo);
-  //   setDirectionsValid(valid);
-  // };
-
   const onPrepMinsChange = (e) => {
-    const mins = e.target.value;
-    const valid = validators.validatePrepTime(0, mins);
-    setPrepTimeValid(valid);
-    setPrepMinutes(mins);
+    setPrepMinutes(e.target.value);
   };
 
   const onCookMinsChange = (e) => {
-    const mins = e.target.value;
-    const valid = validators.validateCookTime(0, mins);
-    setCookTimeValid(valid);
-    setCookMinutes(mins);
+    setCookMinutes(e.target.value);
   };
 
   const onServingsChange = (e) => {
-    const val = e.target.value;
-    const valid = validators.validateServings(val);
-    if (valid) {
-      setServings(val);
-    }
-    setServingsValid(valid);
+    setServings(e.target.value);
   };
 
-  useEffect(() => {
-    const getCookie = (name) => {
-      const value = "; " + document.cookie;
-      const parts = value.split("; " + name + "=");
-      if (parts.length === 2) return parts.pop().split(";").shift();
-    };
+  // useEffect(() => {
+  //   const getCookie = (name) => {
+  //     const value = "; " + document.cookie;
+  //     const parts = value.split("; " + name + "=");
+  //     if (parts.length === 2) return parts.pop().split(";").shift();
+  //   };
 
-    let csrf_token = getCookie("csrf_token");
-    setCsrfToken(csrf_token);
-  }, []);
+  //   let csrf_token = getCookie("csrf_token");
+  //   setCsrfToken(csrf_token);
+  // }, []);
 
   function handleIngredientChange(i, event) {
     const values = [...ingredients];
@@ -126,9 +88,6 @@ function CreateRecipe() {
         event.target.value
       );
       setIngredientsValid(quantityValid);
-      if (!quantityValid) {
-        return setIngredientsValid(quantityValid);
-      }
     }
     if (event.target.name === "is_seasoning") {
       values[i][event.target.name] = event.target.checked;
@@ -168,6 +127,9 @@ function CreateRecipe() {
   function handleRemoveDirection(i) {
     const values = [...directions];
     values.splice(i, 1);
+    for (let j = i; j < values.length; j++) {
+      values[j].step = j + 1;
+    }
     setDirections(values);
   }
 
@@ -182,26 +144,50 @@ function CreateRecipe() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
+    setErrors([]);
+    if (!validators.validateName(name)) {
+      alert("Name must be longer than 3 characters");
+      return;
+    } else {
+      setNameValid(true);
+    }
 
-    // Validate all ingredients
     for (let i = 0; i < ingredients.length; i++) {
       const ingredient = ingredients[i];
-
-      // Validate name
       if (!validators.validateIngredientName(ingredient.name)) {
         alert("Invalid ingredient name");
-        return; // Prevent form submission
+        return;
       }
-
-      // Validate quantity
       if (!validators.validateIngredientQuantity(ingredient.quantity)) {
         alert(
           "Invalid quantity for ingredient whole numbers only: " +
             ingredient.name
         );
-        return; // Prevent form submission
+        return;
       }
+    }
+
+    for (let i = 0; i < directions.length; i++) {
+      const direction = directions[i];
+      if (!validators.validateStepInfo(direction.step_info)) {
+        alert("Step info must be greater than 5 characters");
+        return;
+      }
+    }
+
+    if (!validators.validatePrepTime(0, prepMinutes)) {
+      alert("Prep Time miniutes must be longer than 0 Min");
+      return;
+    }
+
+    if (!validators.validateCookTime(0, cookMinutes)) {
+      alert("Cook Time minutes must be longer than 0 min");
+      return;
+    }
+
+    if (!validators.validateServings(servings)) {
+      alert("Servings must be greater than 0");
+      return;
     }
 
     const formData = new FormData();
@@ -228,8 +214,6 @@ function CreateRecipe() {
     formData.append("ingredients", JSON.stringify(ingredients));
     formData.append("directions", JSON.stringify(directions));
 
-    // const formValid = validateForm(formData)
-    // setIsValid(formValid)
     let newRecipe;
 
     try {
@@ -256,7 +240,7 @@ function CreateRecipe() {
       }
     } catch (err) {
       console.log("Error in catch block", err);
-      setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
+      // setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
     }
   };
   return (
@@ -424,7 +408,7 @@ function CreateRecipe() {
                   onChange={onPrepMinsChange}
                   required
                 >
-                  {Array.from({ length: 60 }, (_, i) => i + 1).map((i) => (
+                  {Array.from({ length: 60 }, (_, i) => i).map((i) => (
                     <option key={i} value={i}>
                       {i} Minutes
                     </option>
@@ -455,7 +439,7 @@ function CreateRecipe() {
                   onChange={onCookMinsChange}
                   required
                 >
-                  {Array.from({ length: 60 }, (_, i) => i + 1).map((i) => (
+                  {Array.from({ length: 60 }, (_, i) => i).map((i) => (
                     <option key={i} value={i}>
                       {i} Minutes
                     </option>
@@ -474,7 +458,7 @@ function CreateRecipe() {
                 // onChange={(e) => setServings(e.target.value)}
                 onChange={onServingsChange}
               >
-                {[...Array(101).keys()].slice(1).map((i) => (
+                {[...Array(101).keys()].slice(0).map((i) => (
                   <option key={i} value={i}>
                     {i} Servings
                   </option>
@@ -518,14 +502,6 @@ function CreateRecipe() {
             type="submit"
             className="submit-button"
             onClick={handleSubmit}
-            disabled={
-              !nameValid ||
-              !ingredientsValid ||
-              !directionsValid ||
-              !prepTimeValid ||
-              !cookTimeValid ||
-              !servingsValid
-            }
           >
             Create Recipe
           </button>

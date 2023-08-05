@@ -16,7 +16,6 @@ import * as LikeActions from "../../store/likes";
 import * as CommentActions from "../../store/comments";
 
 import "./RecipeDetail.css";
-// import "./OpenModalButton.css";
 
 const RecipeDetail = () => {
   const { recipeId } = useParams();
@@ -26,14 +25,10 @@ const RecipeDetail = () => {
   const location = useLocation();
 
   const user = useSelector((state) => state.session.user);
-  const currRecipe = useSelector((state) => state.recipes.recipes[recipeId]);
-  const currentReviews = useSelector((state) => state.reviews.reviews || []);
-
-  const currentComments = useSelector((state) => state.comments.comments);
-  const likesByRecipe = useSelector((state) => state.likes.likesByRecipe);
+  const userId = useSelector((state) => state.session.user?.id);
+  const likesByRecipe = useSelector((state) => state.likes);
 
   const [currentRecipe, setCurrentRecipe] = useState({});
-  const currentRecipes = useSelector((state) => state.recipes.recipes);
 
   const [reviews, setReviews] = useState([]);
   const [reviewPosted, setReviewPosted] = useState(false);
@@ -55,6 +50,7 @@ const RecipeDetail = () => {
       setReviews([]);
     };
   }, []);
+
   useEffect(() => {
     if (recipeId) {
       setLoading(true);
@@ -66,22 +62,37 @@ const RecipeDetail = () => {
             setCurrentRecipe(currentRecipes);
           }
         })
-        .catch((err) => console.log(err));
-
-      dispatch(ReviewActions.getAllReviewsThunk(recipeId))
-        .then((reviews) => setReviews(reviews.Reviews))
         .catch((err) => console.log(err))
         .finally(() => {
           setLoading(false);
         });
+
+      // dispatch(ReviewActions.getAllReviewsThunk(recipeId))
+      //   .then((reviews) => setReviews(reviews.Reviews))
+      //   .catch((err) => console.log(err))
+      //   .finally(() => {
+      //     setLoading(false);
+      //   });
+
+      // dispatch(CommentActions.getAllCommentsThunk(recipeId))
+      //   .then((comments) => setComments(comments.Comments))
+      //   .catch((err) => console.log(err))
+      //   .finally(() => {
+      //     setLoading(false);
+      //   });
+
+      dispatch(LikeActions.getLikesByRecipeThunk(recipeId)).then((likes) => {
+        const userLike = likes.find((like) => like.user_id === userId);
+        setLiked(!!userLike);
+      });
     } else {
       console.error("No recipeId");
     }
   }, [dispatch, recipeId, reviewPosted, refreshKey]);
 
   const isLoggedIn = !!user;
-  const isRecipeOwner = user?.id === currentRecipe.owner_id;
-  const hasReviewed = currentReviews.some(
+  const isRecipeOwner = userId === currentRecipe.owner_id;
+  const hasReviewed = currentRecipe.reviews?.some(
     (review) => review && review.owner_id === user?.id
   );
 
@@ -176,29 +187,29 @@ const RecipeDetail = () => {
   //     .catch((err) => console.log(err));
   // }, [dispatch, recipeId, refreshKey]);
 
-  // const handleLike = () => {
-  //   dispatch(LikeActions.createRecipeLikeThunk(recipeId)).then(() => {
-  //     setLiked(true);
-  //     dispatch(RecipeActions.getRecipeThunk(recipeId));
-  //     setRefreshKey(refreshKey + 1);
-  //   });
-  // };
+  const handleLike = () => {
+    dispatch(LikeActions.createRecipeLikeThunk(recipeId)).then(() => {
+      setLiked(true);
+      dispatch(RecipeActions.getRecipeThunk(recipeId));
+      setRefreshKey(refreshKey + 1);
+    });
+  };
 
-  // const handleUnlike = () => {
-  //   const likesObj = Object.values(likesByRecipe).find(
-  //     (like) => like.userId === user.Id && like.recipeId === parseInt(recipeId)
-  //   );
-  //   if (!likesObj) {
-  //     console.error("No like found for the current user and song");
-  //     return;
-  //   }
-  //   const likeId = likesObj.id;
-  //   dispatch(LikeActions.deleteRecipeLikeThunk(recipeId, likeId)).then(() => {
-  //     setLiked(false);
-  //     dispatch(RecipeActions.getRecipeThunk(recipeId));
-  //     setRefreshKey(refreshKey + 1);
-  //   });
-  // };
+  const handleUnlike = () => {
+    const likesObj = Object.values(likesByRecipe.likes).find(
+      (like) => like.user_id === userId && like.recipe_id === parseInt(recipeId)
+    );
+    if (!likesObj) {
+      console.error("No like found for the current user and recipe");
+      return;
+    }
+    const likeId = likesObj.id;
+    dispatch(LikeActions.deleteRecipeLikeThunk(recipeId, likeId)).then(() => {
+      setLiked(false);
+      dispatch(RecipeActions.getRecipeThunk(recipeId));
+      setRefreshKey(refreshKey + 1);
+    });
+  };
 
   return (
     <>
@@ -233,12 +244,41 @@ const RecipeDetail = () => {
                   <div className="recipe-likes">
                     {currentRecipe?.likes > 0 ? (
                       <>
-                        <i className="fa-solid fa-heart"></i>{" "}
+                        {liked ? (
+                          <i
+                            className="fa-solid fa-heart liked"
+                            onClick={() => {
+                              if (user) handleUnlike();
+                            }}
+                          ></i>
+                        ) : (
+                          <i
+                            className="fa-solid fa-heart"
+                            onClick={() => {
+                              if (user) handleLike();
+                            }}
+                          ></i>
+                        )}{" "}
                         {currentRecipe?.likes}{" "}
                       </>
                     ) : (
                       <>
-                        <i className="far fa-heart"></i> New
+                        {liked ? (
+                          <i
+                            className="fa-solid fa-heart liked"
+                            onClick={() => {
+                              if (user) handleUnlike();
+                            }}
+                          ></i>
+                        ) : (
+                          <i
+                            className="far fa-heart"
+                            onClick={() => {
+                              if (user) handleLike();
+                            }}
+                          ></i>
+                        )}{" "}
+                        New
                       </>
                     )}
                   </div>
@@ -356,7 +396,7 @@ const RecipeDetail = () => {
                       </div>
                     </div>
                     {button}
-                    {currentReviews.map(
+                    {currentRecipe.reviews?.map(
                       (review, i) =>
                         review && (
                           <div key={i} className="recipe-review-container">
@@ -412,25 +452,44 @@ const RecipeDetail = () => {
                         )
                     )}
                   </div>
-                </div>
-                {/* <div className='recipe-comments-container'>
-                            <div className='recipe-comments'>
-                                <div className='recipe-comment-header'>
-                                    <h3>{currentRecipe?.comments?.length === 0 ? 'No Comments Yet' : currentRecipe.comments.length === 1 ? 'Comment' : 'Comments'}</h3>
+                  <div className="recipe-comments-container">
+                    <div className="recipe-comments">
+                      <div className="recipe-comment-header">
+                        {currentRecipe ? (
+                          <div className="recipe-comment-header">
+                            <h3>
+                              {currentRecipe?.comments?.length === 0
+                                ? "No Comments Yet"
+                                : currentRecipe?.comments?.length === 1
+                                ? "Comment"
+                                : "Comments"}
+                            </h3>
+                          </div>
+                        ) : (
+                          "Loading..."
+                        )}
+                      </div>
+                      {currentRecipe.comments.map(
+                        (comment, i) => (
+                          console.log("comments map", comment),
+                          (
+                            <div key={i} className="recipe-comment-container">
+                              <div className="recipe-comment-user">
+                                <div className="recipe-comment-user-name">
+                                  <h3>{comment?.owner_name}</h3>
                                 </div>
-                                {currentRecipe.comments.map((comment, i) => (
-                                    <div key={i} className='recipe-comment-container'>
-                                        <div className='recipe-comment-user'>
-                                            <div className='recipe-comment-user-name'>
-                                                <h3>{comment?.owner_name}</h3>
-                                            </div>
-                                            <p id='comment-created'>{comment?.created_at}</p>
-                                        </div>
-                                        <p>{comment?.comment}</p>
-                                    </div>
-                                ))}
+                                <p id="comment-created">
+                                  {comment?.created_at}
+                                </p>
+                                <p>{comment?.comment}</p>
+                              </div>
                             </div>
-                        </div> */}
+                          )
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}

@@ -22,7 +22,7 @@ export const validateIngredientQuantity = (qty) => {
 
 // Direction step info
 export const validateStepInfo = (info) => {
-  return info.length > 0;
+  return info.length > 5;
 };
 
 // Prep time

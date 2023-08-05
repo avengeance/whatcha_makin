@@ -126,9 +126,21 @@ const recipesReducer = (state = intialState, action) => {
         newState.recipes[recipe.id] = recipe;
       });
       return newState;
+    // case GET_RECIPE:
+    //   newState.recipes[action.recipe.id] = action.recipe;
+    //   return newState;
     case GET_RECIPE:
-      newState.recipes[action.recipe.id] = action.recipe;
-      return newState;
+      return {
+        ...state,
+        recipes: {
+          ...state.recipes,
+          [action.recipe.id]: action.recipe,
+        },
+        comments: {
+          ...state.comments,
+          [action.recipe.id]: action.recipe.comments,
+        },
+      };
     case CREATE_RECIPE:
       newState.recipes[action.recipe.id] = action.recipe;
       return {
