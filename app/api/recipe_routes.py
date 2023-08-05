@@ -11,6 +11,14 @@ from ..models.recipeIngredient import RecipeIngredient
 from ..forms.recipe_form import RecipeForm, EditRecipeForm
 from ..forms.review_form import ReviewForm, EditReviewForm
 
+DEFAULT_PREVIEW_IMAGE = 'https://i.imgur.com/6svLK8d.png'
+DEFAULT_IMAGE = 'https://i.imgur.com/LvxgCES.png'
+
+# DEFAULT_PREVIEW_IMAGE = '/home/avengeance/course/capstone/app/images/default-image-main.png'
+# DEFAULT_IMAGE = '/home/avengeance/course/capstone/app/images/alt-image-stock.png'
+
+
+
 from flask import Blueprint, redirect, url_for, render_template, jsonify, request
 from flask_login import login_required, current_user, logout_user
 from werkzeug.datastructures import MultiDict
@@ -73,6 +81,7 @@ def get_recipe(id):
         likes = Like.query.filter_by(recipe_id=id).count()
         comments = Comment.query.filter_by(recipe_id=id).all()
         directions = Direction.query.filter_by(recipe_id=id).all()
+        print("***********************images***************",images)
         
         ingredients = []
         recipe_ingredients = RecipeIngredient.query.filter_by(recipe_id=id).all()
@@ -180,32 +189,25 @@ def create_recipe():
             cook_time = request.form.get('cook_time'),
             servings = request.form.get('servings')
             )
-        # preview_image = request.files.get('preview_image')
-        # preview_image_string = ''
-        # if preview_image:
-        #     preview_image_string = base64.b64encode(preview_image.read()).decode()
-
-        # new_recipe_image = RecipeImage(
-        #         url = preview_image_string,
-        #         is_preview = True,
-        #         recipe = new_recipe
-        #     )
-            # recipe_image = request.files.get('recipe_image')
-            # if recipe_image:
-            #     recipe_image_string = base64.b64encode(recipe_image.read()).decode()
-            # else:
-            #     print(form.errors)
-
-            # new_recipe_image2 = RecipeImage(
-            #     url = recipe_image_string,
-            #     is_preview = False,
-            #     recipe = new_recipe
-            # )
-
-        # db.session.add(new_recipe_image)
+        print("************************default image path*****************************", DEFAULT_PREVIEW_IMAGE)
+        print("************************other images*****************************", DEFAULT_IMAGE)
+        preview_image_path = DEFAULT_PREVIEW_IMAGE
+        new_recipe_image = RecipeImage(
+                url = preview_image_path,
+                is_preview = True,
+                recipe = new_recipe
+            )
+        other_image_paths = []
+        for i in range(3):
+            other_image_paths.append(DEFAULT_IMAGE)
+        for path in other_image_paths:
+            new_recipe_image = RecipeImage(
+                url=path,
+                is_preview=False,
+                recipe=new_recipe
+            )
+        db.session.add(new_recipe_image)
         db.session.add(new_recipe)
-            # db.session.add(new_recipe_image)
-            # db.session.add(new_recipe_image2)
         db.session.commit()
         directions = json.loads(request.form.get('directions'))
         for direction in directions:
