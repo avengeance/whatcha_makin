@@ -35,7 +35,6 @@ function CreateRecipe() {
 
   const [servings, setServings] = useState(0);
   // const [previewImage, setPreviewImage] = useState(null);
-  // const [recipeImage, setRecipeImage] = useState(null);
   // const [otherImages, setOtherImages] = useState([]);
 
   const [nameValid, setNameValid] = useState(false);
@@ -65,17 +64,6 @@ function CreateRecipe() {
   const onServingsChange = (e) => {
     setServings(e.target.value);
   };
-
-  // useEffect(() => {
-  //   const getCookie = (name) => {
-  //     const value = "; " + document.cookie;
-  //     const parts = value.split("; " + name + "=");
-  //     if (parts.length === 2) return parts.pop().split(";").shift();
-  //   };
-
-  //   let csrf_token = getCookie("csrf_token");
-  //   setCsrfToken(csrf_token);
-  // }, []);
 
   function handleIngredientChange(i, event) {
     const values = [...ingredients];
@@ -148,8 +136,6 @@ function CreateRecipe() {
     if (!validators.validateName(name)) {
       alert("Name must be longer than 3 characters");
       return;
-    } else {
-      setNameValid(true);
     }
 
     for (let i = 0; i < ingredients.length; i++) {
@@ -204,12 +190,17 @@ function CreateRecipe() {
     formData.append("cook_time", totalCookTime);
     formData.append("servings", servings);
 
-    // formData.append("preview_image",JSON.stringify(stockLogo))
+    // formData.append("preview_image", JSON.stringify(previewImage));
     // formData.append('preview_image', previewImage)
     // // formData.append('recipe_image', recipeImage)
     // otherImages.forEach((image, index) => {
     //     formData.append(`other_images[${index}]`, image)
     // })
+
+    formData.append("preview_image", "react-app/public/default-image-main.png");
+    for (let i = 0; i < 3; i++) {
+      formData.append("other_images", "react-app/public/alt-image-stock.png");
+    }
 
     formData.append("ingredients", JSON.stringify(ingredients));
     formData.append("directions", JSON.stringify(directions));
@@ -231,8 +222,8 @@ function CreateRecipe() {
         setCookHours("");
         setCookMinutes("");
         setServings("");
-        // setPreviewImage('')
-        // setOtherImages([])
+        // setPreviewImage("");
+        // setOtherImages([]);
         setErrors([]);
         setHasReviewed(false);
         setShowReviewForm(false);
@@ -240,7 +231,6 @@ function CreateRecipe() {
       }
     } catch (err) {
       console.log("Error in catch block", err);
-      // setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
     }
   };
   return (
@@ -435,7 +425,6 @@ function CreateRecipe() {
                   name="minutes"
                   className="time-drop-down"
                   value={cookMinutes}
-                  // onChange={(e) => setCookMinutes(e.target.value)}
                   onChange={onCookMinsChange}
                   required
                 >
@@ -455,7 +444,6 @@ function CreateRecipe() {
                 type="number"
                 name="servings"
                 value={servings}
-                // onChange={(e) => setServings(e.target.value)}
                 onChange={onServingsChange}
               >
                 {[...Array(101).keys()].slice(0).map((i) => (
@@ -481,22 +469,6 @@ function CreateRecipe() {
             ></textarea>
           </div>
         </div>
-        {/* <h2>Images</h2>
-                <h3>What will this recipe look like?</h3>
-                <h4>Main Image</h4>
-                <input
-                    type="file"
-                    onChange={(e) => setPreviewImage(e.target.files[0])}
-                    required
-                >
-                </input>
-                <h4>Other Images</h4>
-                <input
-                    type="file"
-                    multiple
-                    onChange={handleOtherImages}
-                >
-                </input> */}
         <div id="form-submit-button">
           <button
             type="submit"

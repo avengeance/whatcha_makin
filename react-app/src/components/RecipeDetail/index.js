@@ -39,6 +39,8 @@ const RecipeDetail = () => {
   const [reviewCount, setReviewCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
+  // console.log("This is images:", currentRecipe.images[0].url);
+
   useEffect(() => {
     if (location.pathname === "/recipes/new") {
       setReviews([]);
@@ -67,20 +69,6 @@ const RecipeDetail = () => {
           setLoading(false);
         });
 
-      // dispatch(ReviewActions.getAllReviewsThunk(recipeId))
-      //   .then((reviews) => setReviews(reviews.Reviews))
-      //   .catch((err) => console.log(err))
-      //   .finally(() => {
-      //     setLoading(false);
-      //   });
-
-      // dispatch(CommentActions.getAllCommentsThunk(recipeId))
-      //   .then((comments) => setComments(comments.Comments))
-      //   .catch((err) => console.log(err))
-      //   .finally(() => {
-      //     setLoading(false);
-      //   });
-
       dispatch(LikeActions.getLikesByRecipeThunk(recipeId)).then((likes) => {
         const userLike = likes.find((like) => like.user_id === userId);
         setLiked(!!userLike);
@@ -105,20 +93,6 @@ const RecipeDetail = () => {
       </button>
     );
   }
-
-  // useEffect(() => {
-  //   if (recipeId) {
-  //     dispatch(RecipeActions.getRecipeThunk(recipeId))
-  //       .then((currentRecipes) => setCurrentRecipe(currentRecipes))
-  //       .then((currentRecipe) => {
-  //         if (currentRecipes?.Owner?.id) {
-  //           setCurrentRecipe(currentRecipes);
-  //           setLoading(false);
-  //         }
-  //       })
-  //       .catch((err) => console.log(err));
-  //   }
-  // }, [dispatch, recipeId, reviewPosted]);
 
   function handlePostReview() {
     const modalContent = (
@@ -159,33 +133,6 @@ const RecipeDetail = () => {
     // Return a formatted string
     return `${hours} hr ${remainderMinutes} min`;
   }
-
-  //   useEffect(() => {
-  //     if (recipeId) {
-  //       if (postedRef.current) {
-  //         dispatch(ReviewActions.getAllReviewsThunk(recipeId))
-  //           .then((reviews) => {
-  //             setReviews(reviews.Reviews);
-  //             setHasReviewed(
-  //               currentReviews?.some((review) => review?.owner_id === user?.id)
-  //             );
-  //             setReviewPosted(false);
-  //           })
-  //           .catch((err) => console.log(err));
-  //         postedRef.current = false;
-  //       }
-  //     }
-  //   }, [dispatch, recipeId, refreshKey, user, reviewPosted]);
-
-  // useEffect(() => {
-  //   if (!recipeId) {
-  //     console.error("No recipeId");
-  //     return;
-  //   }
-  //   dispatch(ReviewActions.getAllReviewsThunk(recipeId))
-  //     .then((reviews) => setReviews(reviews.Reviews))
-  //     .catch((err) => console.log(err));
-  // }, [dispatch, recipeId, refreshKey]);
 
   const handleLike = () => {
     dispatch(LikeActions.createRecipeLikeThunk(recipeId)).then(() => {
@@ -294,6 +241,7 @@ const RecipeDetail = () => {
                             ? currentRecipe.images[0].url
                             : null
                         }
+                        // src={currentRecipe.images[0].url}
                         alt="Main Image"
                       />
                     </div>
@@ -469,24 +417,17 @@ const RecipeDetail = () => {
                           "Loading..."
                         )}
                       </div>
-                      {currentRecipe.comments.map(
-                        (comment, i) => (
-                          console.log("comments map", comment),
-                          (
-                            <div key={i} className="recipe-comment-container">
-                              <div className="recipe-comment-user">
-                                <div className="recipe-comment-user-name">
-                                  <h3>{comment?.owner_name}</h3>
-                                </div>
-                                <p id="comment-created">
-                                  {comment?.created_at}
-                                </p>
-                                <p>{comment?.comment}</p>
-                              </div>
+                      {currentRecipe.comments.map((comment, i) => (
+                        <div key={i} className="recipe-comment-container">
+                          <div className="recipe-comment-user">
+                            <div className="recipe-comment-user-name">
+                              <h3>{comment?.owner_name}</h3>
                             </div>
-                          )
-                        )
-                      )}
+                            <p id="comment-created">{comment?.created_at}</p>
+                            <p>{comment?.comment}</p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
