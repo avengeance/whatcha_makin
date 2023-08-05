@@ -115,9 +115,6 @@ function CreateRecipe() {
         event.target.value
       );
       setIngredientsValid(quantityValid);
-      if (!quantityValid) {
-        return setIngredientsValid(quantityValid);
-      }
     }
     if (event.target.name === "is_seasoning") {
       values[i][event.target.name] = event.target.checked;
@@ -160,7 +157,6 @@ function CreateRecipe() {
     for (let j = i; j < values.length; j++) {
       values[j].step = j + 1;
     }
-    console.log(values);
     setDirections(values);
   }
 
@@ -177,32 +173,33 @@ function CreateRecipe() {
     e.preventDefault();
     setErrors([]);
     console.log("Handle Submit Called");
-    // Validate Name
     if (!validators.validateName(name)) {
-      // setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
       alert("Name must be longer than 3 characters");
-      return; // Prevent form submission
+      return;
     } else {
       setNameValid(true);
     }
 
-    // Validate all ingredients
     for (let i = 0; i < ingredients.length; i++) {
       const ingredient = ingredients[i];
-
-      // Validate name
       if (!validators.validateIngredientName(ingredient.name)) {
         alert("Invalid ingredient name");
-        return; // Prevent form submission
+        return;
       }
-
-      // Validate quantity
       if (!validators.validateIngredientQuantity(ingredient.quantity)) {
         alert(
           "Invalid quantity for ingredient whole numbers only: " +
             ingredient.name
         );
-        return; // Prevent form submission
+        return;
+      }
+    }
+
+    for (let i = 0; i < directions.length; i++) {
+      const direction = directions[i];
+      if (!validators.validateStepInfo(direction.step_info)) {
+        alert("Step info must be greater than 5 characters");
+        return;
       }
     }
 
@@ -521,10 +518,8 @@ function CreateRecipe() {
             disabled={
               // !nameValid ||
               // !ingredientsValid ||
-              !directionsValid ||
-              !prepTimeValid ||
-              !cookTimeValid ||
-              !servingsValid
+              // !directionsValid ||
+              !prepTimeValid || !cookTimeValid || !servingsValid
             }
           >
             Create Recipe
