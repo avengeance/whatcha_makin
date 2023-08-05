@@ -264,3 +264,7 @@ INFO:werkzeug: * Detected change in '/home/avengeance/course/capstone/app/api/re
 [0724/204033.503:ERROR:icu_util.cc(252)] Couldn't mmap icu data file
 [0724/204046.891:ERROR:icu_util.cc(252)] Couldn't mmap icu data file
 [0724/204046.929:ERROR:icu_util.cc(252)] Couldn't mmap icu data file
+[0805/090314.905:ERROR:icu_util.cc(252)] Couldn't mmap icu data file
+[0805/090314.939:ERROR:icu_util.cc(252)] Couldn't mmap icu data file
+[0805/090321.641:ERROR:icu_util.cc(252)] Couldn't mmap icu data file
+[0805/090321.680:ERROR:icu_util.cc(252)] Couldn't mmap icu data file

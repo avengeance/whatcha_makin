@@ -33,7 +33,7 @@ function CreateRecipe() {
   const [cookHours, setCookHours] = useState(null);
   const [cookMinutes, setCookMinutes] = useState(0);
 
-  const [servings, setServings] = useState(1);
+  const [servings, setServings] = useState(0);
   // const [previewImage, setPreviewImage] = useState(null);
   // const [recipeImage, setRecipeImage] = useState(null);
   // const [otherImages, setOtherImages] = useState([]);
@@ -52,34 +52,23 @@ function CreateRecipe() {
   const [csrfToken, setCsrfToken] = useState("");
   const [reviews, setReviews] = useState([]);
 
+  // const onNameChange = (e) => {
+  //   const valid = validators.validateName(e.target.value);
+  //   setNameValid(valid);
+  //   setName(e.target.value);
+  //   if (!valid) {
+  //     // setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
+  //     alert("Name must be longer than 3 characters");
+  //   } else {
+  //     setNameValid(valid);
+  //     setName(e.target.value);
+  //     // setReviews([]);
+  //   }
+  // };
+
   const onNameChange = (e) => {
-    const valid = validators.validateName(e.target.value);
-    setNameValid(valid);
     setName(e.target.value);
-    if (!valid) {
-      setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
-    } else {
-      setNameValid(valid);
-      setName(e.target.value);
-      setReviews([]);
-    }
   };
-
-  // const onIngredientChange = (ingredients) => {
-  //   const valid = ingredients.every((ing) => {
-  //     return (
-  //       validators.validateIngredientName(ing.name) &&
-  //       validators.validateIngredientQuantity(ing.quantity)
-  //     );
-  //   });
-  //   setIngredientsValid(valid);
-  //   setIngredients(ingredients);
-  // };
-
-  // const onDirectionChange = (dir) => {
-  //   const valid = validators.validateStepInfo(dir.stepInfo);
-  //   setDirectionsValid(valid);
-  // };
 
   const onPrepMinsChange = (e) => {
     const mins = e.target.value;
@@ -104,16 +93,16 @@ function CreateRecipe() {
     setServingsValid(valid);
   };
 
-  useEffect(() => {
-    const getCookie = (name) => {
-      const value = "; " + document.cookie;
-      const parts = value.split("; " + name + "=");
-      if (parts.length === 2) return parts.pop().split(";").shift();
-    };
+  // useEffect(() => {
+  //   const getCookie = (name) => {
+  //     const value = "; " + document.cookie;
+  //     const parts = value.split("; " + name + "=");
+  //     if (parts.length === 2) return parts.pop().split(";").shift();
+  //   };
 
-    let csrf_token = getCookie("csrf_token");
-    setCsrfToken(csrf_token);
-  }, []);
+  //   let csrf_token = getCookie("csrf_token");
+  //   setCsrfToken(csrf_token);
+  // }, []);
 
   function handleIngredientChange(i, event) {
     const values = [...ingredients];
@@ -168,6 +157,10 @@ function CreateRecipe() {
   function handleRemoveDirection(i) {
     const values = [...directions];
     values.splice(i, 1);
+    for (let j = i; j < values.length; j++) {
+      values[j].step = j + 1;
+    }
+    console.log(values);
     setDirections(values);
   }
 
@@ -182,7 +175,16 @@ function CreateRecipe() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
+    setErrors([]);
+    console.log("Handle Submit Called");
+    // Validate Name
+    if (!validators.validateName(name)) {
+      // setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
+      alert("Name must be longer than 3 characters");
+      return; // Prevent form submission
+    } else {
+      setNameValid(true);
+    }
 
     // Validate all ingredients
     for (let i = 0; i < ingredients.length; i++) {
@@ -228,8 +230,6 @@ function CreateRecipe() {
     formData.append("ingredients", JSON.stringify(ingredients));
     formData.append("directions", JSON.stringify(directions));
 
-    // const formValid = validateForm(formData)
-    // setIsValid(formValid)
     let newRecipe;
 
     try {
@@ -256,7 +256,7 @@ function CreateRecipe() {
       }
     } catch (err) {
       console.log("Error in catch block", err);
-      setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
+      // setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
     }
   };
   return (
@@ -424,7 +424,7 @@ function CreateRecipe() {
                   onChange={onPrepMinsChange}
                   required
                 >
-                  {Array.from({ length: 60 }, (_, i) => i + 1).map((i) => (
+                  {Array.from({ length: 60 }, (_, i) => i).map((i) => (
                     <option key={i} value={i}>
                       {i} Minutes
                     </option>
@@ -455,7 +455,7 @@ function CreateRecipe() {
                   onChange={onCookMinsChange}
                   required
                 >
-                  {Array.from({ length: 60 }, (_, i) => i + 1).map((i) => (
+                  {Array.from({ length: 60 }, (_, i) => i).map((i) => (
                     <option key={i} value={i}>
                       {i} Minutes
                     </option>
@@ -519,8 +519,8 @@ function CreateRecipe() {
             className="submit-button"
             onClick={handleSubmit}
             disabled={
-              !nameValid ||
-              !ingredientsValid ||
+              // !nameValid ||
+              // !ingredientsValid ||
               !directionsValid ||
               !prepTimeValid ||
               !cookTimeValid ||

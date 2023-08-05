@@ -16,7 +16,6 @@ import * as LikeActions from "../../store/likes";
 import * as CommentActions from "../../store/comments";
 
 import "./RecipeDetail.css";
-// import "./OpenModalButton.css";
 
 const RecipeDetail = () => {
   const { recipeId } = useParams();
@@ -27,23 +26,9 @@ const RecipeDetail = () => {
 
   const user = useSelector((state) => state.session.user);
   const userId = useSelector((state) => state.session.user?.id);
-  // const currRecipe = useSelector((state) => state.recipes.recipes[recipeId]);
-  const currentReviews = useSelector((state) => state.reviews.reviews || []);
-
-  // const currentComments = useSelector((state) =>
-  //   Object.values(state.recipes.comments)
-  // );
-
-  const currentComments = useSelector((state) => state.recipes.comments);
   const likesByRecipe = useSelector((state) => state.likes);
 
-  // console.log("current comments", currentComments);
-  // console.log("current reviews", currentReviews);
-  console.log("current user ID:", userId);
-  console.log("Likes by recipe:", likesByRecipe);
-
   const [currentRecipe, setCurrentRecipe] = useState({});
-  const currentRecipes = useSelector((state) => state.recipes.recipes);
 
   const [reviews, setReviews] = useState([]);
   const [reviewPosted, setReviewPosted] = useState(false);
