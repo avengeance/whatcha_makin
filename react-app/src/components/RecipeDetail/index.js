@@ -8,6 +8,8 @@ import OpenModalButton from "../OpenModalButton";
 import CreateReviewModal from "../CreateReview";
 import UpdateReviewModal from "../UpdateReview";
 import DeleteReviewModal from "../DeleteReview";
+import CreateCommentModal from "../CreateComment";
+import DeleteCommentModal from "../DeleteComment";
 import LoadingPage from "../LoadingPage";
 
 import * as RecipeActions from "../../store/recipes";
@@ -33,13 +35,12 @@ const RecipeDetail = () => {
   const [reviews, setReviews] = useState([]);
   const [reviewPosted, setReviewPosted] = useState(false);
   const [comments, setComments] = useState([]);
+  const [commentPosted, setCommentPosted] = useState(false);
   const [liked, setLiked] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const postedRef = useRef(false);
   const [reviewCount, setReviewCount] = useState(0);
   const [loading, setLoading] = useState(true);
-
-  // console.log("This is images:", currentRecipe.images[0].url);
 
   useEffect(() => {
     if (location.pathname === "/recipes/new") {
@@ -157,6 +158,26 @@ const RecipeDetail = () => {
       setRefreshKey(refreshKey + 1);
     });
   };
+
+  function handlePostComment() {
+    const modalContent = (
+      <CreateCommentModal
+        recipeId={recipeId}
+        onCommentSubmit={handleCommentSubmit}
+      />
+    );
+    setLoading(true);
+    setModalContent(modalContent);
+    setLoading(false);
+    setCommentPosted(true);
+    postedRef.current = true;
+    history.push(`/recipes/${recipeId}`);
+  }
+
+  function handleCommentSubmit() {
+    setCommentPosted(true);
+    postedRef.current = true;
+  }
 
   return (
     <>
@@ -382,7 +403,7 @@ const RecipeDetail = () => {
                                 </div>
                                 <div className="delete-button">
                                   <OpenModalButton
-                                    buttonText={"Delete Review"}
+                                    buttonText={"Delete"}
                                     modalComponent={
                                       <DeleteReviewModal
                                         recipeId={recipeId}
@@ -417,7 +438,12 @@ const RecipeDetail = () => {
                           "Loading..."
                         )}
                       </div>
-                      {currentRecipe.comments.map((comment, i) => (
+                      {user && (
+                        <button id="post-comment" onClick={handlePostComment}>
+                          Post Your Comment
+                        </button>
+                      )}
+                      {currentRecipe?.comments?.map((comment, i) => (
                         <div key={i} className="recipe-comment-container">
                           <div className="recipe-comment-user">
                             <div className="recipe-comment-user-name">
@@ -426,6 +452,24 @@ const RecipeDetail = () => {
                             <p id="comment-created">{comment?.created_at}</p>
                             <p>{comment?.comment}</p>
                           </div>
+                          {user && userId === comment.owner_id && (
+                            <div>
+                              <div className="delete-button">
+                                <OpenModalButton
+                                  buttonText={"Delete"}
+                                  modalComponent={
+                                    <DeleteCommentModal
+                                      recipeId={recipeId}
+                                      commentId={comment.id}
+                                      closeModal={closeModal}
+                                      refreshKey={refreshKey}
+                                      setRefreshKey={setRefreshKey}
+                                    />
+                                  }
+                                />
+                              </div>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>

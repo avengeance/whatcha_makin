@@ -1,0 +1,56 @@
+.create-comment-modal {
+  display: flex;
+  justify-content: center;
+  height: 350px;
+  width: 400px;
+  /* border: 4px solid red; */
+}
+
+#modal-title {
+  display: flex;
+  justify-content: center;
+}
+
+#comment-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+#comment-label {
+  display: flex;
+  justify-content: center;
+  /* border: 3px solid green; */
+}
+#comment-input {
+  width: 80%;
+  /* border: 2px solid blue; */
+}
+
+.time-drop-down {
+  display: flex;
+  flex-direction: row;
+  width: 20%;
+}
+
+#submit-modal-button {
+  display: flex;
+  align-items: center;
+  background-color: #c6e08d;
+  border: 2px solid #4d7e3e;
+  color: white;
+  font-size: large;
+  box-shadow: 5px 9px 17px 4px #8abe53;
+}
+.modal-button {
+  display: flex;
+  justify-content: center;
+  height: 35px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.errors {
+  color: red;
+  font-size: small;
+}

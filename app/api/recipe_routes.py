@@ -72,7 +72,6 @@ def get_all_recipes():
 # display a more detailed view of the recipe
 @recipe_routes.route('/<int:id>', methods=['GET'])
 def get_recipe(id):
-    # recipe = Recipe.query.get(id)
     recipe = Recipe.query.options(joinedload('user')).get(id)
     
     if (recipe):
@@ -81,7 +80,6 @@ def get_recipe(id):
         likes = Like.query.filter_by(recipe_id=id).count()
         comments = Comment.query.filter_by(recipe_id=id).all()
         directions = Direction.query.filter_by(recipe_id=id).all()
-        print("***********************images***************",images)
         
         ingredients = []
         recipe_ingredients = RecipeIngredient.query.filter_by(recipe_id=id).all()
@@ -143,7 +141,7 @@ def get_recipe(id):
             comment_dict = {
                 "id": comment.id,
                 "owner_id": comment.owner_id,
-                # "owner_name":comment.users.first_name,
+                "owner_name":comment.users.first_name,
                 "recipe_id": comment.recipe_id,
                 "comment": comment.comment,
                 "created_at": comment.created_at,
@@ -485,15 +483,15 @@ def create_comment(id):
         if request.is_json:
             data = request.get_json()
             data = json.loads(data) if isinstance(data,str) else data
-            comment = Comment(
+            new_comment = Comment(
                 owner_id = current_user.id,
                 recipe_id = id,
                 comment=data['comment']
             )
-            db.session.add(comment)
+            db.session.add(new_comment)
             db.session.commit()
             
-            return jsonify(comment.to_dict()), 201
+            return jsonify(new_comment.to_dict()), 201
     else:
         res = {
             "message": "Recipe does not exist",

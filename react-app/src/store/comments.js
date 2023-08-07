@@ -55,7 +55,7 @@ export const deleteCommentThunk = (recipeId, commentId) => async (dispatch) => {
 // Reducer
 
 const intialState = {
-  comments: {},
+  comments: [],
 };
 
 const commentsReducer = (state = intialState, action) => {
@@ -67,11 +67,12 @@ const commentsReducer = (state = intialState, action) => {
       });
       return newState;
     case CREATE_COMMENT:
-      newState.comments.push(action.comments);
-      return newState;
+      // newState.comments.push(action.comments);
+      return [...state, action.comment];
     case DELETE_COMMENT:
-      delete newState[action.comments.id];
-      return newState;
+      // delete newState[action.commentsId];
+      // return newState;
+      return state.filter((comment) => comment.id !== action.commentId);
     default:
       return state;
   }
