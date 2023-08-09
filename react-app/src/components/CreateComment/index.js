@@ -31,9 +31,10 @@ function CreateCommentModal({ recipeId, onCommentSubmit }) {
 
       try {
         await dispatch(CommentActions.createCommentThunk(recipeId, comment));
-        // setRefreshKey(refreshKey + 1);
+        setRefreshKey(refreshKey + 1);
         closeModal();
         // dispatch(CommentActions.getAllCommentsThunk(recipeId));
+        onCommentSubmit();
         setComment("");
       } catch (err) {
         const data = await err.json();

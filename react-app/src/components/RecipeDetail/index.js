@@ -51,16 +51,8 @@ const RecipeDetail = () => {
           setCurrentRecipe(currentRecipes);
           setReviews(currentRecipes.reviews);
         })
-        // .then((currentRecipes) => {
-        //   if (currentRecipes?.Owner?.id) {
-        //     setCurrentRecipe(currentRecipes);
-        //     setReviews(currentRecipe.reviews);
-        //   }
-        // })
         .catch((err) => console.log(err))
-        .finally(() => {
-          // setRefreshKey((prevKey) => prevKey + 1);
-        });
+        .finally(() => {});
       dispatch(LikeActions.getLikesByRecipeThunk(recipeId)).then((likes) => {
         const userLike = likes.find((like) => like.user_id === userId);
         setLiked(!!userLike);
@@ -100,7 +92,6 @@ const RecipeDetail = () => {
   }
 
   function handleReviewSubmit() {
-    // dispatch(RecipeActions.getRecipeThunk(recipeId));
     setRefreshKey((prevKey) => prevKey + 1);
     setReviewPosted(true);
     postedRef.current = true;
@@ -157,10 +148,7 @@ const RecipeDetail = () => {
         onCommentSubmit={handleCommentSubmit}
       />
     );
-    // await dispatch(RecipeActions.getRecipeThunk(recipeId));
-    // setLoading(true);
     setModalContent(modalContent);
-    // setLoading(false);
     setCommentPosted(true);
     postedRef.current = true;
     history.push(`/recipes/${recipeId}`);
@@ -168,6 +156,7 @@ const RecipeDetail = () => {
 
   async function handleCommentSubmit() {
     // await dispatch(RecipeActions.getRecipeThunk(recipeId));
+    setRefreshKey((prevKey) => prevKey + 1);
     setCommentPosted(true);
     postedRef.current = true;
   }
