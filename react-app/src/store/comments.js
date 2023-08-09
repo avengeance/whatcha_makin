@@ -68,11 +68,15 @@ const commentsReducer = (state = intialState, action) => {
       return newState;
     case CREATE_COMMENT:
       // newState.comments.push(action.comments);
-      return [...state, action.comment];
+      // return [...state, action.comment];
+      return {
+        ...state,
+        comments: [...state.comments, action.comment],
+      };
     case DELETE_COMMENT:
-      // delete newState[action.commentsId];
-      // return newState;
-      return state.filter((comment) => comment.id !== action.commentId);
+      delete newState[action.commentsId];
+      return newState;
+    // return state.filter((comment) => comment.id !== action.commentId);
     default:
       return state;
   }

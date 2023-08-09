@@ -51,10 +51,14 @@ function CreateReviewModal({ recipeId, onReviewSubmit }) {
       setErrors([]);
 
       try {
-        await dispatch(
+        const newReviewId = await dispatch(
           ReviewActions.createReviewThunk(recipeId, review, stars)
         );
+        // console.log("New Review ID:", newReviewId);
+        // dispatch(ReviewActions.getReviewThunk(recipeId, newReviewId));
+        setRefreshKey(refreshKey + 1);
         closeModal();
+        onReviewSubmit();
       } catch (err) {
         const data = await err.json();
         if (data && data.errors) setErrors(data.errors);

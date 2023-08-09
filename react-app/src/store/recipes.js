@@ -116,6 +116,7 @@ export const getRecipesByUserThunk = (userId) => async (dispatch) => {
 // Reducers
 const intialState = {
   recipes: {},
+  // currentRecipe: null,
 };
 
 const recipesReducer = (state = intialState, action) => {

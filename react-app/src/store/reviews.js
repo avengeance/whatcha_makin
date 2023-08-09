@@ -66,7 +66,7 @@ export const createReviewThunk =
     if (res.ok) {
       const data = await res.json();
       dispatch(createReview(data));
-      return null;
+      return data.id;
     } else if (res.status < 500) {
       const data = await res.json();
       if (data.errors) {

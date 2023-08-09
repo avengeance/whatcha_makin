@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 
 import * as ReviewActions from "../../store/reviews";
@@ -75,6 +75,7 @@ const UpdateReviewModal = ({
           ReviewActions.updateReviewThunk(reviewId, stars, review)
         );
         dispatch(ReviewActions.getReviewThunk(recipeId, reviewId));
+        setRefreshKey(refreshKey + 1);
         closeModal();
         onReviewSubmit();
       } catch (err) {

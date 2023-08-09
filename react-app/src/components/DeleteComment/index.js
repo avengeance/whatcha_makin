@@ -18,10 +18,10 @@ const DeleteCommentModal = ({
 
   const deleteComment = async () => {
     await dispatch(CommentActions.deleteCommentThunk(recipeId, commentId));
-    await dispatch(CommentActions.getAllCommentsThunk(recipeId));
-    setRefreshKey(refreshKey + 1);
+    // await dispatch(CommentActions.getAllCommentsThunk(recipeId));
+    // setRefreshKey(refreshKey + 1);
     closeModal();
-    history.push(`/recipes/${recipeId}`);
+    // history.push(`/recipes/${recipeId}`);
   };
 
   const handleNoClick = () => {

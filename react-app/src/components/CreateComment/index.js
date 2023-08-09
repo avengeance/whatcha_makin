@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 
 import * as CommentActions from "../../store/comments";
+import * as RecipeActions from "../../store/recipes";
 
 import "./CreateComment.css";
 
@@ -30,7 +31,9 @@ function CreateCommentModal({ recipeId, onCommentSubmit }) {
 
       try {
         await dispatch(CommentActions.createCommentThunk(recipeId, comment));
+        // setRefreshKey(refreshKey + 1);
         closeModal();
+        // dispatch(CommentActions.getAllCommentsThunk(recipeId));
         setComment("");
       } catch (err) {
         const data = await err.json();
