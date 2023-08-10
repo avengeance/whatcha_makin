@@ -155,7 +155,6 @@ const RecipeDetail = () => {
   }
 
   async function handleCommentSubmit() {
-    // await dispatch(RecipeActions.getRecipeThunk(recipeId));
     setRefreshKey((prevKey) => prevKey + 1);
     setCommentPosted(true);
     postedRef.current = true;

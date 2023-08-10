@@ -33,7 +33,6 @@ function CreateCommentModal({ recipeId, onCommentSubmit }) {
         await dispatch(CommentActions.createCommentThunk(recipeId, comment));
         setRefreshKey(refreshKey + 1);
         closeModal();
-        // dispatch(CommentActions.getAllCommentsThunk(recipeId));
         onCommentSubmit();
         setComment("");
       } catch (err) {

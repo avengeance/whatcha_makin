@@ -54,8 +54,6 @@ function CreateReviewModal({ recipeId, onReviewSubmit }) {
         const newReviewId = await dispatch(
           ReviewActions.createReviewThunk(recipeId, review, stars)
         );
-        // console.log("New Review ID:", newReviewId);
-        // dispatch(ReviewActions.getReviewThunk(recipeId, newReviewId));
         setRefreshKey(refreshKey + 1);
         closeModal();
         onReviewSubmit();
