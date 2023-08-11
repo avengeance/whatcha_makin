@@ -98,6 +98,7 @@ body {
   padding-bottom: 10px;
   opacity: 0;
   transition: opacity 0.5s;
+  width: 300px;
 }
 
 #recipe-name {
