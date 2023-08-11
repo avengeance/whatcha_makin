@@ -28,6 +28,12 @@ body {
   animation: scaleIn 0.5s ease forwards;
   animation-delay: calc(var(--card-index) * 0.2s);
   opacity: 0;
+  /* border: 3px solid white; */
+}
+
+#recipe-tile-image {
+  width: 250px;
+  height: 250px;
 }
 
 .recipe-tile:hover #recipe-tile-image {
@@ -36,14 +42,16 @@ body {
   transform: scale(1);
   /* transition: ease-in-out border-radius 0.5s; */
   box-shadow: 1px 0px 3px 5px #4d7e3e;
+  /* border: 3px solid red; */
 }
 
 .recipe-tile #recipe-tile-image {
-  width: 250px;
+  width: 100%;
   height: 100%;
   border-radius: 50%;
   transition: ease-in-out border-radius 0.5s, transform 0.5s ease-in-out;
   transform: scale(0.5);
+  /* border: 3px solid red; */
 }
 
 .recipe-tile:hover .recipe-review-likes-container #recipe-name {

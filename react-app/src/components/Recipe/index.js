@@ -21,21 +21,8 @@ function Recipe() {
       });
   }, []);
 
-  // const tileHover = (e, recipeName) => {
-  //   const tooltip = tooltipRef.current;
-  //   tooltip.textContent = recipeName;
-  //   tooltip.style.display = "block";
-
-  //   const x = e.clientX;
-  //   const y = e.clientY;
-
-  //   tooltip.style.top = `${y + 20}px`;
-  //   tooltip.style.left = `${x + 10}px`;
-  // };
-
   return (
     <div className="recipe-tile-container">
-      {/* <div ref={tooltipRef} id="recipe-tooltip"></div> */}
       {recipes.map((recipe, index) => {
         const recipeDetails = recipeRating[recipe.id];
         return (
@@ -43,11 +30,6 @@ function Recipe() {
             className="recipe-tile"
             key={recipe.id}
             style={{ "--card-index": index }}
-            // onMouseEnter={(e) => tileHover(e, recipe.name)}
-            // onMouseOut={() => {
-            //   const tooltip = document.getElementById("recipe-tooltip");
-            //   tooltip.textContent = "";
-            // }}
             onClick={() => (window.location.href = `/recipes/${recipe.id}`)}
           >
             <div title={recipe.name}>
@@ -56,7 +38,6 @@ function Recipe() {
                   <div id="recipe-name">{recipe.name}</div>
                   <div id="avgRating">
                     <i className="fas fa-star"></i>
-                    {/* {recipeDetails?.avg_rating ? parseFloat(recipeDetails.avg_rating).toFixed(1) : "New"}  */}
                     {recipeDetails?.avg_rating &&
                     !isNaN(recipeDetails.avg_rating)
                       ? parseFloat(recipeDetails.avg_rating).toFixed(1)

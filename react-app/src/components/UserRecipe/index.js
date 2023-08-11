@@ -69,11 +69,11 @@ const UserRecipes = () => {
               >
                 <OpenModalButton
                   type="button"
-                  buttonText={"Delete Recipe"}
-                  // style={{
-                  //   backgroundColor: "transparent",
-                  //   border: "none",
-                  // }}
+                  buttonText={"Delete"}
+                  style={{
+                    backgroundColor: "transparent",
+                    border: "none",
+                  }}
                   modalComponent={
                     <DeleteRecipeModal
                       recipeId={recipe.id}

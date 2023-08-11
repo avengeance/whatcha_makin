@@ -140,7 +140,7 @@ li {
 
 .login-button {
   display: flex;
-  /* justify-content: center; */
+  justify-content: center;
   align-self: center;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -156,26 +156,15 @@ li {
   padding: 10px 20px;
 }
 
-/* .login-button:hover {
-  background-color: #ddd;
-} */
-
-/* .login-button:hover > button {
-  color: blue;
-} */
-
 .signup-button {
   display: flex;
+  justify-content: center;
   padding-top: 10px;
   padding-bottom: 10px;
   width: 100%;
   margin-left: 0;
   text-decoration: none;
 }
-
-/* .signup-button:hover {
-  background-color: #ddd;
-} */
 
 #create-recipe-button {
   display: flex;
