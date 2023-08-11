@@ -192,14 +192,20 @@ const RecipeDetail = () => {
                     <>
                       {liked ? (
                         <i
-                          className="fa-solid fa-heart liked"
+                          // className="fa-solid fa-heart liked"
+                          className={
+                            liked
+                              ? "fa-solid fa-heart liked"
+                              : "fa-solid fa-heart unlike"
+                          }
                           onClick={() => {
                             if (user) handleUnlike();
                           }}
                         ></i>
                       ) : (
                         <i
-                          className="fa-solid fa-heart"
+                          // className="fa-solid fa-heart"
+                          className="fa-solid fa-heart unlike"
                           onClick={() => {
                             if (user) handleLike();
                           }}
@@ -211,14 +217,24 @@ const RecipeDetail = () => {
                     <>
                       {liked ? (
                         <i
-                          className="fa-solid fa-heart liked"
+                          // className="fa-solid fa-heart liked"
+                          className={
+                            liked
+                              ? "fa-solid fa-heart liked"
+                              : "fa-solid fa-heart unlike"
+                          }
                           onClick={() => {
                             if (user) handleUnlike();
                           }}
                         ></i>
                       ) : (
                         <i
-                          className="far fa-heart"
+                          // className="far fa-heart"
+                          className={
+                            liked
+                              ? "fa-solid fa-heart liked"
+                              : "fa-solid fa-heart unlike"
+                          }
                           onClick={() => {
                             if (user) handleLike();
                           }}

@@ -43,19 +43,17 @@ li {
   /* border: 1px solid black; */
 }
 
-.profile-button {
-  /* position: relative; */
-  /* display: flex; */
-  /* justify-content: flex-end; */
-  /* flex-direction: column; */
-  /* padding-right: 25px; */
-  /* width: 50%; */
-  /* height: 50%; */
-  /* border: 1px solid green; */
-}
-
 .dropdown-container {
   border: 5px solid black;
+}
+
+.user-dropdown {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 20px;
+  width: 200px;
+  /* border: 3px solid blue; */
 }
 
 #profile-button {
@@ -90,7 +88,7 @@ li {
   z-index: 9999;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start;
   border-radius: 30px;
   box-shadow: 0px 0px 10px #888;
@@ -100,7 +98,7 @@ li {
   /* left: 0px; */
   top: 0px;
   left: 135px;
-  width: 200px;
+  width: 250px;
   padding-right: 25px;
   text-align: start;
   background-color: #c6e08d;
@@ -166,50 +164,41 @@ li {
   text-decoration: none;
 }
 
-#create-recipe-button {
-  display: flex;
-  justify-content: center;
-  padding: 5px;
-  padding-right: 20px;
-  width: 80%;
-  font-weight: bold;
-  background-color: transparent;
-}
-
 #recipe-button-link {
   text-decoration: none !important;
   display: flex;
   justify-content: center;
   padding: 5px;
-  margin-left: 28px;
   width: 90%;
   font-weight: bold;
+  color: #4d7e3e;
   background-color: transparent;
   /* border: 1px solid black; */
 }
 
 #firstname {
-  display: flex;
-  justify-content: center;
+  /* display: flex;
+  justify-content: center; */
   font-weight: bold;
-  padding: 5px;
+  /* padding: 5px; */
 }
 
 #email {
-  display: flex;
-  justify-content: center;
+  /* display: flex;
+  justify-content: center; */
   font-weight: bold;
   padding: 5px;
 }
 
 #manage-recipes {
-  display: flex;
-  justify-content: center;
+  /* display: flex; */
+  /* justify-content: center; */
   padding: 5px;
-  padding-right: 20px;
-  width: 80%;
+  /* padding-right: 20px; */
+  width: 100%;
   font-weight: bold;
-  border-top: 2px solid black;
-  border-bottom: 2px solid black;
+  color: #4d7e3e;
+  /* border-top: 2px solid black; */
+  /* border-bottom: 2px solid black; */
   /* border: 1px solid black; */
 }

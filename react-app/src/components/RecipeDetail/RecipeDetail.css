@@ -131,9 +131,12 @@ h2 {
   margin-left: 10px;
   /* border: 1px solid green; */
 }
-
-.fa-solid.fa-heart {
+.fa-solid.fa-heart,
+.fa-solid.fa-heart.unlike {
   color: #4d7e3e;
+}
+.fa-heart.liked {
+  color: red;
 }
 
 .recipe-description {
@@ -356,8 +359,4 @@ h2 {
   color: white;
   justify-content: center;
   /* border: 1px solid black; */
-}
-
-.fa-heart.liked {
-  color: red;
 }

@@ -62,8 +62,8 @@ function ProfileButton({ user }) {
       </button>
       <ul className={ulClassName} ref={ulRef} id="profile-dropdown">
         {user ? (
-          <>
-            <li id="firstname">Hi, {user.first_name} welcome back!</li>
+          <div className="user-dropdown">
+            <li id="firstname">Hi, {user.first_name} Welcome Back!</li>
             <li id="email">{user.email}</li>
             <li>
               <NavLink
@@ -89,7 +89,7 @@ function ProfileButton({ user }) {
                 Log Out
               </button>
             </li>
-          </>
+          </div>
         ) : (
           <>
             <div className="login-button">
