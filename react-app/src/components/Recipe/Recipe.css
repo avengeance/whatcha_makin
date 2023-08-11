@@ -56,10 +56,6 @@ body {
   }
 }
 
-/* .recipe-tile:hover{
-  opacity: 1;
-} */
-
 .recipe-tile:hover #recipe-tile-image {
   cursor: pointer;
   border-radius: 25px;
@@ -78,8 +74,8 @@ body {
 }
 
 .recipe-tile #recipe-tile-image {
-  width: 250px;
-  height: 250px;
+  width: 300px;
+  height: 300px;
   border-radius: 50%;
   transition: ease-in-out border-radius 0.5s, transform 0.5s ease-in-out;
   transform: scale(0.5);
