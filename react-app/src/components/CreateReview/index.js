@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams, useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 
 import * as ReviewActions from "../../store/reviews";
@@ -51,10 +51,12 @@ function CreateReviewModal({ recipeId, onReviewSubmit }) {
       setErrors([]);
 
       try {
-        await dispatch(
+        const newReviewId = await dispatch(
           ReviewActions.createReviewThunk(recipeId, review, stars)
         );
+        setRefreshKey(refreshKey + 1);
         closeModal();
+        onReviewSubmit();
       } catch (err) {
         const data = await err.json();
         if (data && data.errors) setErrors(data.errors);

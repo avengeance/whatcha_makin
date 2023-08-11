@@ -9,6 +9,9 @@ const UPDATE_RECIPE = "recipes/UPDATE_RECIPE";
 const DELETE_RECIPE = "recipes/DELETE_RECIPE";
 const GET_RECIPES_BY_USER = "recipes/GET_RECIPES_BY_USER";
 
+const CLEAR_RECIPE_DATA = "recipes/CLEAR_RECIPE_DATA";
+const CLEAR_REVIEW_DATA = "recipes/CLEAR_REVIEW_DATA";
+
 // Actions
 const getAllRecipes = (recipes) => ({
   type: GET_ALL_RECIPES,
@@ -38,6 +41,14 @@ const deleteRecipe = (recipe) => ({
 const getRecipesByUser = (recipes) => ({
   type: GET_RECIPES_BY_USER,
   recipes,
+});
+
+const clearRecipeData = () => ({
+  type: CLEAR_RECIPE_DATA,
+});
+
+const clearReviewData = () => ({
+  type: CLEAR_REVIEW_DATA,
 });
 
 // Thunks
@@ -70,6 +81,7 @@ export const createRecipeThunk = (formData) => async (dispatch) => {
   });
   const data = await res.json();
   dispatch(createRecipe(data));
+  dispatch(getRecipeThunk(data.id));
   return data;
 };
 
@@ -104,6 +116,7 @@ export const getRecipesByUserThunk = (userId) => async (dispatch) => {
 // Reducers
 const intialState = {
   recipes: {},
+  // currentRecipe: null,
 };
 
 const recipesReducer = (state = intialState, action) => {
@@ -114,9 +127,21 @@ const recipesReducer = (state = intialState, action) => {
         newState.recipes[recipe.id] = recipe;
       });
       return newState;
+    // case GET_RECIPE:
+    //   newState.recipes[action.recipe.id] = action.recipe;
+    //   return newState;
     case GET_RECIPE:
-      newState.recipes[action.recipe.id] = action.recipe;
-      return newState;
+      return {
+        ...state,
+        recipes: {
+          ...state.recipes,
+          [action.recipe.id]: action.recipe,
+        },
+        comments: {
+          ...state.comments,
+          [action.recipe.id]: action.recipe.comments,
+        },
+      };
     case CREATE_RECIPE:
       newState.recipes[action.recipe.id] = action.recipe;
       return {
@@ -142,6 +167,10 @@ const recipesReducer = (state = intialState, action) => {
         });
       }
       return newState;
+    case CLEAR_RECIPE_DATA:
+      return {};
+    case CLEAR_REVIEW_DATA:
+      return {};
     default:
       return state;
   }

@@ -3,13 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 
 import * as RecipeActions from "../../store/recipes";
+import * as validators from "../../utils/validations.js";
 import { csrfFetch } from "../../store/csrf";
 
 import "./UpdateRecipe.css";
 
 const initialIngredient = {
   name: "",
-  quantity: 0,
+  quantity: 1,
   measurement: "cup",
   is_seasoning: false,
 };
@@ -44,13 +45,32 @@ function UpdateRecipe() {
   // const [previewImage, setPreviewImage] = useState(null);
   // const [recipeImage, setRecipeImage] = useState(null);
   // const [otherImages, setOtherImages] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [stepCounter, setStepCounter] = useState(1);
 
+  const [nameValid, setNameValid] = useState(false);
+  const [ingredientsValid, setIngredientsValid] = useState(false);
+  const [directionsValid, setDirectionsValid] = useState(false);
+  const [prepTimeValid, setPrepTimeValid] = useState(false);
+  const [cookTimeValid, setCookTimeValid] = useState(false);
+  const [servingsValid, setServingsValid] = useState(false);
+
   const [errors, setErrors] = useState({});
 
-  // console.log("this is current recipe:", currentRecipe)
+  const onNameChange = (e) => {
+    const inputValue = e.target.value;
+    const valid = validators.validateName(inputValue);
+    setNameValid(valid);
+    if (!valid) {
+      setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
+    } else {
+      setErrors([]);
+      setReviews([]);
+    }
+    setName(inputValue);
+  };
 
   useEffect(() => {
     async function getRecipeThunk() {
@@ -64,24 +84,46 @@ function UpdateRecipe() {
 
         setRecipe(recipe);
         setName(recipe.name || "");
+        setNameValid(validators.validateName(recipe.name || ""));
         setDescription(recipe.description || "");
-        setIngredients(recipe.ingredients || []);
-        setDirections(recipe.directions || []);
+
+        const recipeIngredients = recipe.ingredients.map((ingredient) => {
+          const isValid = validators.validateIngredientName(ingredient.name);
+          return {
+            ...ingredient,
+            isValid: isValid,
+          };
+        });
+        setIngredients(recipeIngredients);
+        setIngredientsValid(
+          recipeIngredients.every((ingredient) => ingredient.isValid)
+        );
+
+        const recipeDirections = recipe.directions.map((direction) => ({
+          ...direction,
+          isValid: validators.validateStepInfo(direction.step_info),
+        }));
+        setDirections(recipeDirections);
+        setDirectionsValid(
+          recipeDirections.every((direction) => direction.isValid)
+        );
 
         setPrepTime(recipe.prep_time);
-        setCookTime(recipe.cook_time);
-
         const prepHours = Math.floor(recipe.prep_time / 60);
         const prepMinutes = recipe.prep_time % 60;
         setPrepHours(prepHours);
         setPrepMinutes(prepMinutes);
+        setPrepTimeValid(validators.validatePrepTime(prepHours, prepMinutes));
 
+        setCookTime(recipe.cook_time);
         const cookHours = Math.floor(recipe.cook_time / 60);
         const cookMinutes = recipe.cook_time % 60;
         setCookHours(cookHours);
         setCookMinutes(cookMinutes);
+        setCookTimeValid(validators.validateCookTime(cookHours, cookMinutes));
 
         setServings(recipe.servings || 1);
+        setServingsValid(validators.validateServings(recipe.servings || 1));
 
         setLoading(false);
       }
@@ -89,12 +131,24 @@ function UpdateRecipe() {
     getRecipeThunk();
   }, [recipeId]);
 
+  useEffect(() => {
+    setIngredientsValid(ingredients.every((ingredient) => ingredient.isValid));
+  }, [ingredients]);
+
+  useEffect(() => {
+    setDirectionsValid(directions.every((direction) => direction.isValid));
+  }, [directions]);
+
   function handleIngredientChange(i, field, value) {
     const values = [...ingredients];
     values[i] = {
       ...values[i],
       [field]: value,
     };
+
+    if (field === "name") {
+      values[i].isValid = validators.validateIngredientName(value);
+    }
     setIngredients(values);
   }
   function handleAddIngredient() {
@@ -120,6 +174,7 @@ function UpdateRecipe() {
       values[i] = {
         ...values[i],
         step_info: value,
+        isValid: validators.validateStepInfo(value),
       };
     }
 
@@ -154,20 +209,13 @@ function UpdateRecipe() {
   //     }
   // }
 
-  // console.log("Ingredients before submit", ingredients);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
 
     const formData = new FormData();
-    // const totalPrepTime = (parseInt(prepHours) || 0) * 60 + (parseInt(prepMinutes) || 0);
-    // const totalCookTime = (parseInt(cookHours) || 0) * 60 + (parseInt(cookMinutes) || 0);
     const totalPrepTime = (prepHours || 0) * 60 + (parseInt(prepMinutes) || 0);
     const totalCookTime = (cookHours || 0) * 60 + (parseInt(cookMinutes) || 0);
-    // const totalPrepTime = ((prepHours || 0) * 60 + (prepMinutes || 0));
-    // const totalCookTime = ((cookHours || 0) * 60 + (cookMinutes || 0));
-
     formData.append("name", name);
     formData.append("description", description);
     formData.append("prep_time", totalPrepTime);
@@ -181,10 +229,6 @@ function UpdateRecipe() {
     formData.append("ingredients", JSON.stringify(ingredients));
     formData.append("directions", JSON.stringify(directions));
 
-    // for (let pair of formData.entries()) {
-    //     console.log(pair[0] + ', ' + pair[1]);
-    // }
-
     let updatedRecipe;
     try {
       const recipe = await dispatch(
@@ -196,13 +240,11 @@ function UpdateRecipe() {
         setDescription("");
         setIngredients([initialIngredient]);
         setDirections([initialDirection]);
-        // setPrepTime(totalPrepTime)
-        // setCookTime(totalCookTime)
         setPrepHours("");
         setPrepMinutes("");
         setCookHours("");
         setCookMinutes("");
-        // setServings('')
+        setServings("");
         // setPreviewImage('')
         // setOtherImages([])
         setErrors([]);
@@ -210,6 +252,7 @@ function UpdateRecipe() {
       }
     } catch (error) {
       console.error("There was an error updating the recipe", error);
+      setErrors([`Name must be ${validators.MIN_NAME_LENGTH} characters long`]);
     }
     if (updatedRecipe) {
       console.log("Updated recipe", updatedRecipe);
@@ -221,6 +264,8 @@ function UpdateRecipe() {
   ) : (
     <div id="update-recipe-container">
       <form className="form" onSubmit={handleSubmit}>
+        {errors?.length > 0 &&
+          errors.map((error) => <p className="errors">{error}</p>)}
         <div className="container">
           <div className="update-recipe-form">
             <h2 id="update-recipe-title">Update Recipe</h2>
@@ -232,7 +277,7 @@ function UpdateRecipe() {
               type="text"
               name="name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={onNameChange}
               placeholder="Recipe Name"
               required
             />
@@ -263,7 +308,6 @@ function UpdateRecipe() {
                 placeholder="Quantity"
                 required={index === 0}
                 min="0"
-                step="0.01"
               />
               <select
                 name="measurement"
@@ -283,6 +327,7 @@ function UpdateRecipe() {
                 <option value="large">Large</option>
                 <option value="slices">Slices</option>
                 <option value="whole">Whole</option>
+                <option value="milligrams">mg</option>
               </select>
               <label>
                 <input
@@ -497,7 +542,18 @@ function UpdateRecipe() {
                     >
                     </input> */}
         <div id="form-submit-button">
-          <button type="submit" className="submit-button">
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={
+              !nameValid ||
+              !ingredientsValid ||
+              !directionsValid ||
+              !prepTimeValid ||
+              !cookTimeValid ||
+              !servingsValid
+            }
+          >
             Update Recipe
           </button>
         </div>

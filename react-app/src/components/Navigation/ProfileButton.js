@@ -8,21 +8,20 @@ import { NavLink, useHistory } from "react-router-dom";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
-  const history = useHistory();
 
   const [showCreateButton, setShowCreateButton] = useState(false);
 
   const openMenu = () => {
-    // if (showMenu) return;
-    // setShowMenu(true);
-    setShowMenu((prev) => !prev)
+    setShowMenu((prev) => !prev);
   };
 
   const toggleCreateButton = () => {
-    setShowCreateButton((prev) => !prev)
-  }
+    setShowCreateButton((prev) => !prev);
+    setShowMenu(false);
+  };
 
   useEffect(() => {
     if (!showMenu) return;
@@ -38,10 +37,10 @@ function ProfileButton({ user }) {
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
 
-
-  const handleLogout = (e) => {
+  const handleLogout = async (e) => {
     e.preventDefault();
-    dispatch(logout());
+    await dispatch(logout());
+    history.push("/");
   };
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
@@ -49,42 +48,53 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={openMenu} id="profile-button" style={{ backgroundColor: '#8ABE53' }}>
-        {/* <i className='fas fa-bars' style={{
-          fontSize: '14px',
-          paddingRight: '12px',
-          paddingLeft: '5px',
-        }} /> */}
-        <i className="fas fa-user-circle" style={{
-          fontSize: '30px',
-        }} />
+      <button
+        onClick={openMenu}
+        id="profile-button"
+        style={{ backgroundColor: "#8ABE53" }}
+      >
+        <i
+          className="fas fa-user-circle"
+          style={{
+            fontSize: "30px",
+          }}
+        />
       </button>
-      {user && (
-        <button onClick={toggleCreateButton} id="create-recipe-button" style={{ backgroundColor: 'transparent' }}>
-          <NavLink exact to="/recipes/new" id='recipe-button-link'>
-            Create a New Recipe!
-          </NavLink>
-        </button>
-      )}
       <ul className={ulClassName} ref={ulRef} id="profile-dropdown">
         {user ? (
           <>
-            <li id="firstname">{user.first_name}</li>
+            <li id="firstname">Hi, {user.first_name} welcome back!</li>
             <li id="email">{user.email}</li>
+            <li>
+              <NavLink
+                exact
+                to="/recipes/new"
+                id="recipe-button-link"
+                onClick={toggleCreateButton}
+              >
+                Create New Recipe
+              </NavLink>
+            </li>
             <li id="manage-recipes">
-              <NavLink to={`/users/${user.id}/recipes`} id="manage-recipes-link" style={{ textDecoration: 'none' }}>
+              <NavLink
+                to={`/users/${user.id}/recipes`}
+                id="manage-recipes-link"
+                style={{ textDecoration: "none" }}
+              >
                 Manage Recipes
               </NavLink>
             </li>
             <li id="li-logout">
-              <button onClick={handleLogout} id="logout-button">Log Out</button>
+              <button onClick={handleLogout} id="logout-button">
+                Log Out
+              </button>
             </li>
           </>
         ) : (
           <>
             <div className="login-button">
               <OpenModalButton
-                className='modal-button'
+                className="modal-button"
                 buttonText="Log In"
                 onItemClick={closeMenu}
                 modalComponent={<LoginFormModal />}

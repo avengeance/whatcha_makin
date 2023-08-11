@@ -4,12 +4,14 @@ export const MIN_INGREDIENT_NAME_LENGTH = 3;
 
 // Name validation
 export const validateName = (name) => {
-  return name.length >= MIN_NAME_LENGTH && /^[a-zA-Z]+$/.test(name);
+  return name.length >= MIN_NAME_LENGTH && /^[a-zA-Z\s]+$/.test(name);
 };
 
 // Ingredient name validation
 export const validateIngredientName = (name) => {
-  return name.length >= MIN_INGREDIENT_NAME_LENGTH && /^[a-zA-Z]+$/.test(name);
+  return (
+    name.length >= MIN_INGREDIENT_NAME_LENGTH && /^[a-zA-Z0-9-' ]+$/.test(name)
+  );
 };
 
 // Ingredient quantity
@@ -20,7 +22,7 @@ export const validateIngredientQuantity = (qty) => {
 
 // Direction step info
 export const validateStepInfo = (info) => {
-  return info.length > 0;
+  return info.length > 5;
 };
 
 // Prep time

@@ -10,7 +10,7 @@ class RecipeIngredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('recipes.id')), nullable=False)
     ingredient_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('ingredients.id')), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
+    quantity = db.Column(db.Float, nullable=False)
     measurement = db.Column(db.String(255), nullable=False)
     
     recipe = db.relationship('Recipe', back_populates='recipe_ingredients', lazy=True)

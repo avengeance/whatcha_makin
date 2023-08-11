@@ -1,11 +1,23 @@
 /* TODO Add site wide styles */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
 @font-face {
-    font-family: "Exo";
-    src: url("./font/Exo-Italic-VariableFont_wght.ttf") format("ttf"),
-         url("./font/Exo-VariableFont_wght.ttf") format("ttf");
+  font-family: "Exo";
+  src: url("./font/Exo-Italic-VariableFont_wght.ttf") format("ttf"),
+    url("./font/Exo-VariableFont_wght.ttf") format("ttf");
 }
 
-body{
-    font-family: "Exo", sans-serif;
-    background-color: #8abe53;
+body {
+  font-family: "Exo", sans-serif;
+  background-image: url("../src/images/whatcha-makin-high-resolution-logo-black-on-transparent-background.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: #8abe53;
 }

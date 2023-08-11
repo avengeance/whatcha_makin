@@ -3,12 +3,12 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 
-import * as ReviewActions from "../../store/reviews";
-import "./DeleteReview.css";
+import * as CommentActions from "../../store/comments";
+import "./DeleteComment.css";
 
-const DeleteReviewModal = ({
+const DeleteCommentModal = ({
   recipeId,
-  reviewId,
+  commentId,
   refreshKey,
   setRefreshKey,
 }) => {
@@ -16,9 +16,9 @@ const DeleteReviewModal = ({
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const deleteReview = async () => {
-    await dispatch(ReviewActions.deleteReviewThunk(reviewId));
-    await dispatch(ReviewActions.getAllReviewsThunk(recipeId));
+  const deleteComment = async () => {
+    await dispatch(CommentActions.deleteCommentThunk(recipeId, commentId));
+    await dispatch(CommentActions.getAllCommentsThunk(recipeId));
     setRefreshKey(refreshKey + 1);
     closeModal();
     history.push(`/recipes/${recipeId}`);
@@ -30,16 +30,16 @@ const DeleteReviewModal = ({
 
   return (
     <div className="delete-modal">
-      <h3>Are you sure you want to delete this review?</h3>
+      <h3>Are you sure you want to delete this comment?</h3>
       <div className="button-div">
         <button
           id="yes-button"
-          onClick={deleteReview}
+          onClick={deleteComment}
           style={{
             backgroundColor: "#C6E08D",
-            width: "100px", // specify your desired width
+            width: "100px",
             height: "50px",
-            borderRadius: "15px", // specify your desired height
+            borderRadius: "15px",
           }}
         >
           Yes
@@ -49,9 +49,9 @@ const DeleteReviewModal = ({
           onClick={handleNoClick}
           style={{
             backgroundColor: "#grey",
-            width: "100px", // specify your desired width
+            width: "100px",
             height: "50px",
-            borderRadius: "15px", // specify your desired height
+            borderRadius: "15px",
           }}
         >
           No
@@ -61,4 +61,4 @@ const DeleteReviewModal = ({
   );
 };
 
-export default DeleteReviewModal;
+export default DeleteCommentModal;

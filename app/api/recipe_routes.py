@@ -11,6 +11,14 @@ from ..models.recipeIngredient import RecipeIngredient
 from ..forms.recipe_form import RecipeForm, EditRecipeForm
 from ..forms.review_form import ReviewForm, EditReviewForm
 
+DEFAULT_PREVIEW_IMAGE = 'https://i.imgur.com/6svLK8d.png'
+DEFAULT_IMAGE = 'https://i.imgur.com/LvxgCES.png'
+
+# DEFAULT_PREVIEW_IMAGE = '/home/avengeance/course/capstone/app/images/default-image-main.png'
+# DEFAULT_IMAGE = '/home/avengeance/course/capstone/app/images/alt-image-stock.png'
+
+
+
 from flask import Blueprint, redirect, url_for, render_template, jsonify, request
 from flask_login import login_required, current_user, logout_user
 from werkzeug.datastructures import MultiDict
@@ -64,9 +72,7 @@ def get_all_recipes():
 # display a more detailed view of the recipe
 @recipe_routes.route('/<int:id>', methods=['GET'])
 def get_recipe(id):
-    # recipe = Recipe.query.get(id)
     recipe = Recipe.query.options(joinedload('user')).get(id)
-    print(recipe)
     
     if (recipe):
         images = RecipeImage.query.filter_by(recipe_id=id).all()
@@ -112,10 +118,11 @@ def get_recipe(id):
                     "id": review.id,
                     "owner_id": review.owner_id,
                     "recipe_id": review.recipe_id,
+                    "owner_name": review.users.first_name,
                     "review": review.review,
                     "stars": review.stars,
                     "created_at": review.created_at,
-                    "udated_at": review.updated_at
+                    "updated_at": review.updated_at
                 }
                 reviews_list.append(review_dict)
         else:
@@ -134,6 +141,7 @@ def get_recipe(id):
             comment_dict = {
                 "id": comment.id,
                 "owner_id": comment.owner_id,
+                "owner_name":comment.users.first_name,
                 "recipe_id": comment.recipe_id,
                 "comment": comment.comment,
                 "created_at": comment.created_at,
@@ -171,10 +179,6 @@ def get_recipe(id):
 @recipe_routes.route('/new/', methods=['POST'])
 @login_required
 def create_recipe():
-        for key in request.form:
-            print(f"{key}: {request.form[key]}")
-            for key in request.form:
-                print(f"{key}: {request.form[key]}")
         new_recipe = Recipe(
             owner_id = current_user.id,
             name = request.form.get('name'),
@@ -183,36 +187,25 @@ def create_recipe():
             cook_time = request.form.get('cook_time'),
             servings = request.form.get('servings')
             )
-        # preview_image = request.files.get('preview_image')
-        # print("                       this is preview image                  ", preview_image)
-        # preview_image_string = ''
-        # if preview_image:
-        #     preview_image_string = base64.b64encode(preview_image.read()).decode()
-
-        # new_recipe_image = RecipeImage(
-        #         url = preview_image_string,
-        #         is_preview = True,
-        #         recipe = new_recipe
-        #     )
-            # recipe_image = request.files.get('recipe_image')
-            # if recipe_image:
-            #     recipe_image_string = base64.b64encode(recipe_image.read()).decode()
-            # else:
-            #     print(form.errors)
-
-            # new_recipe_image2 = RecipeImage(
-            #     url = recipe_image_string,
-            #     is_preview = False,
-            #     recipe = new_recipe
-            # )
-
-        # db.session.add(new_recipe_image)
+        print("************************default image path*****************************", DEFAULT_PREVIEW_IMAGE)
+        print("************************other images*****************************", DEFAULT_IMAGE)
+        preview_image_path = DEFAULT_PREVIEW_IMAGE
+        new_recipe_image = RecipeImage(
+                url = preview_image_path,
+                is_preview = True,
+                recipe = new_recipe
+            )
+        other_image_paths = []
+        for i in range(3):
+            other_image_paths.append(DEFAULT_IMAGE)
+        for path in other_image_paths:
+            new_recipe_image = RecipeImage(
+                url=path,
+                is_preview=False,
+                recipe=new_recipe
+            )
+        db.session.add(new_recipe_image)
         db.session.add(new_recipe)
-            # print(new_recipe)
-            # db.session.add(new_recipe_image)
-            # print(new_recipe_image)
-            # db.session.add(new_recipe_image2)
-            # print(new_recipe_image2)
         db.session.commit()
         directions = json.loads(request.form.get('directions'))
         for direction in directions:
@@ -225,7 +218,6 @@ def create_recipe():
             db.session.commit()
 
         ingredients = json.loads(request.form.get('ingredients'))
-        print("This is ingredients:", ingredients)
         for ingredient in ingredients:
             new_ingredient = Ingredient(
                 name = ingredient['name'],
@@ -347,7 +339,6 @@ def update_recipe(id):
 def delete_recipe(id):
     recipe = Recipe.query.get(id)
     if recipe:
-        Recipe.query.filter_by(id=id).delete()
         db.session.delete(recipe)
         db.session.commit()
         
@@ -412,20 +403,7 @@ def create_review(id):
         return jsonify(new_review.to_dict()), 201
     else:
         return jsonify(form.errors), 400
-    
-# Get a review
-# @recipe_routes.route('/<int:id>/reviews/<int:review_id>', methods=['GET'])
-# def get_review(review_id):
-#     review = Review.query.get(review_id)
-
-#     if review is None:
-#         return jsonify({
-#             "error": "Review does not exist",
-#             "status_code": 404
-#         }), 404
-
-#     review_dict = review.to_dict()
-#     return jsonify(review_dict), 200
+ 
 
 # View Likes by Recipe ID (Bonus Feature)
 @recipe_routes.route('/<int:id>/likes', methods=['GET'])
@@ -484,9 +462,10 @@ def delete_like(id,like_id):
 @recipe_routes.route('/<int:id>/comments', methods=['GET'])
 def view_comments(id):
     recipe = Recipe.query.get(id)
-    
+    # from sqlalchemy.orm import joinedload
     if recipe:
         comments = Comment.query.filter_by(recipe_id=id).all()
+        # comments = Comment.query.options(joinedload(Comment.users)).filter_by(recipe_id=id).all()
         comments_dict = [comment.to_dict() for comment in comments]
         return jsonify(comments_dict), 200
     else:
@@ -504,15 +483,15 @@ def create_comment(id):
         if request.is_json:
             data = request.get_json()
             data = json.loads(data) if isinstance(data,str) else data
-            comment = Comment(
+            new_comment = Comment(
                 owner_id = current_user.id,
                 recipe_id = id,
                 comment=data['comment']
             )
-            db.session.add(comment)
+            db.session.add(new_comment)
             db.session.commit()
             
-            return jsonify(comment.to_dict()), 201
+            return jsonify(new_comment.to_dict()), 201
     else:
         res = {
             "message": "Recipe does not exist",

@@ -44,7 +44,7 @@ class Recipe(db.Model):
                 'directions': [direction.to_dict() for direction in self.directions],
                 'recipe_ingredients': [ingredient.to_dict() for ingredient in self.recipe_ingredients]
             }
-            print("Result before returning from to_dict:", result)
+
             return result
         except Exception as e:
             print("Exception in to_dict:", e)

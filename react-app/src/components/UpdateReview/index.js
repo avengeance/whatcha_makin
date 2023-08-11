@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import { useModal } from "../../context/Modal";
 
 import * as ReviewActions from "../../store/reviews";
@@ -9,16 +9,20 @@ import Cookies from "js-cookie";
 
 import "./UpdateReview.css";
 
-const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
+const UpdateReviewModal = ({
+  recipeId,
+  reviewId,
+  refreshKey,
+  setRefreshKey,
+  onReviewSubmit,
+}) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  // const { recipeId, reviewId } = useParams()
-
   const [review, setReview] = useState("");
   const [stars, setStars] = useState(0);
   const [reviewValid, setReviewValid] = useState(true);
   const [errors, setErrors] = useState([]);
-  const [refreshKey, setRefreshKey] = useState(0);
+  // const [refreshKey, setRefreshKey] = useState(0);
   const { closeModal } = useModal();
 
   const MIN_REVIEW_LENGTH = 10;
@@ -70,27 +74,21 @@ const UpdateReviewModal = ({ recipeId, reviewId, onReviewSubmit }) => {
         await dispatch(
           ReviewActions.updateReviewThunk(reviewId, stars, review)
         );
+        dispatch(ReviewActions.getReviewThunk(recipeId, reviewId));
+        setRefreshKey(refreshKey + 1);
         closeModal();
+        onReviewSubmit();
       } catch (err) {
-        const data = await err.json();
-        if (data && data.errors) setErrors(data.errors);
-        else setErrors(["Unexpected error while creating the review."]);
+        if (err.response && err.response.status == 400) {
+          const data = await err.json();
+          if (data && data.errors) setErrors(data.errors);
+          else setErrors(["Unexpected error while creating the review."]);
+        }
       }
     } else {
       setErrors([`Review must be ${MIN_REVIEW_LENGTH} characters long`]);
     }
     history.push(`/recipes/${recipeId}`);
-    // const updatedReview = await dispatch(
-    //   ReviewActions.updateReviewThunk(reviewId, stars, review)
-    // );
-    // if (updatedReview && !updatedReview.errors) {
-    //   closeModal();
-    //   setRefreshKey(refreshKey + 1);
-    //   dispatch(ReviewActions.getAllReviewsThunk(recipeId));
-    //   history.push(`/recipes/${recipeId}`);
-    // } else {
-    //   setErrors(updatedReview.errors);
-    // }
   };
   return (
     <div className="update-review-modal">

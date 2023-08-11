@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 // Constants
 const GET_ALL_REVIEWS = "reviews/GET_ALL_REVIEWS";
 const GET_REVIEW = "reviews/GET_REVIEW";
+const CLEAR_REVIEWS = "reviews/CLEAR_REVIEWS";
 const CREATE_REVIEW = "reviews/CREATE_REVIEW";
 const UPDATE_REVIEW = "reviews/UPDATE_REVIEW";
 const DELETE_REVIEW = "reviews/DELETE_REVIEW";
@@ -16,6 +17,10 @@ const getReview = (review) => ({
   type: GET_REVIEW,
   review,
 });
+const clearReviews = (reviews) => ({
+  type: CLEAR_REVIEWS,
+  reviews,
+});
 const createReview = (review) => ({
   type: CREATE_REVIEW,
   review,
@@ -24,9 +29,9 @@ const updateReview = (review) => ({
   type: UPDATE_REVIEW,
   review,
 });
-const deleteReview = (reviews) => ({
+const deleteReview = (reviewId) => ({
   type: DELETE_REVIEW,
-  reviews,
+  reviewId,
 });
 
 // Thunks
@@ -61,7 +66,7 @@ export const createReviewThunk =
     if (res.ok) {
       const data = await res.json();
       dispatch(createReview(data));
-      return null;
+      return data.id;
     } else if (res.status < 500) {
       const data = await res.json();
       if (data.errors) {
@@ -105,8 +110,7 @@ export const deleteReviewThunk = (reviewId) => async (dispatch) => {
     });
     if (!res.ok) throw res;
     const data = await res.json();
-    dispatch(deleteReview(data));
-    return data;
+    dispatch(deleteReview(reviewId));
   } catch (error) {
     throw error;
   }
@@ -128,16 +132,22 @@ const reviewsReducer = (state = initialState, action) => {
     case GET_REVIEW:
       newState.reviews[action.review.id] = action.review;
       return newState;
+    case CLEAR_REVIEWS:
+      return { reviews: [] };
     case CREATE_REVIEW:
-      newState.reviews = action.payload;
-      return { ...state, reviews: [...state.reviews, action.review] };
+      // newState.reviews = action.payload;
+      // return { ...state, reviews: [...state.reviews, action.review] };
+      return {
+        ...state,
+        reviews: [...state.reviews, action.review],
+      };
     case UPDATE_REVIEW:
       const { id } = action.review;
       newState.reviews[id] = action.review;
       return newState;
     case DELETE_REVIEW:
-      delete newState.reviews[action.reviews.id];
-      return { ...state, reviews: [...state.reviews, action.review] };
+      delete newState.reviews[action.reviewId];
+      return newState;
     default:
       return state;
   }
