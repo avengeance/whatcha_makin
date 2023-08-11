@@ -234,251 +234,253 @@ function CreateRecipe() {
     }
   };
   return (
-    <div id="create-recipe-container">
-      <form className="form" onSubmit={handleSubmit}>
-        {errors?.length > 0 &&
-          errors.map((error) => <p className="errors">{error}</p>)}
-        <div className="container">
-          <div className="create-recipe-form">
-            <h2 id="create-recipe-title">Create a New Recipe</h2>
-            <h3>What is the name of your new recipe?</h3>
-          </div>
-          <div id="form-container" className="form-input">
-            <input
-              id="recipe-name-input"
-              type="text"
-              name="name"
-              value={name}
-              // onChange={(e) => setName(e.target.value)}
-              onChange={onNameChange}
-              placeholder="Recipe Name"
-              required
-            />
-          </div>
-        </div>
-        <div className="container">
-          <h2 id="ingredient-title">Ingredients</h2>
-          <h3 id="ingredient-subtitle">What ingredients will we need?</h3>
-          {ingredients.map((ingredient, index) => (
-            <div key={index} className="ingredient-input">
+    <div className="create-main-container">
+      <div id="create-recipe-container">
+        <form className="form" onSubmit={handleSubmit}>
+          {errors?.length > 0 &&
+            errors.map((error) => <p className="errors">{error}</p>)}
+          <div className="container">
+            <div className="create-recipe-form">
+              <h2 id="create-recipe-title">Create a New Recipe</h2>
+              <h3>What is the name of your new recipe?</h3>
+            </div>
+            <div id="form-container" className="form-input">
               <input
+                id="recipe-name-input"
                 type="text"
                 name="name"
-                value={ingredient.name}
-                onChange={(e) => handleIngredientChange(index, e)}
-                placeholder="Ingredient Name"
-                required={index === 0}
-              />
-              <input
-                type="number"
-                name="quantity"
-                value={ingredient.quantity}
-                onChange={(e) => handleIngredientChange(index, e)}
-                placeholder="Quantity"
-                required={index === 0}
-                min="0"
-                step="0.01"
-              />
-              <select
-                name="measurement"
-                value={ingredient.measurement}
-                required={index === 0}
-                onChange={(e) => handleIngredientChange(index, e)}
-              >
-                <option value="cup">Cup</option>
-                <option value="oz">Oz</option>
-                <option value="ml">Ml</option>
-                <option value="tbsp">Tbsp</option>
-                <option value="tsp">Tsp</option>
-                <option value="g">G</option>
-                <option value="lb">Lb</option>
-                <option value="slice">Slice</option>
-                <option value="Large">Large</option>
-                <option value="whole">Whole</option>
-                <option value="sheet">Sheet</option>
-                <option value="split">Split</option>
-                <option value="cloves">Cloves</option>
-                <option value="milligrams">mg</option>
-              </select>
-              <label>
-                <input
-                  type="checkbox"
-                  name="is_seasoning"
-                  checked={ingredient.is_seasoning}
-                  //   value={ingredient.is_seasoning}
-                  onChange={(e) => handleIngredientChange(index, e)}
-                />
-                Seasoning
-              </label>
-              {ingredients.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => handleRemoveIngredient(index)}
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-          ))}
-          <div className="increase-button">
-            <button
-              type="button"
-              onClick={handleAddIngredient}
-              className="add-button"
-            >
-              <i class="fas fa-plus"></i>
-              <span>Add Ingredient</span>
-            </button>
-          </div>
-        </div>
-        <div className="container">
-          <h2>Directions</h2>
-          <h3>How will we make this recipe?</h3>
-          {directions.map((direction, index) => (
-            <div key={index} className="direction-input">
-              <input
-                type="text"
-                name="step"
-                value={`Step ${direction.step}`}
-                readOnly
-              />
-              <input
-                type="text"
-                name="step_info"
-                value={direction.step_info}
-                onChange={(e) => handleDirectionChange(index, e)}
+                value={name}
+                // onChange={(e) => setName(e.target.value)}
+                onChange={onNameChange}
+                placeholder="Recipe Name"
                 required
-                placeholder="Step Info"
               />
-              {directions.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => handleRemoveDirection(index)}
-                >
-                  Remove
-                </button>
-              )}
             </div>
-          ))}
-          <div className="increase-button">
+          </div>
+          <div className="container">
+            <h2 id="ingredient-title">Ingredients</h2>
+            <h3 id="ingredient-subtitle">What ingredients will we need?</h3>
+            {ingredients.map((ingredient, index) => (
+              <div key={index} className="ingredient-input">
+                <input
+                  type="text"
+                  name="name"
+                  value={ingredient.name}
+                  onChange={(e) => handleIngredientChange(index, e)}
+                  placeholder="Ingredient Name"
+                  required={index === 0}
+                />
+                <input
+                  type="number"
+                  name="quantity"
+                  value={ingredient.quantity}
+                  onChange={(e) => handleIngredientChange(index, e)}
+                  placeholder="Quantity"
+                  required={index === 0}
+                  min="0"
+                  step="0.01"
+                />
+                <select
+                  name="measurement"
+                  value={ingredient.measurement}
+                  required={index === 0}
+                  onChange={(e) => handleIngredientChange(index, e)}
+                >
+                  <option value="cup">Cup</option>
+                  <option value="oz">Oz</option>
+                  <option value="ml">Ml</option>
+                  <option value="tbsp">Tbsp</option>
+                  <option value="tsp">Tsp</option>
+                  <option value="g">G</option>
+                  <option value="lb">Lb</option>
+                  <option value="slice">Slice</option>
+                  <option value="Large">Large</option>
+                  <option value="whole">Whole</option>
+                  <option value="sheet">Sheet</option>
+                  <option value="split">Split</option>
+                  <option value="cloves">Cloves</option>
+                  <option value="milligrams">mg</option>
+                </select>
+                <label>
+                  <input
+                    type="checkbox"
+                    name="is_seasoning"
+                    checked={ingredient.is_seasoning}
+                    //   value={ingredient.is_seasoning}
+                    onChange={(e) => handleIngredientChange(index, e)}
+                  />
+                  Seasoning
+                </label>
+                {ingredients.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveIngredient(index)}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            ))}
+            <div className="increase-button">
+              <button
+                type="button"
+                onClick={handleAddIngredient}
+                className="add-button"
+              >
+                <i class="fas fa-plus"></i>
+                <span>Add Ingredient</span>
+              </button>
+            </div>
+          </div>
+          <div className="container">
+            <h2>Directions</h2>
+            <h3>How will we make this recipe?</h3>
+            {directions.map((direction, index) => (
+              <div key={index} className="direction-input">
+                <input
+                  type="text"
+                  name="step"
+                  value={`Step ${direction.step}`}
+                  readOnly
+                />
+                <input
+                  type="text"
+                  name="step_info"
+                  value={direction.step_info}
+                  onChange={(e) => handleDirectionChange(index, e)}
+                  required
+                  placeholder="Step Info"
+                />
+                {directions.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveDirection(index)}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+            ))}
+            <div className="increase-button">
+              <button
+                type="button"
+                onClick={handleAddDirection}
+                className="add-button"
+              >
+                <i class="fas fa-plus"></i>
+                <span>Add Direction</span>
+              </button>
+            </div>
+          </div>
+          <div className="container">
+            <h2>Time to Cook</h2>
+            <h3>How long will this take to cook?</h3>
+            <div className="time-container">
+              <div id="prep-time">
+                <h4>Prep time:</h4>
+                <div className="time-select">
+                  <select
+                    name="hours"
+                    className="time-drop-down"
+                    value={prepHours}
+                    onChange={(e) => setPrepHours(e.target.value)}
+                  >
+                    {[...Array(169).keys()].map((i) => (
+                      <option key={i} value={i}>
+                        {i} Hours
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    name="minutes"
+                    className="time-drop-down"
+                    value={prepMinutes}
+                    // onChange={(e) => setPrepMinutes(e.target.value)}
+                    onChange={onPrepMinsChange}
+                    required
+                  >
+                    {Array.from({ length: 60 }, (_, i) => i).map((i) => (
+                      <option key={i} value={i}>
+                        {i} Minutes
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div id="cook-time">
+                <h4>Cook time:</h4>
+                <div className="time-select">
+                  <select
+                    name="hours"
+                    className="time-drop-down"
+                    value={cookHours}
+                    onChange={(e) => setCookHours(e.target.value)}
+                  >
+                    {[...Array(169).keys()].map((i) => (
+                      <option key={i} value={i}>
+                        {i} Hours
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    name="minutes"
+                    className="time-drop-down"
+                    value={cookMinutes}
+                    onChange={onCookMinsChange}
+                    required
+                  >
+                    {Array.from({ length: 60 }, (_, i) => i).map((i) => (
+                      <option key={i} value={i}>
+                        {i} Minutes
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div id="servings">
+              <h4>Servings:</h4>
+              <div className="time-select">
+                <select
+                  type="number"
+                  name="servings"
+                  value={servings}
+                  onChange={onServingsChange}
+                >
+                  {[...Array(101).keys()].slice(0).map((i) => (
+                    <option key={i} value={i}>
+                      {i} Servings
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+          <div className="container">
+            <h2>Description</h2>
+            <h3>What is it about this recipe?</h3>
+            <div className="textarea-container">
+              <textarea
+                name="description"
+                id="description-text"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows="4"
+                placeholder="Description"
+              ></textarea>
+            </div>
+          </div>
+          <div id="form-submit-button">
             <button
-              type="button"
-              onClick={handleAddDirection}
-              className="add-button"
+              type="submit"
+              className="submit-button"
+              onClick={handleSubmit}
             >
-              <i class="fas fa-plus"></i>
-              <span>Add Direction</span>
+              Create Recipe
             </button>
           </div>
-        </div>
-        <div className="container">
-          <h2>Time to Cook</h2>
-          <h3>How long will this take to cook?</h3>
-          <div className="time-container">
-            <div id="prep-time">
-              <h4>Prep time:</h4>
-              <div className="time-select">
-                <select
-                  name="hours"
-                  className="time-drop-down"
-                  value={prepHours}
-                  onChange={(e) => setPrepHours(e.target.value)}
-                >
-                  {[...Array(169).keys()].map((i) => (
-                    <option key={i} value={i}>
-                      {i} Hours
-                    </option>
-                  ))}
-                </select>
-                <select
-                  name="minutes"
-                  className="time-drop-down"
-                  value={prepMinutes}
-                  // onChange={(e) => setPrepMinutes(e.target.value)}
-                  onChange={onPrepMinsChange}
-                  required
-                >
-                  {Array.from({ length: 60 }, (_, i) => i).map((i) => (
-                    <option key={i} value={i}>
-                      {i} Minutes
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div id="cook-time">
-              <h4>Cook time:</h4>
-              <div className="time-select">
-                <select
-                  name="hours"
-                  className="time-drop-down"
-                  value={cookHours}
-                  onChange={(e) => setCookHours(e.target.value)}
-                >
-                  {[...Array(169).keys()].map((i) => (
-                    <option key={i} value={i}>
-                      {i} Hours
-                    </option>
-                  ))}
-                </select>
-                <select
-                  name="minutes"
-                  className="time-drop-down"
-                  value={cookMinutes}
-                  onChange={onCookMinsChange}
-                  required
-                >
-                  {Array.from({ length: 60 }, (_, i) => i).map((i) => (
-                    <option key={i} value={i}>
-                      {i} Minutes
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-          <div id="servings">
-            <h4>Servings:</h4>
-            <div className="time-select">
-              <select
-                type="number"
-                name="servings"
-                value={servings}
-                onChange={onServingsChange}
-              >
-                {[...Array(101).keys()].slice(0).map((i) => (
-                  <option key={i} value={i}>
-                    {i} Servings
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-        <div className="container">
-          <h2>Description</h2>
-          <h3>What is it about this recipe?</h3>
-          <div className="textarea-container">
-            <textarea
-              name="description"
-              id="description-text"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows="4"
-              placeholder="Description"
-            ></textarea>
-          </div>
-        </div>
-        <div id="form-submit-button">
-          <button
-            type="submit"
-            className="submit-button"
-            onClick={handleSubmit}
-          >
-            Create Recipe
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

@@ -108,7 +108,7 @@ body {
   margin-bottom: 10px;
   margin-right: auto;
   transition: opacity 0.5s;
-  border: 2px solid red;
+  /* border: 2px solid red; */
 }
 
 .recipe-review-likes {
