@@ -82,9 +82,11 @@
 
 #li-logout {
   display: flex;
-  right: 13px;
+  justify-content: center;
+  /* right: 13px; */
   padding-top: 10px;
   width: 100%;
+  /* border: 2px solid orange; */
 }
 
 #logout-button {
