@@ -160,11 +160,6 @@ const RecipeDetail = () => {
     postedRef.current = true;
   }
 
-  // let heartClass = "fa-solid fa-heart unlike";
-  // if (liked) {
-  //   heartClass = "fa-solid fa-heart liked";
-  // }
-
   let heartStyle = liked ? { color: "red" } : { color: "#4d7e3e" };
 
   return (
@@ -463,7 +458,7 @@ const RecipeDetail = () => {
                             <h3>{comment?.owner_name}</h3>
                           </div>
                           <p id="comment-created">{comment?.created_at}</p>
-                          <p>{comment?.comment}</p>
+                          <p id="comment-message">{comment?.comment}</p>
                         </div>
                         {user && userId === comment.owner_id && (
                           <div>
