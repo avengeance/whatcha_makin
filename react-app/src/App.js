@@ -18,6 +18,8 @@ import UpdateRecipe from "./components/UpdateRecipe";
 
 import UserRecipes from "./components/UserRecipe";
 
+import Footer from "./components/Footer";
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -31,29 +33,32 @@ function App() {
     <div className="flex">
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
-        <Switch>
-          <Route path="/login">
-            <LoginFormPage />
-          </Route>
-          <Route path="/signup">
-            <SignupFormPage />
-          </Route>
-          <Route exact path="/">
-            <Recipe />
-          </Route>
-          <Route exact path="/recipes/new">
-            <CreateRecipe />
-          </Route>
-          <Route exact path="/users/:userId/recipes">
-            <UserRecipes />
-          </Route>
-          <Route exact path="/recipes/:recipeId/edit">
-            <UpdateRecipe />
-          </Route>
-          <Route path="/recipes/:recipeId">
-            <RecipeDetail />
-          </Route>
-        </Switch>
+        <>
+          <Switch>
+            <Route path="/login">
+              <LoginFormPage />
+            </Route>
+            <Route path="/signup">
+              <SignupFormPage />
+            </Route>
+            <Route exact path="/">
+              <Recipe />
+            </Route>
+            <Route exact path="/recipes/new">
+              <CreateRecipe />
+            </Route>
+            <Route exact path="/users/:userId/recipes">
+              <UserRecipes />
+            </Route>
+            <Route exact path="/recipes/:recipeId/edit">
+              <UpdateRecipe />
+            </Route>
+            <Route path="/recipes/:recipeId">
+              <RecipeDetail />
+            </Route>
+          </Switch>
+          <Footer />
+        </>
       )}
     </div>
   );

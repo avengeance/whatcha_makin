@@ -1,8 +1,18 @@
+.create-main-container {
+  display: flex;
+  justify-content: center;
+  /* border: 3px solid orange; */
+}
+
 #create-recipe-container {
+  display: flex;
+  justify-content: center;
   padding: 15px;
   background-color: #c6e08d;
   border-radius: 25px;
+  max-width: 1600px;
   border: 3px solid black;
+  opacity: 0.9;
   /* border: 1px solid red; */
 }
 
@@ -20,6 +30,7 @@ h4 {
 .container {
   border: 2px dotted black;
   border-radius: 25px;
+  padding: 10px;
   padding-bottom: 10px;
   margin-bottom: 5px;
 }
@@ -39,6 +50,8 @@ h4 {
   display: flex;
   justify-content: center;
   padding: 10px;
+  /* width: 100%; */
+  /* border: 3px solid black; */
 }
 
 .direction-input {
@@ -46,19 +59,21 @@ h4 {
   justify-content: center;
 }
 
-.add-button {
+.add-button,
+span {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 15%;
+  width: 450px;
   gap: 5px;
   padding: 5px 10px;
-  background-color: #e2e2e2;
+  /* background-color: #e2e2e2; */
   border: none;
   color: #333;
   font-size: 16px;
   cursor: pointer;
   border-radius: 20px;
+  /* border: 2px solid orange; */
 }
 
 .time-container {
