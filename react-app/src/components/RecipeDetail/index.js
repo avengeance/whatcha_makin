@@ -394,7 +394,7 @@ const RecipeDetail = () => {
                             <p>{review?.review}</p>
                           </div>
                           {user && user.id === review.owner_id && (
-                            <div>
+                            <div id="detail-update-delete-button">
                               <div className="update-button">
                                 <OpenModalButton
                                   buttonText={"Update"}

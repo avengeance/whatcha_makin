@@ -25,7 +25,7 @@ const Footer = () => {
               gap: "10px",
             }}
           >
-            <p style={{ color: "#000000" }}>Owner's LinkedIn:</p>
+            <p style={{ color: "#000000" }}></p>
             <i
               className="fab fa-linkedin"
               style={{ fontSize: "3rem", color: "#000000" }}
@@ -41,7 +41,7 @@ const Footer = () => {
               gap: "10px",
             }}
           >
-            <p style={{ color: "#000000" }}>Project Owner:</p>
+            <p style={{ color: "#000000" }}></p>
             <i
               className="fab fa-github"
               style={{ fontSize: "3rem", color: "#000000" }}

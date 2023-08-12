@@ -153,6 +153,7 @@ li {
   height: 100px;
   padding: 10px 20px;
   background-color: transparent !important;
+  border: 1px solid black;
 }
 
 .signup-button {
