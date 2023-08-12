@@ -60,7 +60,7 @@ const RecipeDetail = () => {
     } else {
       console.error("No recipeId");
     }
-  }, [dispatch, recipeId, refreshKey]);
+  }, [dispatch, recipeId, refreshKey, userId]);
 
   const isLoggedIn = !!user;
   const isRecipeOwner = userId === currentRecipe.owner_id;
@@ -160,6 +160,13 @@ const RecipeDetail = () => {
     postedRef.current = true;
   }
 
+  // let heartClass = "fa-solid fa-heart unlike";
+  // if (liked) {
+  //   heartClass = "fa-solid fa-heart liked";
+  // }
+
+  let heartStyle = liked ? { color: "red" } : { color: "#4d7e3e" };
+
   return (
     <>
       <div>
@@ -244,6 +251,19 @@ const RecipeDetail = () => {
                     </>
                   )}
                 </div>
+                {/* <div className="recipe-likes">
+                  <i
+                    className={
+                      liked
+                        ? "fa-solid fa-heart liked"
+                        : "fa-solid fa-heart unlike"
+                    }
+                    onClick={() => {
+                      if (user) liked ? handleUnlike() : handleLike();
+                    }}
+                  ></i>
+                  {currentRecipe?.likes > 0 ? currentRecipe?.likes : "New"}
+                </div> */}
               </div>
               <div id="recipe-detail-info">
                 <div className="recipe-image">
