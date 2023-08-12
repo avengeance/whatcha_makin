@@ -213,6 +213,49 @@ function UpdateRecipe() {
     e.preventDefault();
     setErrors({});
 
+    if (!validators.validateName(name)) {
+      alert("Name must be longer than 3 characters");
+      return;
+    }
+
+    for (let i = 0; i < ingredients.length; i++) {
+      const ingredient = ingredients[i];
+      if (!validators.validateIngredientName(ingredient.name)) {
+        alert("Invalid ingredient name");
+        return;
+      }
+      // if (!validators.validateIngredientQuantity(ingredient.quantity)) {
+      //   alert(
+      //     "Invalid quantity for ingredient whole numbers only: " +
+      //       ingredient.name
+      //   );
+      //   return;
+      // }
+    }
+
+    for (let i = 0; i < directions.length; i++) {
+      const direction = directions[i];
+      if (!validators.validateStepInfo(direction.step_info)) {
+        alert("Step info must be greater than 5 characters");
+        return;
+      }
+    }
+
+    if (!validators.validatePrepTime(0, prepMinutes)) {
+      alert("Prep Time miniutes must be longer than 0 Min");
+      return;
+    }
+
+    if (!validators.validateCookTime(0, cookMinutes)) {
+      alert("Cook Time minutes must be longer than 0 min");
+      return;
+    }
+
+    if (!validators.validateServings(servings)) {
+      alert("Servings must be greater than 0");
+      return;
+    }
+
     const formData = new FormData();
     const totalPrepTime = (prepHours || 0) * 60 + (parseInt(prepMinutes) || 0);
     const totalCookTime = (cookHours || 0) * 60 + (parseInt(cookMinutes) || 0);
@@ -308,6 +351,7 @@ function UpdateRecipe() {
                 placeholder="Quantity"
                 required={index === 0}
                 min="0"
+                step="0.01"
               />
               <select
                 name="measurement"
@@ -542,18 +586,7 @@ function UpdateRecipe() {
                     >
                     </input> */}
         <div id="form-submit-button">
-          <button
-            type="submit"
-            className="submit-button"
-            disabled={
-              !nameValid ||
-              !ingredientsValid ||
-              !directionsValid ||
-              !prepTimeValid ||
-              !cookTimeValid ||
-              !servingsValid
-            }
-          >
+          <button type="submit" className="submit-button">
             Update Recipe
           </button>
         </div>
