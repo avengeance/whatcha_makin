@@ -80,6 +80,7 @@ div.update-button button {
   width: 130px;
   transition: background-color 0.3s ease;
   opacity: 0.75;
+  margin-top: 20px;
 }
 
 div.delete-button button {
@@ -91,6 +92,7 @@ div.delete-button button {
   border-radius: 4px;
   width: 130px;
   transition: background-color 0.3s ease;
+  margin-top: 20px;
 }
 
 .modal-style {
