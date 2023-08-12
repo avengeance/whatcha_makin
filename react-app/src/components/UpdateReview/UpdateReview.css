@@ -34,15 +34,18 @@
 #stars {
   display: flex;
   justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
   margin-top: 15px;
-  /* border: 2px solid orange; */
+  border: 2px solid orange;
 }
 .fas.fa-star {
   color: grey;
+  /* border: 1px solid grey; */
 }
-
 .fas.fa-star.active {
   color: yellow;
+  /* border: 1px solid black; */
 }
 
 .time-drop-down {
