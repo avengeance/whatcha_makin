@@ -58,7 +58,10 @@ const UserRecipes = () => {
               id="recipe-tile-image"
             />
             <div className="recipe-buttons">
-              <div className="update-button">
+              <div
+                className="update-button"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <Link to={`/recipes/${recipe.id}/edit`}>
                   <button type="button">Update</button>
                 </Link>
