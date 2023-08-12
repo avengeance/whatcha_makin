@@ -19,6 +19,13 @@ h2 {
   /* border: 1px solid black; */
 }
 
+#detail-update-delete-button {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  /* border: 1px solid red; */
+}
+
 .recipe-image {
   display: flex;
   justify-content: center;
@@ -344,6 +351,6 @@ h2 {
   /* border: 1px solid black; */
 }
 #comment-message {
-  width: 500px;
+  width: 750px;
   /* border: 1px solid red; */
 }
